@@ -36,21 +36,23 @@ git rm --cached wide-world-454314-d1-49e10dbd8fb4.json 2>nul
 echo [INFO] Adding files to staging...
 git add .
 
-:: 6. Commit (Amend to scrub history)
+:: 6. Commit (Amend to scrub history OR standard commit)
 echo [INFO] Committing files...
-:: We use --amend to fix the previous commit that had the secret
-git commit --amend -m "Morgan v18.6 Stable Demo - Tavus TTS & Nodemailer Fixes" --allow-empty
+git commit -m "UI: Add AI disclaimer to landing page and video overlay" --allow-empty
 
-:: 7. Add Remote
+:: 7. Add Remote (Ignore if exists)
 echo [INFO] Configuring remote origin...
-:: Remove existing origin if it exists to avoid errors
-git remote remove origin 2>nul
-git remote add origin https://github.com/aifusionlabs25/tavus-app.git
+git remote add origin https://github.com/aifusionlabs25/tavus-app.git 2>nul
 
 :: 8. Push
 echo [INFO] Pushing to GitHub (main branch)...
 git branch -M main
 git push -u origin main
+
+:: 9. Create Checkpoint Tag
+echo [INFO] Creating Checkpoint Tag: Morganv18.6-demo-TavusTTS-v1-Dev-stable
+git tag -f Morganv18.6-demo-TavusTTS-v1-Dev-stable
+git push origin Morganv18.6-demo-TavusTTS-v1-Dev-stable
 
 echo ==========================================
 if %errorlevel% equ 0 (

@@ -91,6 +91,13 @@ export default function InteractiveAvatar() {
                             allow="microphone; camera; autoplay"
                             title="AI Fusion Labs Conversation"
                         />
+
+                        {/* AI Disclaimer Overlay */}
+                        <div className="absolute bottom-4 left-0 right-0 text-center pointer-events-none z-50">
+                            <p className="text-xs text-white/40 bg-black/20 backdrop-blur-sm inline-block px-3 py-1 rounded-full">
+                                Morgan uses AI to generate responses. Information may be inaccurate or incomplete.
+                            </p>
+                        </div>
                     </div>
                 </div>
             )}
