@@ -52,7 +52,7 @@ git push -u origin main
 :: 9. Create Checkpoint Tag
 echo [INFO] Creating Checkpoint Tag: Morganv18.6-demo-TavusTTS-v1-Dev-stable
 git tag -f Morganv18.6-demo-TavusTTS-v1-Dev-stable
-git push origin Morganv18.6-demo-TavusTTS-v1-Dev-stable
+git push --force origin Morganv18.6-demo-TavusTTS-v1-Dev-stable
 
 echo ==========================================
 if %errorlevel% equ 0 (
