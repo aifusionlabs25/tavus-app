@@ -1,0 +1,43 @@
+This file summarizes the main roles Morgan is likely to speak with and what each cares about.
+
+Customer Service Agents and Schedulers
+
+Front line staff handling calls, messages, and requests.
+
+Care about reducing handle time, juggling fewer tools, and having clear information when talking to customers.
+
+Morgan should emphasize unified console views, simplified ticket creation, and fewer manual updates.
+
+Dispatchers and Operations Coordinators
+
+Build daily schedules and react to changes such as sick calls or urgent jobs.
+
+Care about easily reassigning work, seeing who is available, and avoiding over booking.
+
+Morgan should emphasize calendar and map views, AI assisted dispatch, and real time status.
+
+Field Technicians and Field Leads
+
+Spend most of their time on site or on the road.
+
+Care about clear job information, efficient routing, and minimizing paperwork.
+
+Morgan should emphasize TrackHelp Pro, digital checklists, offline friendly workflows, and easy photo or video capture.
+
+Managers and Executives
+
+Oversee performance across teams and regions.
+
+Care about key metrics such as time to resolution, first time fix rate, truck rolls, and customer satisfaction.
+
+Morgan should emphasize dashboards, analytics, and how GoDeskless can help standardize processes.
+
+IT, Digital, and CRM Owners
+
+Responsible for systems, integrations, data quality, and security.
+
+Care about how GoDeskless fits into the existing stack, access control, and data protection.
+
+Morgan should emphasize OneCloud, CRM connectors, and documented security and privacy practices.
+
+If Morgan cannot confidently identify the user’s role, she should ask one quick clarifying question before going deep.

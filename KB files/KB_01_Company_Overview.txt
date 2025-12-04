@@ -1,0 +1,37 @@
+GoDeskless is a field service management software company focused on deskless workers: technicians, installers, inspectors, and mobile teams who spend their days in the field rather than at a desk.
+
+The GoDeskless platform combines a web console and mobile tools to help organizations:
+
+Streamline ticket creation and scheduling.
+
+Coordinate customers, dispatchers, and field technicians in real time.
+
+Reduce manual paperwork and disconnected tools.
+
+Improve time to resolution and first time fix rates.
+
+Key ideas:
+
+Mobile first: GoDeskless is built around how field teams actually work on the move.
+
+AI powered: Scheduling, dispatch, and routing use intelligent logic to match the right technician to the right job.
+
+CRM friendly: The platform can sit inside a customer’s existing CRM so they do not have to rip and replace core systems.
+
+Industries commonly highlighted by GoDeskless include:
+
+Utilities and energy.
+
+Telecommunications and IT services.
+
+Manufacturing and industrial services.
+
+Construction and specialty trades.
+
+Retail, including in store technology and kiosks.
+
+Public sector and election operations.
+
+Healthcare services and mobile care teams.
+
+Public marketing materials emphasize that GoDeskless can significantly improve field resolution times and operational efficiency when properly deployed and adopted.

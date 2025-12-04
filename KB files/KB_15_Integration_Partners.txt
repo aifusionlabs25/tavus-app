@@ -1,0 +1,191 @@
+# KB_15: INTEGRATION PARTNERS & SYSTEM CONNECTIVITY
+
+**Purpose:** Equip Morgan with detailed knowledge of goDeskless integrations, CRM connectors, API capabilities, and ecosystem partnerships to answer technical and workflow-related questions.
+
+---
+
+## CORE INTEGRATION PHILOSOPHY
+
+goDeskless is **CRM-first** and **API-open**:
+- **CRM-First**: Native connectors for major CRM platforms (Salesforce, ServiceNow, HubSpot, Microsoft Dynamics, Zoho) ensure seamless data flow between customer records, service tickets, and field operations.
+- **API-Open**: RESTful APIs enable custom integrations with ERP systems, legacy databases, IoT devices, accounting software, and third-party tools.
+
+**Key Differentiator**: Unlike legacy field service platforms that treat integrations as afterthoughts, goDeskless is built for **ecosystem interoperability**—you own your data, and it flows where you need it.
+
+---
+
+## NATIVE CRM CONNECTORS (PRE-BUILT, NO CODE REQUIRED)
+
+### **Salesforce**
+- **What It Does**: Syncs customer accounts, service cases, work orders, and field service appointments between Salesforce CRM and goDeskless dispatch/mobile apps.
+- **Typical Use Case**: Enterprise teams using Salesforce as their system of record for customer relationships and service contracts.
+- **Setup Time**: 3-5 days (standard connector, minimal customization)
+- **Data Flow**: Bidirectional (Salesforce → goDeskless and goDeskless → Salesforce)
+- **Key Fields Synced**: Account details, contact info, service history, work order status, technician notes, invoices
+
+**Morgan's Language**:  
+*"We have a native Salesforce connector that syncs customer accounts, service cases, and work orders in real time. Your dispatchers see Salesforce data in the goDeskless console, and technicians see customer history on their mobile app. When they complete a job, it updates Salesforce automatically—no manual data entry. Setup takes 3-5 days."*
+
+---
+
+### **ServiceNow**
+- **What It Does**: Integrates goDeskless field service operations with ServiceNow IT Service Management (ITSM) and Customer Service Management (CSM) modules.
+- **Typical Use Case**: Enterprise IT teams managing field technicians for hardware installations, network maintenance, or facilities management.
+- **Setup Time**: 5-7 days (requires ServiceNow instance configuration)
+- **Data Flow**: Bidirectional
+- **Key Fields Synced**: Incident tickets, change requests, asset inventory, SLA tracking, technician dispatch status
+
+**Morgan's Language**:  
+*"If you're using ServiceNow for IT service management, our connector syncs incident tickets, change requests, and asset data with goDeskless dispatch. When a ServiceNow ticket requires a field visit, it automatically creates a work order in goDeskless, assigns the right technician, and updates ServiceNow when the job is complete."*
+
+---
+
+### **Microsoft Dynamics 365**
+- **What It Does**: Connects goDeskless with Dynamics 365 Sales, Customer Service, and Field Service modules.
+- **Typical Use Case**: Mid-market and enterprise teams using Microsoft ecosystem (Office 365, Azure, Dynamics).
+- **Setup Time**: 5-7 days
+- **Data Flow**: Bidirectional
+- **Key Fields Synced**: Customer accounts, service agreements, work orders, invoices, payment status
+
+**Morgan's Language**:  
+*"Our Dynamics 365 connector syncs customer accounts, service contracts, and invoicing data. If you're already using Microsoft's ecosystem, this integration ensures your field operations stay in sync with sales, finance, and customer service teams—all within the Dynamics platform."*
+
+---
+
+### **HubSpot**
+- **What It Does**: Syncs contact records, deals, and service tickets between HubSpot CRM and goDeskless field operations.
+- **Typical Use Case**: SMB and mid-market teams using HubSpot for marketing automation and CRM.
+- **Setup Time**: 2-3 days (simpler than enterprise CRMs)
+- **Data Flow**: Bidirectional
+- **Key Fields Synced**: Contact details, deal pipeline, service requests, job completion status, customer feedback
+
+**Morgan's Language**:  
+*"HubSpot is great for marketing and sales automation, and our connector ensures your field service data flows back into HubSpot. When a technician completes a service call, HubSpot logs it against the customer record—so your sales and support teams always see the latest interaction history."*
+
+---
+
+### **Zoho CRM**
+- **What It Does**: Integrates Zoho CRM customer data with goDeskless dispatch and mobile workflows.
+- **Typical Use Case**: Small and mid-market teams using Zoho as an affordable CRM alternative.
+- **Setup Time**: 2-3 days
+- **Data Flow**: Bidirectional
+- **Key Fields Synced**: Leads, accounts, contacts, deals, service tickets, invoices
+
+**Morgan's Language**:  
+*"Zoho is a cost-effective CRM for growing businesses, and our connector syncs customer accounts, service requests, and job completion data. Technicians see customer history on their mobile app, and Zoho updates automatically when jobs are completed—no double data entry."*
+
+---
+
+## API-BASED INTEGRATIONS (CUSTOM, CODE REQUIRED)
+
+### **RESTful API Capabilities**
+goDeskless provides **open APIs** for custom integrations with:
+- **ERP Systems**: SAP, Oracle NetSuite, QuickBooks Enterprise, Microsoft Dynamics 365 Finance
+- **Accounting Software**: QuickBooks Online, Xero, FreshBooks
+- **Inventory Management**: Fishbowl, TradeGecko, Cin7
+- **IoT Devices**: Smart equipment monitoring (e.g., HVAC sensors, industrial machinery)
+- **Payment Gateways**: Stripe, Square, Authorize.Net
+- **Communication Platforms**: Twilio (SMS notifications), Slack (team alerts), Microsoft Teams
+
+**API Documentation**: Available at [developer portal or internal link]  
+**Setup Time**: 2-4 weeks (depends on complexity, custom development required)
+
+**Morgan's Language**:  
+*"If you're using a legacy ERP or custom system that doesn't have a pre-built connector, no problem—we have open RESTful APIs. Our team (or your developers) can build custom integrations to sync data between goDeskless and your existing tools. Typical custom integrations take 2-4 weeks to develop and test."*
+
+---
+
+## ACCOUNTING & INVOICING INTEGRATIONS
+
+### **QuickBooks Online**
+- **What It Does**: Syncs invoices, payments, and customer accounts between goDeskless and QuickBooks.
+- **Setup Time**: 1-2 days
+- **Typical Use Case**: Small and mid-market teams using QuickBooks for accounting.
+
+**Morgan's Language**:  
+*"When a technician completes a job and generates an invoice in goDeskless, it automatically syncs to QuickBooks. Your accounting team doesn't need to manually enter field service invoices—everything flows through in real time."*
+
+---
+
+### **Xero**
+- **What It Does**: Similar to QuickBooks integration—syncs invoices, payments, and expense tracking.
+- **Setup Time**: 1-2 days
+- **Typical Use Case**: Teams using Xero as their accounting platform (popular in UK, Australia, New Zealand).
+
+---
+
+## COMMUNICATION & COLLABORATION INTEGRATIONS
+
+### **Twilio (SMS/Voice)**
+- **What It Does**: Enables automated SMS notifications for job assignments, ETAs, appointment reminders, and customer updates.
+- **Setup Time**: 1-2 days
+- **Typical Use Case**: Reduce no-shows, improve customer communication, automate appointment confirmations.
+
+**Morgan's Language**:  
+*"We integrate with Twilio to send automated SMS updates—'Your technician is on the way, ETA 15 minutes.' Customers love the transparency, and it reduces no-shows by 20-30%."*
+
+---
+
+### **Slack / Microsoft Teams**
+- **What It Does**: Sends real-time alerts to internal Slack/Teams channels (e.g., "Job completed," "SLA breach alert," "High-priority ticket assigned").
+- **Setup Time**: 1 day
+- **Typical Use Case**: Real-time operational visibility for managers and dispatchers.
+
+---
+
+## PAYMENT PROCESSING INTEGRATIONS
+
+### **Stripe, Square, Authorize.Net**
+- **What It Does**: Enables mobile payment collection—technicians can accept credit card payments on-site via goDeskless mobile app.
+- **Setup Time**: 1-2 days
+- **Typical Use Case**: HVAC, plumbing, electrical service calls where on-site payment is common.
+
+**Morgan's Language**:  
+*"Technicians can accept credit card payments directly from the mobile app using Stripe or Square. Customers sign digitally, pay on the spot, and receive an email receipt—all without the technician needing a separate card reader."*
+
+---
+
+## IOT & EQUIPMENT MONITORING INTEGRATIONS
+
+### **Smart Equipment Sensors**
+- **What It Does**: Integrates IoT sensors (HVAC thermostats, industrial equipment monitors) to trigger predictive maintenance work orders in goDeskless.
+- **Setup Time**: Custom (4-6 weeks)
+- **Typical Use Case**: Proactive maintenance—detect equipment issues before they fail, auto-dispatch technicians.
+
+**Morgan's Language**:  
+*"If you're using IoT sensors to monitor HVAC systems or industrial equipment, we can integrate those alerts with goDeskless. When a sensor detects an anomaly, it automatically creates a work order and dispatches the nearest technician—before your customer even notices a problem."*
+
+---
+
+## COMMON INTEGRATION QUESTIONS & MORGAN'S RESPONSES
+
+### **"Can you integrate with [obscure legacy system]?"**
+*"If it has an API, yes—we can build a custom integration. If it doesn't have an API, we can explore workarounds like CSV exports, webhooks, or middleware tools like Zapier. Let me connect you with our technical team to scope it out."*
+
+---
+
+### **"How long does a CRM integration take?"**
+*"For native connectors (Salesforce, HubSpot, ServiceNow), 3-7 days. For custom API integrations, 2-4 weeks depending on complexity."*
+
+---
+
+### **"Do we need to hire developers to manage integrations?"**
+*"Not for native connectors—those are point-and-click setup. For custom API integrations, you'll need either your internal dev team or our professional services team to handle the initial build. After that, integrations are low-maintenance."*
+
+---
+
+### **"What if our CRM isn't on your list?"**
+*"No problem. We have open APIs, so we can build a custom connector. It takes 2-4 weeks depending on your CRM's API capabilities. Alternatively, we can use middleware tools like Zapier or Make.com to bridge the gap."*
+
+---
+
+## ESCALATION PATH
+
+If a prospect asks **detailed API documentation, security whitepapers, or custom integration scoping**, Morgan should say:  
+*"Great question—our technical team has API docs, security certifications, and integration architecture diagrams. Let me connect you with them so they can walk you through it. Would you like to schedule a demo where we can discuss your integration requirements?"*
+
+---
+
+**Last Updated**: Dec 1, 2025  
+**Owner**: Product / Solutions Engineering  
+**Review Cycle**: Quarterly

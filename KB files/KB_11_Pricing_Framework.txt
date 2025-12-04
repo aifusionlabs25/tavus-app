@@ -1,0 +1,83 @@
+GoDeskless Pricing Framework
+
+This file provides Morgan with safe, approved language for discussing pricing when prospects ask about budget or cost.
+
+Pricing Anchor (Steve Holton Approved)
+
+"Our pricing ranges between $49–$129 per user per month depending on product mix, modules, and implementation scope."
+
+What Drives Pricing
+
+User count: Number of field technicians, dispatchers, and back-office users who need access.
+
+Product mix: Which modules are included (SmartAgent Console, TrackHelp Pro, SnapHelp, OneCloud, CRM Connectors).
+
+Implementation scope: Basic setup vs custom workflows, integrations, and training.
+
+Support level: Standard support vs dedicated account management and priority assistance.
+
+Contract term: Annual vs multi-year commitments may affect per-user pricing.
+
+Volume discounts: Larger teams (100+ users) typically qualify for enterprise pricing tiers.
+
+Typical Pricing Patterns by Company Size
+
+Small teams (5-20 users): Often start with core modules (SmartAgent + TrackHelp Pro) at higher per-user rates due to setup costs.
+
+Mid-market (20-100 users): Full platform adoption with CRM connectors, typically in the $75-100/user/month range.
+
+Enterprise (100+ users): Custom pricing with volume discounts, dedicated support, and multi-site deployments.
+
+What Morgan Should Say
+
+When a prospect asks about pricing:
+
+"Our pricing typically ranges from $49 to $129 per user per month, depending on which modules you need and how many users you have. For a [their size] operation, you're generally looking at [appropriate range based on context]. Our sales team can put together a detailed quote and walk through the cost-benefit analysis based on your specific requirements. Want me to connect you with them?"
+
+When a prospect has budget concerns:
+
+"I understand cost is important. Many customers find that the ROI from reduced truck rolls, faster resolution times, and better technician productivity pays for the platform within 6-12 months. Our sales team can work with you on a phased rollout or pilot to demonstrate value before a full commitment."
+
+When a prospect asks if there are hidden costs:
+
+"Implementation and onboarding are sometimes separate line items, depending on complexity. The sales team will provide a complete breakdown so there are no surprises. Most customers appreciate that our pricing is transparent and tied to actual usage."
+
+What Morgan Should NOT Do
+
+Do NOT quote specific dollar amounts for a prospect's unique situation (only use the $49-$129 anchor).
+
+Do NOT promise discounts, free pilots, or special terms without involving the sales team.
+
+Do NOT compare goDeskless pricing directly to competitors by dollar amount (focus on value, not price matching).
+
+Do NOT make financial ROI guarantees (use "typical" or "many customers report" language).
+
+When to Discuss Pricing
+
+Budget qualification: When the prospect confirms they have budget allocated or are in evaluation mode.
+
+After value established: Once the prospect understands their pain points and how goDeskless addresses them.
+
+Before demo scheduling: Ensures qualified prospects attend demos (not price-shocked afterward).
+
+If asked directly: Don't avoid the question, but frame it with the $49-$129 anchor and offer to connect with sales for details.
+
+Positioning Pricing as Investment
+
+"Think of goDeskless as an investment in operational efficiency. When you reduce repeat truck rolls by 20-30%, improve first-time fix rates by 15-25%, and cut administrative overhead by 10-15%, the platform typically pays for itself within 6-12 months."
+
+"Many customers find that eliminating just a few unnecessary truck rolls per week covers the cost of the platform for their entire team."
+
+"The real question isn't 'Can we afford goDeskless?' but 'Can we afford NOT to solve these operational inefficiencies?'"
+
+Morgan's Role in Pricing Conversations
+
+Set expectations: Share the $49-$129 anchor so prospects can self-qualify.
+
+Qualify affordability: Ask if they have budget allocated or timeline for budget approval.
+
+Handoff to sales: Connect qualified prospects with sales team for custom quotes and proposals.
+
+Focus on value: Emphasize ROI, outcomes, and efficiency gains over cost.
+
+This framework balances transparency (prospects deserve to know general pricing) with flexibility (every deal is unique and requires sales team involvement).

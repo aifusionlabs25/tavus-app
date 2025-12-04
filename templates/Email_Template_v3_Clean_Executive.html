@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.5;
+            color: #333;
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #f4f6f8;
+            padding: 20px;
+        }
+
+        .container {
+            background: #fff;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .header {
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            /* Purple/Blue Gradient */
+            padding: 25px;
+            color: #fff;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .header-sub {
+            font-size: 13px;
+            opacity: 0.9;
+            margin-top: 5px;
+        }
+
+        .score-section {
+            background: #f8f9fa;
+            text-align: center;
+            padding: 25px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .score-value {
+            font-size: 56px;
+            font-weight: 800;
+            color: #28a745;
+            /* Green */
+            line-height: 1;
+            margin-bottom: 5px;
+        }
+
+        .score-label {
+            font-size: 12px;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+        }
+
+        .badges {
+            margin-top: 15px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .badge {
+            background: #d4edda;
+            color: #155724;
+            font-size: 11px;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-weight: 600;
+            display: inline-block;
+        }
+
+        .content {
+            padding: 25px;
+        }
+
+        .section-title {
+            font-size: 12px;
+            color: #8898aa;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            margin-top: 25px;
+        }
+
+        .section-title:first-child {
+            margin-top: 0;
+        }
+
+        .grid-box {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 10px;
+        }
+
+        .info-card {
+            background: #f8f9fa;
+            padding: 12px;
+            border-radius: 6px;
+            border: 1px solid #e9ecef;
+        }
+
+        .info-label {
+            font-size: 10px;
+            color: #888;
+            text-transform: uppercase;
+            font-weight: 700;
+            margin-bottom: 3px;
+        }
+
+        .info-value {
+            font-size: 13px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .pain-box {
+            background: #fff3cd;
+            /* Yellow */
+            border: 1px solid #ffeeba;
+            color: #856404;
+            padding: 15px;
+            border-radius: 6px;
+        }
+
+        .pain-list {
+            margin: 0;
+            padding-left: 20px;
+        }
+
+        .pain-list li {
+            margin-bottom: 8px;
+        }
+
+        .pain-list li:last-child {
+            margin-bottom: 0;
+        }
+
+        .strategy-box {
+            background: #d1ecf1;
+            /* Light Blue */
+            border: 1px solid #bee5eb;
+            color: #0c5460;
+            padding: 15px;
+            border-radius: 6px;
+        }
+
+        .strategy-list {
+            margin: 0;
+            padding-left: 20px;
+        }
+
+        .strategy-list li {
+            margin-bottom: 10px;
+        }
+
+        .demo-box {
+            background: #e2e6ea;
+            padding: 15px;
+            border-radius: 6px;
+        }
+
+        .demo-list {
+            margin: 0;
+            padding-left: 20px;
+        }
+
+        .demo-list li {
+            margin-bottom: 5px;
+            font-size: 13px;
+        }
+
+        .cta-row {
+            margin-top: 30px;
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn {
+            flex: 1;
+            text-align: center;
+            padding: 12px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .btn-primary {
+            background: #6a11cb;
+            color: #fff !important;
+        }
+
+        .btn-outline {
+            background: #fff;
+            border: 1px solid #6a11cb;
+            color: #6a11cb !important;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔥 Hot Lead: {{contact_name}} - {{company_name}}</h1>
+            <div class="header-sub">{{industry}} • {{team_size}} • {{budget}} Budget</div>
+        </div>
+
+        <div class="score-section">
+            <div class="score-value">{{lead_score}}/100</div>
+            <div class="score-label">Lead Viability Score</div>
+            <div class="badges">
+                {{badges}}
+            </div>
+        </div>
+
+        <div class="content">
+            <div class="section-title">Contact & Company Overview</div>
+            <div class="grid-box">
+                <div class="info-card">
+                    <div class="info-label">Contact Name</div>
+                    <div class="info-value">{{contact_name}} ({{contact_role}})</div>
+                </div>
+                <div class="info-card">
+                    <div class="info-label">Company</div>
+                    <div class="info-value">{{company_name}}</div>
+                </div>
+            </div>
+            <div class="grid-box">
+                <div class="info-card">
+                    <div class="info-label">Team Size</div>
+                    <div class="info-value">{{team_size}}</div>
+                </div>
+                <div class="info-card">
+                    <div class="info-label">Location</div>
+                    <div class="info-value">{{location}}</div>
+                </div>
+            </div>
+            <div class="grid-box">
+                <div class="info-card">
+                    <div class="info-label">Email</div>
+                    <div class="info-value"><a href="mailto:{{email}}">{{email}}</a></div>
+                </div>
+                <div class="info-card">
+                    <div class="info-label">Phone</div>
+                    <div class="info-value"><a href="tel:{{phone}}">{{phone}}</a></div>
+                </div>
+            </div>
+
+            <div class="section-title">Critical Pain Points</div>
+            <div class="pain-box">
+                <ul class="pain-list">
+                    <li><strong>{{pain_point_1}}</strong></li>
+                    <li><strong>{{pain_point_2}}</strong></li>
+                    <li><strong>{{pain_point_3}}</strong></li>
+                </ul>
+            </div>
+
+            <div class="section-title">Deal Intelligence</div>
+            <div class="grid-box">
+                <div class="info-card">
+                    <div class="info-label">Monthly Budget</div>
+                    <div class="info-value">{{budget}}</div>
+                </div>
+                <div class="info-card">
+                    <div class="info-label">Timeline</div>
+                    <div class="info-value">{{timeline}}</div>
+                </div>
+            </div>
+            <div class="grid-box">
+                <div class="info-card">
+                    <div class="info-label">Decision Maker</div>
+                    <div class="info-value">{{decision_maker}}</div>
+                </div>
+                <div class="info-card">
+                    <div class="info-label">Buying Committee</div>
+                    <div class="info-value">{{buying_committee}}</div>
+                </div>
+            </div>
+
+            <div class="section-title">Recommended Sales Strategy</div>
+            <div class="strategy-box">
+                <ol class="strategy-list">
+                    {{sales_strategy}}
+                </ol>
+            </div>
+
+            <div class="section-title">Demo Must-Haves</div>
+            <div class="demo-box">
+                <ol class="demo-list">
+                    {{demo_focus_areas}}
+                </ol>
+            </div>
+
+            <div class="cta-row">
+                <a href="mailto:{{email}}" class="btn btn-primary">Email {{contact_name}}</a>
+                <a href="tel:{{phone}}" class="btn btn-outline">Call: {{phone}}</a>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

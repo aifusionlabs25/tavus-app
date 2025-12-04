@@ -1,0 +1,13 @@
+CHECKPOINT: Morganv18.6-demo-TavusTTS-v1-Dev-stable
+DATE: 2025-12-04
+STATUS: STABLE
+
+FEATURES VERIFIED:
+1. Tavus TTS (Native) - Confirmed working.
+2. Webhook Data Parsing - Fixed "Not Provided" issues using Gemini fallback.
+3. Gmail Draft Service - Fixed "Draft vs Send" logic (Dev=Send, Prod=Draft).
+4. Email Formatting - Fixed HTML rendering and header issues using Nodemailer.
+5. Stream Handling - Fixed "[object Object]" error by buffering stream.
+
+DEPLOYMENT:
+Latest Production Deployment: https://x-agent-hrsyctwjo-robs-projects-e72bad73.vercel.app

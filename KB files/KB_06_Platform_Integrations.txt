@@ -1,0 +1,27 @@
+GoDeskless OneCloud is the platform layer that ties all products together.
+
+Core responsibilities:
+
+Maintain a unified data model for customers, assets, technicians, jobs, and communication events.
+
+Power AI assisted scheduling and job assignment based on skills, location, rules, and performance insights.
+
+Provide analytics, dashboards, and historical views so leaders can understand performance trends.
+
+Support multi tenant cloud deployments with high availability and scalability.
+
+Morgan can safely say that OneCloud is an AI enabled operations layer that helps teams move from manual coordination to data driven decisions.
+
+CRM connectors extend this platform into the systems customers already use.
+
+CRM connector themes to emphasize:
+
+Native feel: GoDeskless can be embedded within supported CRM and service tools so that agents work in a familiar environment.
+
+Bi directional sync: customer and ticket data flows between GoDeskless and the CRM to keep records consistent.
+
+Secure access: integrations are designed to respect permissions and data protection requirements defined by the customer.
+
+Faster time to value: prebuilt connectors and expert implementation help customers avoid long, fragile custom integration projects.
+
+Morgan should avoid naming specific CRM products unless they are clearly listed in public GoDeskless materials or in a separate, approved KB file.

@@ -1,0 +1,156 @@
+# KB_13: BUYING COMMITTEE PATTERNS & STAKEHOLDER MAPPING
+
+**Purpose:** Help Morgan identify key decision-makers, influencers, and blockers in a goDeskless evaluation, and tailor conversations accordingly.
+
+---
+
+## TYPICAL BUYING COMMITTEE STRUCTURE
+
+### **Small Operations (1-15 technicians)**
+- **Decision Maker**: Owner / General Manager (90%+ of decisions)
+- **Influencer**: Lead Technician or Office Manager (operational input)
+- **Timeline**: 2-4 weeks (fast, single-decision-maker)
+- **Budget Authority**: Owner controls purse strings directly
+
+**Morgan's Approach**:  
+*Focus on ROI and ease of use. Owner wants to see clear cost savings and fast technician adoption. Demo should emphasize mobile simplicity and quick wins (e.g., GPS tracking, digital invoicing).*
+
+---
+
+### **Mid-Market Operations (15-100 technicians)**
+- **Decision Maker**: VP of Operations / COO / Service Manager
+- **Influencers**: 
+  - **IT Manager** (integration, security, data migration)
+  - **Finance/CFO** (budget approval, ROI validation)
+  - **Field Supervisor** (technician adoption, mobile UX feedback)
+- **Blocker**: Existing software vendor (incumbent system, switching costs)
+- **Timeline**: 4-8 weeks (requires multiple stakeholder buy-in)
+- **Budget Authority**: VP/COO proposes, CFO approves
+
+**Morgan's Approach**:  
+*Multi-threaded sales. Morgan should ask:*  
+- "Who else is involved in evaluating field service tools?"  
+- "Is IT reviewing integrations and security?"  
+- "Does Finance need to sign off on the budget?"  
+*Position goDeskless as 'easy for IT' (CRM-native, SOC 2, API-first), 'financially attractive' (6-12 month payback), and 'loved by field teams' (mobile-first UX).*
+
+---
+
+### **Enterprise Operations (100+ technicians)**
+- **Decision Maker**: VP of Field Operations / Chief Customer Officer
+- **Influencers**: 
+  - **CIO / IT Director** (architecture, security, compliance)
+  - **CFO / Finance VP** (CapEx vs. OpEx, contract terms)
+  - **Procurement** (vendor management, MSA/SOW requirements)
+  - **End Users** (field technicians, dispatchers, customer service reps)
+- **Blocker**: Internal IT projects (competing priorities), incumbent vendor lock-in
+- **Timeline**: 8-16 weeks (RFP process, security reviews, pilot programs)
+- **Budget Authority**: C-suite approval required (CFO, COO, or CEO)
+
+**Morgan's Approach**:  
+*Enterprise sales require deep discovery and multi-stakeholder engagement. Morgan should:*  
+1. Map the evaluation team early: "Who's driving this project internally? Who else needs to weigh in?"  
+2. Understand procurement requirements: "Do you have a formal RFP process? Any compliance certifications we need to provide?"  
+3. Identify technical gatekeepers: "Is IT reviewing our security posture? We're SOC 2 certified and have detailed API documentation."  
+4. Surface political dynamics: "Is there an incumbent vendor? What's working or not working with them?"  
+*Position goDeskless as 'enterprise-ready' (SOC 2, CRM-native, scalable), 'fast to deploy' (vs. 12-month implementations), and 'proven at scale' (reference customers with 100+ technicians).*
+
+---
+
+## PERSONA-SPECIFIC PAIN POINTS & MESSAGING
+
+### **VP of Operations / COO** (Economic Buyer)
+- **Pain Points**: Cost per service call, technician utilization, customer satisfaction scores, operational inefficiency
+- **Value Prop**: "20-30% reduction in truck rolls, 15-25% improvement in first-time fix rates, 6-12 month payback"
+- **Demo Focus**: AI dispatch optimization, real-time GPS tracking, SnapHelp video assist (reduce travel costs)
+
+---
+
+### **IT Manager / CIO** (Technical Buyer)
+- **Pain Points**: Integration complexity, data security, vendor lock-in, API limitations
+- **Value Prop**: "CRM-native connectors (Salesforce, ServiceNow, HubSpot), SOC 2 certified, RESTful APIs, 6-8 week deployment"
+- **Demo Focus**: CRM integration demo, API documentation, security/compliance overview
+
+---
+
+### **CFO / Finance VP** (Financial Buyer)
+- **Pain Points**: ROI justification, unpredictable costs, long payback periods
+- **Value Prop**: "Transparent pricing ($49-$129/user/month), no hidden fees, 6-12 month payback, subscription-based OpEx model"
+- **Demo Focus**: ROI calculator, pricing scenarios, cost savings case studies
+
+---
+
+### **Field Supervisor / Service Manager** (Operational Influencer)
+- **Pain Points**: Technician pushback on new tools, dispatch errors, manual paperwork, poor mobile UX
+- **Value Prop**: "Technicians adopt it in 2-3 days, mobile-first design, AI-powered dispatch reduces manual scheduling by 50%"
+- **Demo Focus**: Technician mobile app walkthrough, dispatch workflow, digital checklists
+
+---
+
+### **Field Technician** (End User)
+- **Pain Points**: Clunky mobile apps, poor GPS directions, manual paperwork, unclear job instructions
+- **Value Prop**: "Simple mobile interface, real-time job updates, digital checklists, offline mode for rural areas"
+- **Demo Focus**: Technician mobile experience, job completion workflow, customer signature capture
+
+---
+
+## DISCOVERY QUESTIONS TO MAP BUYING COMMITTEE
+
+Morgan should ask these questions early in the conversation:
+
+1. **Decision-Making Process**:  
+   - "Who's driving this project internally?"  
+   - "Who else is involved in evaluating field service tools?"  
+   - "What's the decision-making process—does IT need to review? Does Finance sign off?"
+
+2. **Timeline & Urgency**:  
+   - "When are you hoping to have a new system in place?"  
+   - "Is there a compelling event driving this timeline?" (e.g., contract renewal, merger, growth target)
+
+3. **Budget Authority**:  
+   - "Do you control the budget for this project, or does someone else need to approve?"  
+   - "What's the typical approval process for software purchases at your company?"
+
+4. **Incumbent Vendor**:  
+   - "What are you using today for field service management?"  
+   - "What's working well? What's not working?"  
+   - "Are you locked into a contract, or is this a good time to switch?"
+
+5. **Evaluation Criteria**:  
+   - "If you could wave a magic wand, what's the #1 thing you'd want a new field service platform to solve?"  
+   - "What are your top 3 priorities in a new system?"  
+   - "Are you evaluating other vendors? Who's on your shortlist?"
+
+---
+
+## RED FLAGS (WHEN TO ESCALATE TO SALES)
+
+Morgan should escalate to the sales team if:
+- ❌ **No clear decision-maker identified** ("I'll need to run this by my boss")  
+- ❌ **No budget allocated** ("We're just exploring options")  
+- ❌ **No timeline** ("Maybe next year sometime")  
+- ❌ **Procurement-heavy process** ("We need to issue an RFP first")  
+- ❌ **Incumbent vendor lock-in** ("We're locked into a 3-year contract with ServiceTitan")  
+
+**Morgan's Escalation Language**:  
+*"It sounds like you're early in the evaluation process—that's great! Let me connect you with our sales team. They can walk you through how we typically work with companies in your situation, including how to build a business case, navigate procurement, and plan a pilot program. Sound good?"*
+
+---
+
+## IDEAL BUYER PROFILE (GREEN LIGHT)
+
+Morgan should prioritize prospects who:
+- ✅ **Clear decision-maker or champion identified** (VP Ops, COO, Service Manager with budget authority)  
+- ✅ **Defined timeline** (next 3-6 months)  
+- ✅ **Budget allocated or ROI justification underway** ("We have $50K earmarked for field service software")  
+- ✅ **Pain point urgency** (scaling issues, customer complaints, operational inefficiency costing money)  
+- ✅ **Multi-stakeholder buy-in** (Operations, IT, Finance aligned on the problem)
+
+**Morgan's Acceleration Language**:  
+*"It sounds like you're ready to move quickly on this. Let's get you into a customized demo where we can map goDeskless directly to your workflow. I'll also share a couple of case studies from companies similar to yours who saw results in the first 60 days. How does [specific date/time] work for a 30-minute walkthrough?"*
+
+---
+
+**Last Updated**: Dec 1, 2025  
+**Owner**: Sales Enablement / Revenue Operations  
+**Review Cycle**: Quarterly

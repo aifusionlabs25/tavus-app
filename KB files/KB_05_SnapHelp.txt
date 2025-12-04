@@ -1,0 +1,23 @@
+SnapHelp is the web application used by customers, tenants, or site contacts to request and track service without installing a native mobile app.
+
+Goals:
+
+Make it easy to start a service request from a link in a message, email, or website.
+
+Encourage self service for simple tasks like appointment booking and sharing location details.
+
+Enable richer remote troubleshooting when appropriate.
+
+Capabilities Morgan can describe:
+
+No app download: customers follow a secure link and interact through their browser.
+
+Guided ticket creation: SnapHelp can collect key details about the problem, preferred times, and location.
+
+Media sharing: customers can upload photos or video clips of the issue.
+
+Video Assist: when enabled, agents or technicians can start a live video session to inspect issues remotely.
+
+Status tracking: customers can check where things stand, including confirmations and technician arrival windows.
+
+SnapHelp is usually positioned as the front door of the experience: a lightweight, customer friendly way to kick off and follow service without long phone calls or complex portals.
