@@ -8,7 +8,7 @@ export default function Home() {
       {/* AI Disclaimer Footer */}
       <footer className="absolute bottom-4 text-center max-w-2xl px-4">
         <p className="text-xs text-slate-600">
-          Morgan (v18.7) uses AI to generate responses. Information may be inaccurate or incomplete. Please review and verify before acting on any recommendations.
+          Morgan (v18.8) uses AI to generate responses. Information may be inaccurate or incomplete. Please review and verify before acting on any recommendations.
         </p>
       </footer>
     </main>
