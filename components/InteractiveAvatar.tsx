@@ -2,6 +2,13 @@
 
 import { useState } from 'react';
 
+declare global {
+    namespace JSX {
+        interface IntrinsicElements {
+            'tavus-broadcast-view': any;
+        }
+    }
+}
 
 export default function InteractiveAvatar() {
     const [conversation, setConversation] = useState<any>(null);
@@ -317,5 +324,7 @@ export default function InteractiveAvatar() {
 
                         </div>
                     </div>
-                );
-            }
+            </div >
+        </div >
+    );
+}
