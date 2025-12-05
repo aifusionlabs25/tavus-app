@@ -120,7 +120,7 @@ export default function InteractiveAvatar() {
             {/* 2. HEADER: Minimal & Tech-Focused */}
             <div className="absolute top-0 left-0 w-full z-50 flex items-center justify-between px-8 py-6">
                 <div className="flex items-center gap-3">
-                    <img src="/morgan_icon.png" alt="Morgan Icon" className="w-10 h-10 object-contain drop-shadow-[0_0_10px_rgba(56,189,248,0.5)]" />
+                    <img src="/morgan-icon.png" alt="Morgan Icon" className="w-10 h-10 object-contain drop-shadow-[0_0_10px_rgba(56,189,248,0.5)]" />
                     <span className="text-white text-xl font-light tracking-wide">
                         Morgan <span className="text-slate-500 mx-2">|</span> <span className="text-emerald-400 font-medium">GoDeskless</span>
                     </span>
@@ -166,7 +166,12 @@ export default function InteractiveAvatar() {
                         <div className="w-full h-full bg-slate-900/50 backdrop-blur-sm flex flex-col items-center justify-center text-center p-12">
                             <div className="p-6 rounded-full bg-gradient-to-tr from-blue-500/10 to-emerald-500/10 border border-white/5 mb-8 relative group">
                                 <div className="absolute inset-0 rounded-full bg-emerald-500/20 blur-xl group-hover:blur-2xl transition-all duration-500"></div>
-                                <img src="/morgan_icon.png" alt="Morgan" className="w-32 h-32 object-contain relative z-10 opacity-90 group-hover:scale-105 transition-transform duration-500" />
+                                {/* Image path fixed to 'morgan-icon.png' (hyphen) to match public folder */}
+                                <img
+                                    src="/morgan-icon.png"
+                                    alt="Morgan Avatar"
+                                    className="w-32 h-32 object-contain relative z-10 opacity-90 group-hover:scale-105 transition-transform duration-500 text-transparent"
+                                />
                             </div>
 
                             <h2 className="text-4xl md:text-5xl font-light text-white mb-6 tracking-tight">
