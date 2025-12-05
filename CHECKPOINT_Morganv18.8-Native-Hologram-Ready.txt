@@ -1,0 +1,23 @@
+[CHECKPOINT] Morgan v18.8 Native Architecture & Holographic Demo
+Date: December 4, 2025
+Commit: ff61676
+Status: STABLE / PRODUCTION-READY
+
+[CORE FEATURES]
+1. Architecture: Tavus-Native v18.8 (Dual Persona Routing)
+2. Data Flow: Objectives-based Structured Data + Transcript Hybrid Analysis
+3. Knowledge Base: Fully synced with Tavus (11 tags: morgan-godeskless-*)
+4. Demo Mode: Holographic Overlay (Green Screen / Chroma Key) support
+5. Backup: Dedicated Vercel project (morgan-v18-7-legacy) locked to v18.7
+
+[ENVIRONMENT CONFIGURATION]
+- Production Project (morgan-v18-8-native): PROD ID (p485e5b31290)
+- Backup Project (morgan-v18-7-legacy): LEGACY ID (p17be47caaec)
+
+[ROLLBACK PROCEDURES]
+To rollback MAIN site to this state:
+> git reset --hard ff61676
+> git push -f origin main
+
+To rollback to v18.7 Legacy state:
+> git checkout stable-v18.7-backup
