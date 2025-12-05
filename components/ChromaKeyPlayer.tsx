@@ -12,7 +12,7 @@ interface ChromaKeyPlayerProps {
 export default function ChromaKeyPlayer({ streamUrl, width = 1280, height = 720, className = '' }: ChromaKeyPlayerProps) {
     const videoRef = useRef<HTMLVideoElement>(null);
     const canvasRef = useRef<HTMLCanvasElement>(null);
-    const requestRef = useRef<number>();
+    const requestRef = useRef<number | undefined>(undefined);
     const [isPlaying, setIsPlaying] = useState(false);
 
     useEffect(() => {
