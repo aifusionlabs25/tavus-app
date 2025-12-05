@@ -1,0 +1,165 @@
+TITLE: Competitive Battle Cards (Safe Use Version)
+
+PRIMARY USER: Morgan – X Agent guide for goDeskless-related conversations
+
+PURPOSE:
+- Help Morgan speak credibly about other field service solutions.
+- Stay respectful and customer-centric.
+- Emphasize fit, value, and time-to-value instead of trashing competitors.
+
+GLOBAL GUARDRAILS:
+- Never insult or disparage a competitor.
+- Treat all competitor info as approximate and based on public info + customer feedback.
+- Use phrases like “we often hear…”, “customers tell us…”, “in our experience…”.
+- Avoid specific claims about competitor pricing, churn, or market share as hard facts.
+- If a prospect asks for exact competitor pricing or terms, Morgan should say:
+  “I can share what we typically hear from customers, but exact pricing and terms will always come directly from that vendor.”
+
+HOW MORGAN SHOULD USE THIS FILE:
+1. FIRST:
+   - Clarify who the prospect is using or evaluating: “Are you currently on a field service platform like ServiceTitan, Jobber, Housecall Pro, FieldEdge, or something homegrown?”
+2. SECOND:
+   - Ask 1–2 questions about their experience: “What do you like about it?” / “What’s frustrating?”
+3. THIRD:
+   - Pick ONE short positioning summary and, if needed, ONE example story. Do NOT read long scripts.
+4. FOURTH:
+   - Bridge back to goDeskless: how it might be a better fit for their situation.
+
+NOTE:
+- For deeper messaging philosophy, see `KB_Competition_Intel_Positioning_v2.txt`.
+- For pricing ranges, see `KB_Pricing_Scenarios_Examples_v2.txt` (still use “ballpark” language).
+
+-----------------------------------
+SECTION: ServiceTitan
+
+CUSTOMER-LEVEL POSITIONING (high level):
+- Good fit:
+  - Very large, complex field service operations
+  - Heavy back-office workflows and deep configuration needs
+  - Teams with strong in-house IT and appetite for big deployments
+- Common friction we hear:
+  - High total cost of ownership
+  - Long implementations and change-management efforts
+  - Feels like “more than we need” for some mid-market teams
+
+DISCOVERY HOOKS (pick 1–2):
+- “Roughly how many field techs do you have, and how complex are your workflows?”
+- “How did your implementation and rollout timeline go with ServiceTitan?”
+- “Do you feel you’re using 80–90% of what you’re paying for, or more like 20–30%?”
+
+GO-DESKLESS POSITIONING (light, respectful):
+- “Where ServiceTitan shines is in very large, complex environments with big IT support.
+   goDeskless is designed to give you:
+   - AI-assisted dispatch and scheduling
+   - A simpler, mobile-first tech experience
+   - Faster time-to-value, especially for teams that don’t want a year-long project.”
+
+EXAMPLE TALK TRACK (condensed):
+- “Many teams we meet chose ServiceTitan when they were smaller, then realized later
+   that it was built for a much bigger, more complex environment than they really are.
+   They tell us things like ‘We use a fraction of it, but pay for all of it,’ and
+   implementation or change requests can be heavy.
+   goDeskless is positioned more as a modern, AI-first field service platform with
+   a shorter path to value and a lighter change-management lift.
+   If you’re feeling that mismatch, it’s worth exploring whether goDeskless is a better fit.”
+
+-----------------------------------
+SECTION: Jobber
+
+CUSTOMER-LEVEL POSITIONING:
+- Good fit:
+  - Very small shops, solo operators, or early-stage teams
+  - Basic quoting + scheduling + invoicing
+- Common friction we hear:
+  - Outgrowing its capabilities as the team scales
+  - Challenges coordinating multiple crews and complex jobs
+  - Limited visibility and workflows for dispatchers / managers
+
+DISCOVERY HOOKS:
+- “How many techs or crews are you running today?”
+- “Do you have someone whose job is primarily dispatch and coordination?”
+- “Is Jobber still handling your complexity smoothly, or are you bumping into workarounds?”
+
+GO-DESKLESS POSITIONING:
+- “Jobber is great when you’re just getting started.
+   goDeskless is built for the moment when:
+   - You’re juggling multiple crews and routes
+   - You need better visibility from office to field
+   - You want AI to help optimize routes, schedules, and technician productivity.”
+
+EXAMPLE TALK TRACK:
+- “A lot of teams we talk to started on Jobber and loved it in the early days.
+   Then they hit a point where they were managing multiple crews, routes, and SLAs,
+   and Jobber felt more like a starter tool than an operating system.
+   goDeskless is designed for that ‘scale-up’ moment—keeping things simple for techs,
+   while giving dispatchers and managers the visibility and optimization they’ve been missing.”
+
+-----------------------------------
+SECTION: Housecall Pro
+
+CUSTOMER-LEVEL POSITIONING:
+- Good fit:
+  - Residential service contractors
+  - Tight combination of scheduling, estimates, and payments
+- Common friction we hear:
+  - Limited flexibility for more complex commercial / multi-site work
+  - Reporting and analytics limits as teams grow
+  - Desire for deeper field visibility and AI-driven insights
+
+DISCOVERY HOOKS:
+- “Are you mostly doing residential work, or do you also handle commercial/multi-site contracts?”
+- “How happy are you with the visibility you have into jobs in progress?”
+- “Do you feel you have the analytics you need to manage at scale?”
+
+GO-DESKLESS POSITIONING:
+- “Housecall Pro is a solid fit for residential-heavy work.
+   goDeskless leans into:
+   - Real-time field visibility
+   - AI-powered dispatch and prioritization
+   - A more scalable backbone for mixed residential/commercial teams.”
+
+EXAMPLE TALK TRACK:
+- “Teams who move from Housecall Pro to goDeskless often tell us:
+   ‘We needed something built for more complex operations.’
+   They want better visibility into what’s happening now, tools that scale with
+   larger contracts, and more AI-driven decision support.”
+
+-----------------------------------
+SECTION: Homegrown / Spreadsheet / “Frankenstack”
+
+CUSTOMER-LEVEL POSITIONING:
+- Typical setup:
+  - Google Sheets, Excel, email, text groups, whiteboards
+  - Maybe a light CRM + separate scheduling tools
+- Common friction we hear:
+  - Dependence on a few ‘heroes’ who know how it all works
+  - Lots of manual data entry and copy/paste
+  - Limited visibility and reporting
+
+DISCOVERY HOOKS:
+- “How many different tools do you have to touch to get a job from request to invoice?”
+- “If your main coordinator left tomorrow, what’s the risk to your operation?”
+- “Do you feel your current setup could handle 2x the volume?”
+
+GO-DESKLESS POSITIONING:
+- “Homegrown systems can be powerful, but they depend heavily on a few people.
+   goDeskless aims to:
+   - Put everything into a single, field-first platform
+   - Reduce the manual glue-work
+   - Give you an upgrade path without breaking what already works.”
+
+EXAMPLE TALK TRACK:
+- “We see a lot of teams running impressive operations on spreadsheets and duct tape.
+   The downside is that growth gets scary, and risk concentrates in a few people’s heads.
+   goDeskless gives you a way to formalize what’s working, automate what’s repetitive,
+   and build a platform that can handle more volume without burning people out.”
+
+-----------------------------------
+ENDING GUIDANCE:
+- Use this file to:
+  - Acknowledge what the customer likes about their current tool.
+  - Highlight where goDeskless is simply a better fit for their situation.
+  - Offer to explore a focused demo: “Based on what you’ve told me, here’s the part of goDeskless I’d show first…”
+- If the customer wants deep competitive detail or specific price matching:
+  - Morgan should say:
+    “I can give you high-level patterns and what we hear from customers, but exact pricing and roadmap details would come from our sales team.”

@@ -1,0 +1,125 @@
+TITLE: Competition Intel & Positioning
+
+PRIMARY USER: Morgan – X Agent guide for goDeskless-related conversations
+
+PURPOSE:
+- Help Morgan answer “How do you compare to X?” in a balanced way.
+- Emphasize fit, strengths, and trade-offs instead of attacking competitors.
+- Point toward when goDeskless is likely a better fit.
+
+GLOBAL GUARDRAILS:
+- Treat competitors with respect; no trash talk.
+- Frame differences as “fit for different situations.”
+- Use phrases like “we often hear from customers who switched…” instead of absolute claims.
+- Do not claim exact competitor pricing, churn, or market share.
+
+HOW THIS FILE RELATES TO OTHERS:
+- Use this file for **high-level positioning**.
+- Use `KB_Competitive_Battle_Cards_v2` for more tactical detail if needed.
+
+-----------------------------------
+GENERAL POSITIONING PRINCIPLES
+
+1) NEVER TRASH COMPETITORS
+- Acknowledge they’re strong tools in the right context.
+- Focus on why goDeskless is a better fit for this specific customer.
+
+2) START WITH THE CUSTOMER
+- Always anchor in what the user told Morgan:
+  - “You mentioned you have X techs and [type of work].
+     That changes how I’d think about [Competitor] vs. goDeskless.”
+
+3) USE “WE HEAR FROM CUSTOMERS WHO SWITCHED…”
+- Safer and more relatable:
+  - “We often hear from teams who moved from [Competitor] that…”
+
+4) THREE CORE GO-DESKLESS THEMES
+- AI-assisted scheduling and dispatch.
+- Mobile-first field experience that’s easy on techs.
+- Time-to-value: reduced complexity in implementation and change management.
+
+-----------------------------------
+COMPETITOR SNAPSHOTS
+
+Morgan should use these as **short blurbs**, not scripts.
+
+-----------------------------------
+SERVICETITAN (ST)
+
+What Morgan can say:
+
+- “ServiceTitan is a strong platform, especially for very large, complex operations with deep back-office workflows.
+   Teams who stay on it often have big IT support and are comfortable with heavier projects.”
+
+- “We often hear from mid-market teams who started on ServiceTitan that:
+   - They use a small fraction of its capabilities,
+   - The cost and complexity feel high for their size,
+   - Change requests and new workflows can take real effort.”
+
+- “goDeskless is more focused on:
+   - AI-assisted scheduling and field coordination,
+   - A simpler, mobile-first experience for dispatch and techs,
+   - Faster time-to-value for teams that don’t want an 8–12 month project.”
+
+-----------------------------------
+JOBBER
+
+What Morgan can say:
+
+- “Jobber is a great starting point for small teams, especially in the early stages when you’re just getting off of paper or simple tools.”
+
+- “We commonly hear that as teams grow—more techs, more routes, more job types—they start looking for:
+   - Better visibility across the field,
+   - More robust dispatch and routing,
+   - Deeper analytics.”
+
+- “goDeskless tends to be a better fit when you’ve outgrown the starter tools and want something that can handle more complexity while still feeling simple to use.”
+
+-----------------------------------
+HOUSECALL PRO
+
+What Morgan can say:
+
+- “Housecall Pro is strong for residential service teams who want scheduling, estimates, and payments in one place.”
+
+- “Teams who come to goDeskless from Housecall Pro often tell us:
+   - They’re taking on more complex or commercial work,
+   - They need more advanced field visibility and role separation,
+   - They want AI to help prioritize and route work.”
+
+- “goDeskless leans into:
+   - Real-time operational visibility,
+   - AI-supported dispatch and prioritization,
+   - A structure that supports growing beyond mainly residential work.”
+
+-----------------------------------
+HOMEGROWN / SPREADSHEETS / “FRANKENSTACK”
+
+What Morgan can say:
+
+- “Homegrown setups can be surprisingly powerful, especially when built by someone who deeply understands the business.”
+
+- “We usually hear two concerns:
+   - Growth risk: if that person leaves, the system leaves.
+   - Coordination pain: lots of manual updates across multiple tools.”
+
+- “goDeskless is often a good fit when:
+   - You want to keep what’s working conceptually,
+   - But move it into a platform that’s easier to scale, report on, and maintain.”
+
+-----------------------------------
+CLOSING PATTERN WHEN COMPETITORS COME UP
+
+Morgan’s pattern:
+
+1. Acknowledge:
+   - “It makes sense you’re looking at [Competitor]; they’re strong in this space.”
+
+2. Reflect the user’s situation:
+   - “Given that you have [size] techs and focus on [type of work]…”
+
+3. Position:
+   - “…I’d think about it this way: [short contrast with goDeskless].”
+
+4. Bridge:
+   - “If you’d like, we can focus the demo on the areas where teams like yours usually see the biggest difference versus [Competitor].”

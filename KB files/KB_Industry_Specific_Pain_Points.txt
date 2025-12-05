@@ -1,0 +1,162 @@
+TITLE: Industry-Specific Pain Points
+
+PRIMARY USER: Morgan – X Agent guide for goDeskless-related conversations
+
+PURPOSE:
+- Help Morgan quickly recognize patterns by industry.
+- Ask 1–2 sharp discovery questions, not a long survey.
+- Tie pains to goDeskless capabilities in a natural, conversational way.
+
+GLOBAL GUARDRAILS:
+- Morgan should pick the most relevant 2–3 pain points and 1–2 questions.
+- Do NOT read lists verbatim.
+- Treat all examples as patterns, not assumptions—always validate with the user.
+
+HOW MORGAN SHOULD USE THIS FILE:
+1. Listen for industry cues (HVAC, plumbing, electrical, property management, general home services).
+2. Reflect back what she heard: “Sounds like you’re running an HVAC team with busy summers…”
+3. Choose 1–2 pain points that obviously match what the user said.
+4. Ask 1 follow-up question to deepen understanding.
+5. Offer 1–2 high-level ways goDeskless could help.
+
+-----------------------------------
+SECTION 1 – HVAC CONTRACTORS
+
+TYPICAL PROFILE:
+- Seasonal spikes (summer/winter).
+- Mix of emergency calls and planned maintenance.
+- Trucks and techs stretched thin in peak months.
+
+COMMON PAIN PATTERNS:
+- Seasonal overload: dispatchers overwhelmed, harder to prioritize.
+- Balancing emergencies vs. maintenance contracts.
+- Missed or delayed jobs during peak heat waves.
+- Limited visibility into where techs actually are.
+
+DISCOVERY QUESTIONS (pick 1–2):
+- “How do you handle the summer surge—do you feel on top of it or mostly in firefighting mode?”
+- “How do you decide which tech gets which job during peak season?”
+- “Do you have maintenance contracts that sometimes slip because emergencies always win?”
+- “If you had to guess, where do you lose the most time—dispatch, drive time, or job coordination?”
+
+GODESKLESS HOOKS (paraphrase, don’t read):
+- AI-assisted scheduling and routing to prioritize high-impact jobs.
+- Real-time tech location and job status for better dispatch decisions.
+- Maintenance contract tracking so they don’t get buried by emergencies.
+- Simple field app so techs capture notes, photos, and follow-ups consistently.
+
+-----------------------------------
+SECTION 2 – PLUMBING COMPANIES
+
+TYPICAL PROFILE:
+- Emergency-heavy: burst pipes, leaks, sewer backups.
+- Job duration often unpredictable.
+- Reliant on parts availability and quick decisions.
+
+COMMON PAIN PATTERNS:
+- Emergencies blow up the schedule and push other jobs out.
+- “Simple” jobs turning into all-day projects.
+- Multiple supply house trips per day.
+- Hard to track warranties and callbacks.
+
+DISCOVERY QUESTIONS (pick 1–2):
+- “When emergencies hit, how do you decide what to bump and who to send?”
+- “How often does a ‘quick’ job turn into a half-day project, and what happens to the schedule when it does?”
+- “How do you keep track of warranty or callback work so you’re not doing free labor by accident?”
+- “Do your techs ever feel like they’re living at the supply house?”
+
+GODESKLESS HOOKS (paraphrase):
+- Dynamic scheduling that can reshuffle jobs when durations change.
+- Tagging emergency vs. non-emergency work and protecting high-value commitments.
+- Better job notes and history so callbacks are visible and trackable.
+- Visibility into parts-related delays to help plan smarter.
+
+-----------------------------------
+SECTION 3 – ELECTRICAL CONTRACTORS
+
+TYPICAL PROFILE:
+- Mix of quick service calls and multi-day projects.
+- Frequent permits and inspections.
+- Safety and compliance are major concerns.
+
+COMMON PAIN PATTERNS:
+- Keeping track of permit status and inspection dates.
+- Coordinating multi-day jobs and handoffs between techs.
+- Ensuring the right level of licensed tech is on each job.
+- Documenting code compliance and safety steps.
+
+DISCOVERY QUESTIONS (pick 1–2):
+- “How do you currently track permits and inspections—spreadsheets, paper, or a system?”
+- “For multi-day projects, how do you keep everyone aligned on status across shifts?”
+- “Do you ever worry about the wrong tech being scheduled on a job that needs a specific license?”
+- “How comfortable do you feel if an inspector asked for documentation on a job from six months ago?”
+
+GODESKLESS HOOKS (paraphrase):
+- Tracking permits and inspections with reminders.
+- Multi-day job visibility with progress notes and milestones.
+- Role-based dispatch rules so only appropriately licensed techs are assigned certain jobs.
+- Digital job documentation and checklists that support compliance and audits.
+
+-----------------------------------
+SECTION 4 – PROPERTY MANAGEMENT / FACILITIES
+
+TYPICAL PROFILE:
+- Portfolio of properties or facilities.
+- Mix of resident requests, preventative maintenance, and vendor coordination.
+- Multiple stakeholders: internal teams, residents/tenants, vendors.
+
+COMMON PAIN PATTERNS:
+- Requests slipping through cracks or delayed communication.
+- Low visibility into which work orders are truly urgent.
+- Difficulty coordinating internal teams and external vendors.
+- Hard to report on SLA compliance and response times.
+
+DISCOVERY QUESTIONS (pick 1–2):
+- “How do maintenance requests come in today—phone, email, portal, all of the above?”
+- “What’s hardest right now: prioritizing work, actually getting it done, or reporting back to owners/leadership?”
+- “Do you ever get surprised by missed SLAs or unhappy tenants because something got stuck?”
+- “How many different systems do you touch just to track ‘one’ work order?”
+
+GODESKLESS HOOKS (paraphrase):
+- Centralized intake for maintenance requests with clear status.
+- Priority rules and SLAs surfaced to dispatchers.
+- Visibility for property managers into what’s open, in progress, and closed.
+- Mobile tools for techs and vendors so updates happen in real time.
+
+-----------------------------------
+SECTION 5 – GENERAL HOME SERVICES & “OTHER”
+
+TYPICAL PROFILE:
+- Mix of home services (appliance repair, landscaping, pest control, etc.).
+- Small-to-mid teams often growing from “owner plus a couple of techs.”
+
+COMMON PAIN PATTERNS:
+- Owner/dispatcher wearing too many hats.
+- Lack of visibility into schedule adherence and job outcomes.
+- Inconsistent customer communication and follow-up.
+- Hard to scale without losing control.
+
+DISCOVERY QUESTIONS (pick 1–2):
+- “What does a typical day look like for whoever handles scheduling and dispatch?”
+- “Do you feel you have a clear picture of who’s where and what’s actually done at any moment?”
+- “How do you stay on top of follow-ups or recurring work so nothing falls through the cracks?”
+- “If you doubled your job volume, what would break first?”
+
+GODESKLESS HOOKS (paraphrase):
+- Central schedule and real-time map of jobs/techs.
+- Simple field app that standardizes how jobs are documented.
+- Automated reminders for follow-ups and recurring work.
+- A platform that helps the owner/dispatcher get out of pure firefighting.
+
+-----------------------------------
+FINAL GUIDANCE FOR MORGAN
+
+ALWAYS:
+- Reflect back what you heard.
+- Start with *their* words, not your assumptions.
+- Use 1 pain + 1 question + 1 hook to keep the conversation moving.
+
+NEVER:
+- Assume every pain applies.
+- Query the user with a long checklist.
+- Promise specific metrics in this file (metrics/ROI live in the ROI/pricing KBs).

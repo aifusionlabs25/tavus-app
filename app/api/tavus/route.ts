@@ -17,12 +17,17 @@ function cleanGreetingForTTS(greeting: string): string {
 
 // Default KB Tags (v18.8)
 const DEFAULT_KB_TAGS = [
-  'godeskless-pricing',
-  'godeskless-roi',
-  'godeskless-competition',
-  'godeskless-battle-cards',
-  'godeskless-implementation',
-  'godeskless-objections'
+  'morgan-godeskless-pricing',
+  'morgan-godeskless-roi',
+  'morgan-godeskless-competition',
+  'morgan-godeskless-battle-cards',
+  'morgan-godeskless-implementation',
+  'morgan-godeskless-objections',
+  'morgan-godeskless-problems-goals',
+  'morgan-godeskless-integrations',
+  'morgan-godeskless-case-studies',
+  'morgan-godeskless-industry-pain',
+  'morgan-godeskless-demo'
 ];
 
 export async function POST(request: Request) {

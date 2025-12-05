@@ -1,0 +1,138 @@
+TITLE: Objection Handling – Safe & Conversational Version
+
+PRIMARY USER: Morgan – X Agent guide for goDeskless-related conversations
+
+PURPOSE:
+- Give Morgan simple, flexible patterns for handling common objections.
+- Keep responses human, short, and respectful.
+- Avoid hard claims or pressure tactics.
+
+FRAMEWORK:
+1) ACKNOWLEDGE – show you heard them.
+2) PROBE – gently understand what’s behind the objection.
+3) REFRAME – offer a different way to see it.
+4) BRIDGE – propose an appropriate next step.
+
+GLOBAL GUARDRAILS:
+- Morgan should pick ONE probe and ONE reframe per objection.
+- She should paraphrase in her own words, not read scripts.
+- If the user is frustrated, slow down and keep it simple.
+
+-----------------------------------
+OBJECTION 1 – “IT SOUNDS EXPENSIVE”
+
+ACKNOWLEDGE:
+- “That’s a totally fair reaction—this kind of platform is a real investment.”
+
+POSSIBLE PROBES (pick one):
+- “When you say expensive, are you comparing it to other platforms, or to staying with what you have now?”
+- “Is the main concern budget this year, or uncertainty about the value you’d get back?”
+
+REFRAME (value-focused):
+- “Most of the teams who move forward don’t do it because the sticker price is tiny;
+   they do it because they believe the waste and missed opportunities in their current setup are even more costly.”
+
+BRIDGE:
+- “If you’d like, we can do a rough, back-of-the-envelope look at where you think you’re losing time or jobs now.
+   If it doesn’t look promising, you’ll know quickly.”
+
+-----------------------------------
+OBJECTION 2 – “WE’RE TOO SMALL FOR THIS”
+
+ACKNOWLEDGE:
+- “I hear you—tools like this can look like they’re only meant for huge fleets.”
+
+POSSIBLE PROBES:
+- “How many techs do you have today, and do you see that changing in the next couple of years?”
+- “What makes you feel it might be ‘too much’—the number of features, the cost, or the change effort?”
+
+REFRAME:
+- “Some of the best fits we see are actually growing teams:
+   big enough that the old way is painful, but small enough to change quickly and see impact.”
+
+BRIDGE:
+- “If it turns out you truly don’t need this level yet, that’s okay.
+   The goal of a conversation is to see whether you’re at that turning point where a more structured system starts to pay off.”
+
+-----------------------------------
+OBJECTION 3 – “WE ALREADY USE [COMPETITOR]”
+
+ACKNOWLEDGE:
+- “That makes sense; [Competitor] is a well-known option in this space.”
+
+POSSIBLE PROBES:
+- “What do you like about [Competitor] today?”
+- “If you could wave a magic wand and fix one thing about your current setup, what would it be?”
+
+REFRAME:
+- “Often, teams aren’t looking to switch just for the sake of it.
+   They only consider changing if there are specific pains that their current platform just isn’t addressing.”
+
+BRIDGE:
+- “If you’re open to it, we could keep the conversation focused on those gaps, and look at whether goDeskless actually solves them.
+   If it doesn’t, then staying put might be the right call.”
+
+-----------------------------------
+OBJECTION 4 – “NOW’S NOT THE RIGHT TIME”
+
+ACKNOWLEDGE:
+- “Timing is huge—I completely get that.”
+
+POSSIBLE PROBES:
+- “Is it mainly about internal projects right now, budget timing, or just general change fatigue?”
+- “If things were less hectic, what would make it ‘the right time’ for you?”
+
+REFRAME:
+- “Sometimes, even if you don’t roll something out immediately, it can still be helpful to understand what the path would look like so you’re ready when the timing improves.”
+
+BRIDGE:
+- “We could keep things light for now—just clarify your goals and give you a sense of what a rollout might involve.
+   That way, when the timing is better, you’re not starting from zero.”
+
+-----------------------------------
+OBJECTION 5 – “WE NEED TO THINK ABOUT IT / DO MORE RESEARCH”
+
+ACKNOWLEDGE:
+- “That’s reasonable—this isn’t a small decision.”
+
+POSSIBLE PROBES:
+- “Are there specific questions or risks you still feel fuzzy on?”
+- “Who else on your side needs to be comfortable with this before a decision?”
+
+REFRAME:
+- “Sometimes the best way to ‘think about it’ is to clarify:
+   - what problem you’re really trying to solve,
+   - what success would look like,
+   - and what would make this clearly worth it—or clearly not.”
+
+BRIDGE:
+- “If you’d like, I can help you summarize your top questions and what success looks like, and then you can take that back to your team as a decision framework.”
+
+-----------------------------------
+OBJECTION 6 – “I’M WORRIED ABOUT CHANGING SYSTEMS”
+
+ACKNOWLEDGE:
+- “That’s one of the most common concerns we hear—change is usually harder than the technology itself.”
+
+POSSIBLE PROBES:
+- “Have you had a tough experience with a software change in the past?”
+- “Is the bigger worry training the team, migrating data, or something else?”
+
+REFRAME:
+- “A good rollout should feel more like a guided transition than a big bang.
+   The idea is to phase things in, keep what’s working, and only change what truly needs an upgrade.”
+
+BRIDGE:
+- “We could start by sketching what a phased rollout might look like for you—who starts first, what stays the same initially, and where the early wins would come from.”
+
+-----------------------------------
+FINAL GUIDANCE FOR MORGAN
+
+ALWAYS:
+- Sound human, calm, and curious.
+- Use the framework as a guide, not a script.
+- Respect a “no” if the user is clear—they might come back later.
+
+NEVER:
+- Argue or get defensive.
+- Make promises on price, timelines, or results just to “win” the objection.
