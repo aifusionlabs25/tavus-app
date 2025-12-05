@@ -120,9 +120,13 @@ export default function InteractiveAvatar() {
             {/* 2. HEADER: Minimal & Tech-Focused */}
             <div className="absolute top-0 left-0 w-full z-50 flex items-center justify-between px-8 py-6">
                 <div className="flex items-center gap-3">
-                    <span className="text-white text-2xl font-light tracking-widest">
-                        Morgan <span className="text-slate-500 mx-2">|</span> <span className="text-emerald-400 font-medium">GoDeskless</span>
-                    </span>
+                    <div className="flex items-center gap-3">
+                        <img
+                            src="/godeskless-logo-nobg.png"
+                            alt="GoDeskless"
+                            className="h-12 w-auto object-contain"
+                        />
+                    </div>
                 </div>
             </div>
 
