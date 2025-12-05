@@ -170,7 +170,7 @@ export default function InteractiveAvatar() {
                                 <img
                                     src="/morgan-ii-thumbnail.png"
                                     alt="Morgan II"
-                                    className="w-48 h-48 object-cover rounded-full relative z-10 opacity-90 group-hover:scale-105 transition-transform duration-500"
+                                    className="w-80 h-80 object-cover rounded-full relative z-10 opacity-90 group-hover:scale-105 transition-transform duration-500"
                                 />
                             </div>
 
