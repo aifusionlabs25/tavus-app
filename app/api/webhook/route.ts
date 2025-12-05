@@ -358,10 +358,10 @@ async function handleNativeMorgan(body: any) {
       FULL TRANSCRIPT (Context):
       ${transcriptText}
       
-      TASK: Generate a JSON object for the sales team.
+      TASK: Generate a valid JSON object map for the sales team.
       Use STRUCTURED DATA as primary source. Use TRANSCRIPT to fill gaps.
       
-      REQUIRED JSON OUTPUT:
+      REQUIRED JSON OUTPUT (No Markdown, No Code Blocks, Just Raw JSON):
       {
         "company_name": "String",
         "industry": "String",

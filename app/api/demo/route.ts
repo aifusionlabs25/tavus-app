@@ -39,9 +39,15 @@ export async function POST(request: Request) {
         });
 
         if (!response.ok) {
-            const errorData = await response.json();
+            const errorText = await response.text();
+            let errorData;
+            try {
+                errorData = JSON.parse(errorText);
+            } catch (e) {
+                errorData = { error: errorText }; // Fallback for HTML/Text errors
+            }
             console.error('Tavus Context Update Failed:', errorData);
-            return NextResponse.json({ error: 'Failed to update context' }, { status: 500 });
+            return NextResponse.json({ error: 'Failed to update context', details: errorData }, { status: 500 });
         }
 
         return NextResponse.json({ success: true, action });
