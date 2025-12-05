@@ -155,6 +155,7 @@ export default function InteractiveAvatar() {
                     }`}>
                     {conversation ? (
                         <div className="w-full h-full">
+                            {/* @ts-ignore */}
                             <tavus-broadcast-view
                                 conversation-id={conversation.conversation_id}
                                 className="w-full h-full object-cover"
