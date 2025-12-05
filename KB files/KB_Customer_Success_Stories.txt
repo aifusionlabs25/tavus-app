@@ -1,0 +1,136 @@
+TITLE: Customer Success Stories (Representative Examples)
+
+PRIMARY USER: Morgan – X Agent guide for goDeskless-related conversations
+
+PURPOSE:
+- Give Morgan short, punchy stories that show what success can look like.
+- Keep examples “representative” rather than precise claims.
+- Enable Morgan to quickly match a story to a prospect’s profile.
+
+GLOBAL GUARDRAILS:
+- Treat these as composite, representative examples based on patterns from similar customers.
+- Morgan should say things like:
+  - “For example, a customer like you…”
+  - “A team similar to yours saw…”
+- Avoid presenting any single story as an exact, named case unless you have explicit marketing approval.
+
+HOW MORGAN SHOULD USE THIS FILE:
+1. Identify what the prospect looks like:
+   - Size (small / mid / large), industry, main pain.
+2. Pick ONE relevant story.
+3. Summarize in 2–3 sentences.
+4. Offer to send a more detailed write-up via email instead of reading long details on the call.
+
+-----------------------------------
+EXAMPLE 1: Mid-Sized HVAC Team – Revenue Capture & Capacity
+
+PROFILE:
+- Location: Sunbelt metro area
+- Size: ~25–30 field technicians
+- Industry: HVAC + light plumbing
+- Main pains:
+  - Missed jobs during peak season
+  - Dispatch juggling without visibility
+  - Lost follow-up opportunities
+
+BEFORE:
+- Running on:
+  - A patchwork of scheduling tools and spreadsheets
+  - Manual dispatch and phone calls
+- Symptoms:
+  - Jobs falling through the cracks in busy season
+  - Technicians idling while others were overloaded
+  - Difficulty predicting capacity and revenue
+
+AFTER GOESKLESS:
+- Consolidated scheduling and dispatch into goDeskless.
+- Gained real-time visibility of technician location and workload.
+- Used AI-assisted dispatch to balance routes and teams.
+
+REPRESENTATIVE OUTCOMES (approximate):
+- Captured a meaningful chunk of previously lost peak-season work.
+- Increased jobs completed per day per tech.
+- Improved on-time arrival rates and customer satisfaction scores.
+
+MORGAN’S SHORT VERSION:
+- “A mid-sized HVAC team with around 25 techs went from spreadsheets and manual dispatch
+   to using goDeskless as their central field platform.
+   During peak season, they were able to capture significantly more jobs and keep techs better utilized,
+   instead of watching work slip through the cracks.”
+
+-----------------------------------
+EXAMPLE 2: Regional Plumbing Company – Truck Rolls & First-Time Fix
+
+PROFILE:
+- Size: ~15–20 techs
+- Industry: Plumbing + drain cleaning
+- Main pains:
+  - High number of repeat visits (no first-time fix)
+  - Unclear job notes and history for techs in the field
+  - Extra truck rolls eating into margins
+
+BEFORE:
+- Techs arriving onsite without full job context.
+- Inconsistent documentation between visits.
+- Dispatchers guessing who to send where.
+
+AFTER GOESKLESS:
+- Structured job notes and checklists in the field app.
+- Asset/service history available to techs on arrival.
+- Better matching of tech skills to job types.
+
+REPRESENTATIVE OUTCOMES:
+- Fewer follow-up visits for simple jobs.
+- Improved technician productivity and morale.
+- Reduced unnecessary truck rolls and fuel waste.
+
+MORGAN’S SHORT VERSION:
+- “A regional plumbing company with ~15–20 techs used goDeskless to give techs better job context and structured checklists.
+   Over time, they saw fewer repeat visits on simple jobs and cut down on unnecessary truck rolls,
+   which directly improved margins.”
+
+-----------------------------------
+EXAMPLE 3: Multi-Region Service Provider – Visibility & Reporting
+
+PROFILE:
+- Size: 80+ technicians across multiple regions
+- Industry: Mixed commercial/residential field service
+- Main pains:
+  - Leaders couldn’t see what was happening in the field in real time.
+  - Weekly reporting took hours of manual work.
+  - Difficult to compare region-to-region performance.
+
+BEFORE:
+- Patchwork of systems per region.
+- Reporting via spreadsheets and manual exports.
+- No single view of technician utilization or job status.
+
+AFTER GOESKLESS:
+- Standardized dispatch and field workflows across regions.
+- Centralized dashboards for jobs, SLAs, and technician utilization.
+- Leadership could see performance by region at a glance.
+
+REPRESENTATIVE OUTCOMES:
+- Less time spent building reports.
+- Faster identification of underperforming regions/routes.
+- Clearer decisions about staffing and resource allocation.
+
+MORGAN’S SHORT VERSION:
+- “A multi-region service provider rolled out goDeskless as a common platform across locations.
+   Instead of stitching together spreadsheets every week, leadership now has real-time dashboards
+   showing job status and technician utilization by region, which helps them make faster, better decisions.”
+
+-----------------------------------
+CLOSING GUIDANCE FOR MORGAN
+
+WHEN TO USE STORIES:
+- When a prospect says:
+  - “Has anyone like us done this?”
+  - “What kind of results do people actually see?”
+- Keep it short, then offer:
+  - “If you’d like, I can have our team send a deeper case study after this call.”
+
+WHAT TO AVOID:
+- Naming specific companies or logos unless you are sure they’re approved references.
+- Quoting very precise ROI numbers as promises.
+- Suggesting that these outcomes are guaranteed; always frame as “examples” or “typical patterns.”

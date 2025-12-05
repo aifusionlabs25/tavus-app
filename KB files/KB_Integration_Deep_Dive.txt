@@ -1,0 +1,153 @@
+TITLE: Integration Deep Dive
+
+PRIMARY USER: Morgan – X Agent guide for goDeskless-related conversations
+
+PURPOSE:
+- Help Morgan answer “Do you integrate with X?” in a concise, confident way.
+- Provide high-level clarity first, then optional deeper detail.
+- Avoid over-promising specifics about timelines, packaging, or custom work.
+
+GLOBAL GUARDRAILS:
+- Treat all integration details as “typical” or “common” – not guarantees.
+- Use language like “usually”, “often”, “typical pattern”, “ballpark”.
+- For anything custom or complex, Morgan should offer to involve the solutions/IT team.
+
+-----------------------------------
+HOW MORGAN SHOULD USE THIS FILE
+
+WHEN A USER ASKS:
+- “Do you integrate with Salesforce/HubSpot/QuickBooks/etc.?”
+  1. Respond with a short, confident YES/NO + brief explanation.
+  2. Ask 1–2 clarifying questions.
+  3. Only then, offer deeper detail if they’re interested.
+
+GENERIC ANSWER PATTERN (SHORT VERSION):
+
+“Yes, we integrate with [SYSTEM]. In most cases we:
+- Sync [high-level objects: e.g., customers, jobs, invoices]
+- Keep [directionality: one-way / two-way] data consistent, and
+- Let you manage field operations in goDeskless while keeping [SYSTEM] as your system of record.
+
+The exact setup depends on your workflows, but most teams are up and running in roughly [ballpark time]. For anything complex or custom, we’d pull in our solutions team.”
+
+MORGAN SHOULD:
+- Avoid specifying exact hours or days unless the user pushes.
+- Avoid promising “out-of-the-box” for niche systems.
+- Offer to log an integration interest note for follow-up.
+
+-----------------------------------
+SECTION: Salesforce
+
+SHORT ANSWER SUMMARY:
+- “Yes, we integrate with Salesforce. The common pattern is:
+   - Salesforce stays your CRM / system of record.
+   - goDeskless manages field operations and jobs.
+   - We sync accounts/contacts and job-related data so sales and ops stay aligned.”
+
+CLARIFYING QUESTIONS (pick 1–2):
+- “Which Salesforce clouds are you using today? (Sales Cloud, Service Cloud, Field Service, etc.)”
+- “Do you want Salesforce to drive job creation, or should jobs originate in goDeskless?”
+- “Who mainly uses Salesforce now – sales, service, or a mix?”
+
+TYPICAL INTEGRATION PATTERN:
+- Data synced:
+  - Accounts / Contacts ↔ Customers
+  - Opportunities / Cases → Jobs / Work Orders
+  - Status + key job outcomes → back to Salesforce for reporting
+- Direction:
+  - Usually one-way or bi-directional depending on use case.
+- Typical timeline:
+  - Simple sync patterns: days to a couple of weeks.
+  - Complex, custom objects / automations: longer, needs solutions design.
+
+ESCALATION PHRASE:
+- “For detailed field mappings and custom objects, we’d have our solutions team design it with you—I can note that as a follow-up.”
+
+-----------------------------------
+SECTION: HubSpot
+
+SHORT ANSWER SUMMARY:
+- “Yes, we commonly integrate with HubSpot as the marketing/sales front-end and use goDeskless for actual field work and service delivery.”
+
+CLARIFYING QUESTIONS:
+- “Are you mostly using HubSpot for marketing, sales, service, or all three?”
+- “Do you want service tickets in HubSpot to turn into jobs in goDeskless automatically?”
+
+TYPICAL INTEGRATION PATTERN:
+- Contacts / Companies ↔ Customers
+- Deals / Tickets → Jobs
+- Key job outcomes (completed, scheduled, missed, etc.) → HubSpot for lifecycle tracking
+
+NOTES:
+- Emphasize that exact behavior is configurable.
+- Avoid quoting specific setup hours; say “usually fairly quick once we agree on the mapping.”
+
+-----------------------------------
+SECTION: QuickBooks / Xero
+
+SHORT ANSWER SUMMARY:
+- “Yes, we integrate with accounting systems like QuickBooks and Xero. The typical model is:
+   - goDeskless handles scheduling, work orders, and job completion.
+   - We send the right info back to accounting for invoicing and financial reporting.”
+
+CLARIFYING QUESTIONS:
+- “Do you currently invoice from QuickBooks/Xero directly, or from another system?”
+- “Is your goal to automate invoice creation once jobs are completed?”
+
+TYPICAL INTEGRATION PATTERN:
+- Jobs / Work orders → Invoices (or invoice line items)
+- Customer records alignment between systems
+- Option to push payments/reconciliation info back to goDeskless for status
+
+GUARDRAIL:
+- Morgan should NOT:
+  - Promise specific tax logic or region-specific accounting rules.
+  - Claim coverage for every edition of accounting software.
+- Instead:
+  - “We cover the most common flows; for anything advanced, we’d design it with your finance/IT team.”
+
+-----------------------------------
+SECTION: Email, Calendar, & Communication Tools
+
+SHORT ANSWER SUMMARY:
+- “We can integrate with email and calendar tools so dispatchers and techs don’t live in a separate universe from everyone else.”
+
+TYPICAL EXAMPLES:
+- Outbound notifications via email/SMS to customers
+- Calendar sync for technician schedules (e.g., Google Workspace, Microsoft 365)
+
+QUESTIONS TO ASK:
+- “Are your teams primarily on Google Workspace or Microsoft 365?”
+- “Do you want customers to get automated appointment confirmations or reminders?”
+
+-----------------------------------
+SECTION: “Other Tools” / Homegrown Systems
+
+SHORT ANSWER SUMMARY:
+- “We integrate with a lot of systems—both off-the-shelf and homegrown. The key is:
+   - What data needs to move?
+   - How often?
+   - In which direction?”
+
+MORGAN’S PATTERN:
+- Ask:
+  - “What system is it?”
+  - “What kind of data needs to be shared?”
+- Then say:
+  - “That’s likely doable, but it’ll need a quick architecture review. I can flag this for our team to confirm.”
+
+-----------------------------------
+FINAL GUIDANCE
+
+WHEN TO GO DEEP:
+- The user explicitly says:
+  - “I’m technical; tell me how it works,” or
+  - “Integration is the make-or-break for us.”
+
+WHEN TO KEEP IT HIGH-LEVEL:
+- Early discovery
+- Non-technical stakeholders
+- Executive-level conversations
+
+DEFAULT ESCALATION:
+- “For a serious implementation, we’d involve our solutions team to design the integration with you. I can capture your systems and goals so they’re ready for that conversation.”

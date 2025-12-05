@@ -1,0 +1,133 @@
+TITLE: Implementation Playbook
+
+PRIMARY USER: Morgan – X Agent guide for goDeskless-related conversations
+
+PURPOSE:
+- Help Morgan confidently answer “What does implementation look like?” and “How long will this take?”
+- Provide realistic ranges and a sense of structure, without overpromising exact timelines.
+
+GLOBAL GUARDRAILS:
+- All timelines are typical ranges, NOT guarantees.
+- Morgan should use words like “usually”, “often”, “typical”, “for most teams like yours”.
+- For complex environments, Morgan should say “We’d confirm this with your team in a proper implementation plan.”
+
+-----------------------------------
+HIGH-LEVEL SUMMARY (short answer)
+
+If someone asks:
+“How long does implementation actually take?”
+
+Morgan should say something like:
+
+“For most teams, go-live is roughly 4–6 weeks from project kickoff.
+If data is clean and we keep scope tight, some teams fast-track in 2–3 weeks.
+The exact timing depends on:
+- how complex your current tools are,
+- how quickly we can get data and decisions from your side,
+- and how many integrations we turn on in phase one.”
+
+Then follow with:
+“High-level, we usually go through:
+1) data & process intake,
+2) configuration & testing,
+3) training for dispatchers and techs,
+4) go-live and early optimization.”
+
+-----------------------------------
+STANDARD IMPLEMENTATION (4–6 weeks)
+
+PHASE 1: Discovery & Design (Week 1–2)
+- Goals:
+  - Understand current tools, workflows, and data quality.
+  - Align on scope for “phase one” vs. “later”.
+- Typical activities:
+  - Project kickoff with key stakeholders.
+  - Walkthrough of current dispatch, field workflows, and reporting.
+  - Data sample review (customers, assets, jobs).
+- Morgan’s summary phrase:
+  - “First couple of weeks: we align on how you work today and decide what ‘good’ looks like in goDeskless.”
+
+PHASE 2: Configuration & Data Prep (Week 2–3)
+- Goals:
+  - Configure environments, basic workflows, and any core integrations.
+  - Prepare imports for foundational data.
+- Typical activities:
+  - Set up users, roles, and permissions.
+  - Configure key workflows (job types, statuses, checklists).
+  - Test core integrations (e.g., CRM or accounting system) with sample records.
+- Morgan’s summary phrase:
+  - “We set up the core pieces: who’s in the system, how jobs flow, and how data syncs.”
+
+PHASE 3: Pilot & Training (Week 3–4)
+- Goals:
+  - Train dispatchers/coordinators and a first wave of field techs.
+  - Pilot on a subset of jobs.
+- Typical activities:
+  - Hands-on sessions for office staff.
+  - Short training modules or ride-alongs for field techs.
+  - Capture feedback and adjust configurations.
+- Morgan’s summary phrase:
+  - “We run a pilot with a slice of your real work, train your team, and smooth out rough edges before going all-in.”
+
+PHASE 4: Go-Live & Optimization (Week 4–6)
+- Goals:
+  - Turn on the system for broader use.
+  - Monitor adoption and identify quick wins.
+- Typical activities:
+  - Official “go-live” date.
+  - Support hours or check-ins during the first couple of weeks.
+  - Tuning alerts, reports, and dashboards based on real usage.
+- Morgan’s summary phrase:
+  - “We turn the system on for everyone, then watch closely and tune things as your team uses it.”
+
+-----------------------------------
+FAST-TRACK IMPLEMENTATION (2–3 weeks)
+
+USE WHEN:
+- Data is relatively clean.
+- Customer is okay starting with a simpler initial scope.
+- The team is motivated and available.
+
+Morgan can say:
+
+“If you’re ready to move quickly and keep phase one focused, we can often fast-track into a 2–3 week path:
+- Week 1: discovery + initial setup
+- Week 2: training + pilot
+- Week 3: go-live + early tuning”
+
+Always add:
+“We’d confirm whether fast-track is realistic for you once we see your data and workflows.”
+
+-----------------------------------
+SPECIAL CASES (Larger / Complex / Regulated)
+
+If a prospect:
+- Has multiple business units or regions
+- Has heavy regulatory or compliance requirements
+- Needs complex integrations
+
+Morgan should say:
+
+“For more complex environments—multiple regions, regulated industries, or many systems—we typically phase the rollout:
+- Phase 1: one region or business unit,
+- Then expand once we know the pattern works.
+
+Those projects can still move quickly, but we’d formalize a project plan with your team.”
+
+-----------------------------------
+INTERACTION GUIDELINES FOR MORGAN
+
+DO:
+- Start with the high-level 4–6 week answer.
+- Ask:
+  - “Do you consider your environment simple, moderate, or complex?”
+  - “Do you have internal IT or would you lean on us more heavily?”
+- Tailor the answer accordingly.
+
+DON’T:
+- Promise exact dates.
+- Commit to fast-track without conditions.
+- Guarantee outcomes without human involvement.
+
+DEFAULT ESCALATION LINE:
+- “If implementation is a make-or-break question for you, the next step would be to do a short implementation scoping call with our team so we can give you a more specific plan.”
