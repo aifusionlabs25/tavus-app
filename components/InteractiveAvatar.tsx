@@ -122,7 +122,7 @@ export default function InteractiveAvatar() {
                 <div className="flex items-center gap-3">
                     <img src="/morgan_icon.png" alt="Morgan Icon" className="w-10 h-10 object-contain drop-shadow-[0_0_10px_rgba(56,189,248,0.5)]" />
                     <span className="text-white text-xl font-light tracking-wide">
-                        Morgan <span className="text-slate-500 mx-2">|</span> <span className="text-emerald-400 font-medium">goDeskless</span>
+                        Morgan <span className="text-slate-500 mx-2">|</span> <span className="text-emerald-400 font-medium">GoDeskless</span>
                     </span>
                 </div>
             </div>
@@ -174,16 +174,16 @@ export default function InteractiveAvatar() {
                             </h2>
 
                             <p className="text-lg text-slate-400 max-w-lg leading-relaxed mb-10">
-                                Your AI-powered Field Service Specialist.
-                                <br />Ready to qualify leads and demo goDeskless.
+                                Your GoDeskless Field Service Specialist.
+                                <br />Ready to qualify leads and demo GoDeskless.
                             </p>
 
                             <button
                                 onClick={startConversation}
                                 disabled={loading}
-                                className="group relative px-10 py-5 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 rounded-full text-white font-medium text-xl shadow-[0_0_40px_rgba(16,185,129,0.3)] hover:shadow-[0_0_60px_rgba(16,185,129,0.5)] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed overflow-hidden"
+                                className="group relative px-10 py-5 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 rounded-full text-white font-medium text-xl shadow-[0_0_40px_rgba(16,185,129,0.3)] hover:shadow-[0_0_60px_rgba(16,185,129,0.5)] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed overflow-hidden flex items-center justify-center"
                             >
-                                <span className="relative z-10 flex items-center gap-3">
+                                <span className="relative z-10 flex items-center gap-3 justify-center">
                                     {loading ? 'Connecting...' : 'Talk to Morgan'}
                                     {!loading && <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" /></svg>}
                                 </span>
