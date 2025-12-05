@@ -166,11 +166,11 @@ export default function InteractiveAvatar() {
                             {/* Increased size, removed padding/border to make image fill the circle */}
                             <div className="rounded-full bg-gradient-to-tr from-blue-500/10 to-emerald-500/10 mb-8 relative group">
                                 <div className="absolute inset-0 rounded-full bg-emerald-500/20 blur-xl group-hover:blur-2xl transition-all duration-500"></div>
-                                {/* Image path updated to 'godeskless-logo.png' (User Requested Logo) */}
+                                {/* Image path updated to 'morgan-headshot-circle.png' (User Specified Asset) */}
                                 <img
-                                    src="/godeskless-logo.png"
-                                    alt="GoDeskless Logo"
-                                    className="w-60 h-60 object-contain relative z-10 opacity-90 group-hover:scale-105 transition-transform duration-500"
+                                    src="/morgan-headshot-circle.png"
+                                    alt="Morgan Headshot"
+                                    className="w-60 h-60 object-cover rounded-full relative z-10 opacity-90 group-hover:scale-105 transition-transform duration-500"
                                 />
                             </div>
 
