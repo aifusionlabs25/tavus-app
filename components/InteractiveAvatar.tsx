@@ -163,13 +163,14 @@ export default function InteractiveAvatar() {
                     ) : (
                         /* IDLE STATE UI */
                         <div className="w-full h-full bg-slate-900/50 backdrop-blur-sm flex flex-col items-center justify-center text-center p-12">
-                            <div className="p-6 rounded-full bg-gradient-to-tr from-blue-500/10 to-emerald-500/10 border border-white/5 mb-8 relative group">
+                            {/* Increased size, removed padding/border to make image fill the circle */}
+                            <div className="rounded-full bg-gradient-to-tr from-blue-500/10 to-emerald-500/10 mb-8 relative group">
                                 <div className="absolute inset-0 rounded-full bg-emerald-500/20 blur-xl group-hover:blur-2xl transition-all duration-500"></div>
                                 {/* Image path updated to 'morgan-ii-thumbnail.png' (New Asset) */}
                                 <img
                                     src="/morgan-ii-thumbnail.png"
                                     alt="Morgan II"
-                                    className="w-32 h-32 object-contain rounded-full relative z-10 opacity-90 group-hover:scale-105 transition-transform duration-500 text-transparent"
+                                    className="w-48 h-48 object-cover rounded-full relative z-10 opacity-90 group-hover:scale-105 transition-transform duration-500"
                                 />
                             </div>
 
@@ -179,7 +180,6 @@ export default function InteractiveAvatar() {
 
                             <p className="text-lg text-slate-400 max-w-lg leading-relaxed mb-10">
                                 Your GoDeskless Field Service Specialist.
-                                <br />Ready to qualify leads and demo GoDeskless.
                             </p>
 
                             <button
@@ -188,7 +188,7 @@ export default function InteractiveAvatar() {
                                 className="group relative px-10 py-5 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 rounded-full text-white font-medium text-xl shadow-[0_0_40px_rgba(16,185,129,0.3)] hover:shadow-[0_0_60px_rgba(16,185,129,0.5)] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed overflow-hidden flex items-center justify-center"
                             >
                                 <span className="relative z-10 flex items-center gap-3 justify-center">
-                                    {loading ? 'Connecting...' : 'Talk to Morgan'}
+                                    {loading ? 'Connecting...' : 'Start Conversation'}
                                     {!loading && <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" /></svg>}
                                 </span>
                             </button>
