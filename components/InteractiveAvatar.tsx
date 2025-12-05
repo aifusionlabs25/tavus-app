@@ -165,11 +165,11 @@ export default function InteractiveAvatar() {
                         <div className="w-full h-full bg-slate-900/50 backdrop-blur-sm flex flex-col items-center justify-center text-center p-12">
                             <div className="p-6 rounded-full bg-gradient-to-tr from-blue-500/10 to-emerald-500/10 border border-white/5 mb-8 relative group">
                                 <div className="absolute inset-0 rounded-full bg-emerald-500/20 blur-xl group-hover:blur-2xl transition-all duration-500"></div>
-                                {/* Image path fixed to 'morgan-icon.png' (hyphen) to match public folder */}
+                                {/* Image path updated to 'morgan-ii-thumbnail.png' (New Asset) */}
                                 <img
-                                    src="/morgan-icon.png"
-                                    alt="Morgan Avatar"
-                                    className="w-32 h-32 object-contain relative z-10 opacity-90 group-hover:scale-105 transition-transform duration-500 text-transparent"
+                                    src="/morgan-ii-thumbnail.png"
+                                    alt="Morgan II"
+                                    className="w-32 h-32 object-contain rounded-full relative z-10 opacity-90 group-hover:scale-105 transition-transform duration-500 text-transparent"
                                 />
                             </div>
 
