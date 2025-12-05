@@ -21,6 +21,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${outfit.variable} font-sans antialiased`}>
         {children}
+        <script src="https://tavusapi.com/daily-js"></script>
       </body>
     </html>
   );
