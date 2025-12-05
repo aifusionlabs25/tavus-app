@@ -2,13 +2,7 @@
 
 import { useState } from 'react';
 
-declare global {
-    namespace JSX {
-        interface IntrinsicElements {
-            'tavus-broadcast-view': any;
-        }
-    }
-}
+
 
 export default function InteractiveAvatar() {
     const [conversation, setConversation] = useState<any>(null);
@@ -156,8 +150,8 @@ export default function InteractiveAvatar() {
 
                 {/* B. MORGAN AVATAR CONTAINER */}
                 <div className={`relative transition-all duration-700 ease-in-out ${showDemo
-                        ? 'w-[320px] h-[180px] absolute bottom-8 right-8 z-40 rounded-xl overflow-hidden border-2 border-emerald-500/50 shadow-[0_0_30px_rgba(16,185,129,0.2)]' // PIP Mode
-                        : 'w-full max-w-4xl aspect-video z-30 rounded-2xl overflow-hidden shadow-[0_0_80px_rgba(0,0,0,0.6)] border border-white/10' // Full Mode
+                    ? 'w-[320px] h-[180px] absolute bottom-8 right-8 z-40 rounded-xl overflow-hidden border-2 border-emerald-500/50 shadow-[0_0_30px_rgba(16,185,129,0.2)]' // PIP Mode
+                    : 'w-full max-w-4xl aspect-video z-30 rounded-2xl overflow-hidden shadow-[0_0_80px_rgba(0,0,0,0.6)] border border-white/10' // Full Mode
                     }`}>
                     {conversation ? (
                         <div className="w-full h-full">
