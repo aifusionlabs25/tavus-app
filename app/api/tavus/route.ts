@@ -15,8 +15,18 @@ function cleanGreetingForTTS(greeting: string): string {
   return greeting;
 }
 
+// Default KB Tags (v18.8)
+const DEFAULT_KB_TAGS = [
+  'godeskless-pricing',
+  'godeskless-roi',
+  'godeskless-competition',
+  'godeskless-battle-cards',
+  'godeskless-implementation',
+  'godeskless-objections'
+];
+
 export async function POST(request: Request) {
-  const { persona_id, audio_only, memory_id } = await request.json();
+  const { persona_id, audio_only, memory_id, document_tags } = await request.json();
 
   if (!process.env.TAVUS_API_KEY) {
     return NextResponse.json({ error: 'API key not configured' }, { status: 500 });
@@ -33,9 +43,13 @@ export async function POST(request: Request) {
     const rawGreeting = "Hey! I'm Morgan, your goDeskless guide. I'm here to answer questions, share ideas, or just talk through what you're working on. What brings you here today?";
     const cleanedGreeting = cleanGreetingForTTS(rawGreeting);
 
+    // Merge default tags with any custom tags
+    const finalTags = Array.from(new Set([...DEFAULT_KB_TAGS, ...(document_tags || [])]));
+
     const body: any = {
       persona_id: persona_id,
       custom_greeting: cleanedGreeting,
+      document_tags: finalTags, // NEW: Attach KB tags
       properties: {
         max_call_duration: 3600,
         enable_recording: true,
