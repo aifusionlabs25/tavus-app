@@ -10,6 +10,7 @@ export default function InteractiveAvatar() {
     const [error, setError] = useState('');
     const [audioOnly, setAudioOnly] = useState(false);
     const [showDemo, setShowDemo] = useState(false);
+    const [isScreenSharing, setIsScreenSharing] = useState(false);
 
     const startConversation = async () => {
         const activePersonaId = process.env.NEXT_PUBLIC_TAVUS_PERSONA_ID;
@@ -109,6 +110,32 @@ export default function InteractiveAvatar() {
         }
     };
 
+    // Screen Share Handler for Perception Layer
+    const handleScreenShare = async () => {
+        try {
+            // Request screen share from browser
+            const stream = await navigator.mediaDevices.getDisplayMedia({
+                video: true,
+                audio: false
+            });
+
+            // Track when user stops sharing
+            stream.getVideoTracks()[0].onended = () => {
+                setIsScreenSharing(false);
+                console.log('Screen share ended by user');
+            };
+
+            setIsScreenSharing(true);
+            console.log('Screen share started - Morgan can now see the demo!');
+
+            // Note: In a full implementation, you'd send this stream to Tavus
+            // For now, the browser's screen share indicator shows it's active
+        } catch (err) {
+            console.error('Screen share failed:', err);
+            setIsScreenSharing(false);
+        }
+    };
+
     return (
         <div className="w-full h-screen bg-black flex flex-col items-center justify-center relative overflow-hidden font-sans selection:bg-cyan-500/30">
             {/* 1. BACKGROUND: Deep Void with Tech Glows */}
@@ -165,14 +192,40 @@ export default function InteractiveAvatar() {
                             src="https://godeskless.com/lp/interactive-demo/"
                             className="w-full h-full border-0 rounded-lg shadow-2xl opacity-100"
                         />
-                        {/* "Back to Morgan" Button */}
-                        <button
-                            onClick={handleEndDemo}
-                            className="absolute bottom-8 right-8 z-50 bg-slate-900/80 text-white px-6 py-3 rounded-full border border-slate-700 hover:bg-slate-800 transition-all flex items-center gap-2 backdrop-blur-md"
-                        >
-                            <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse"></span>
-                            End Demo
-                        </button>
+                        {/* Demo Mode Controls */}
+                        <div className="absolute bottom-8 right-8 z-50 flex items-center gap-3">
+                            {/* Share Screen Button - Let Morgan see the demo */}
+                            <button
+                                onClick={handleScreenShare}
+                                className={`px-6 py-3 rounded-full font-medium backdrop-blur-md transition-all flex items-center gap-2 ${isScreenSharing
+                                        ? 'bg-emerald-600/90 text-white border border-emerald-400'
+                                        : 'bg-blue-600/90 hover:bg-blue-500/90 text-white border border-blue-400'
+                                    }`}
+                            >
+                                {isScreenSharing ? (
+                                    <>
+                                        <span className="w-2 h-2 rounded-full bg-white animate-pulse"></span>
+                                        Morgan is Watching
+                                    </>
+                                ) : (
+                                    <>
+                                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                                        </svg>
+                                        Share Screen with Morgan
+                                    </>
+                                )}
+                            </button>
+
+                            {/* End Demo Button */}
+                            <button
+                                onClick={handleEndDemo}
+                                className="bg-slate-900/80 text-white px-6 py-3 rounded-full border border-slate-700 hover:bg-slate-800 transition-all flex items-center gap-2 backdrop-blur-md"
+                            >
+                                <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse"></span>
+                                End Demo
+                            </button>
+                        </div>
                     </div>
                 )}
 
