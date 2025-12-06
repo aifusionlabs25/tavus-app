@@ -113,10 +113,14 @@ export default function InteractiveAvatar() {
     // Screen Share Handler for Perception Layer
     const handleScreenShare = async () => {
         try {
-            // Request screen share from browser
+            // Request screen share - prefer current tab for easier selection
             const stream = await navigator.mediaDevices.getDisplayMedia({
-                video: true,
-                audio: false
+                video: {
+                    displaySurface: 'browser' // Prefer browser tab over window/screen
+                },
+                audio: false,
+                // @ts-ignore - preferCurrentTab is a newer API
+                preferCurrentTab: true // Pre-select current tab if supported
             });
 
             // Track when user stops sharing
@@ -144,15 +148,19 @@ export default function InteractiveAvatar() {
                 <div className="absolute bottom-0 right-0 w-[800px] h-[600px] bg-emerald-900/10 rounded-full blur-[120px]"></div>
             </div>
 
-            {/* 2. HEADER: Minimal & Tech-Focused */}
+            {/* 2. HEADER: Minimal & Tech-Focused - Hide logo when demo is active */}
             <div className="absolute top-0 left-0 w-full z-50 flex items-center justify-between px-8 py-6">
-                <div className="flex items-center gap-3">
-                    <img
-                        src="/godeskless-logo-white-clean.png"
-                        alt="GoDeskless"
-                        className="h-9 w-auto object-contain"
-                    />
-                </div>
+                {/* Logo - Hidden when demo is showing */}
+                {!showDemo && (
+                    <div className="flex items-center gap-3">
+                        <img
+                            src="/godeskless-logo-white-clean.png"
+                            alt="GoDeskless"
+                            className="h-9 w-auto object-contain"
+                        />
+                    </div>
+                )}
+                {showDemo && <div></div>} {/* Empty spacer when logo hidden */}
 
                 {/* Right Side: Active Conversation Controls */}
                 {conversation && (
@@ -185,15 +193,15 @@ export default function InteractiveAvatar() {
             {/* 3. MAIN CONTENT AREA */}
             <div className="relative w-full h-full max-w-[1600px] mx-auto flex items-center justify-center p-8">
 
-                {/* A. INTERACTIVE DEMO IFRAME (Appears behind/beside Morgan) */}
+                {/* A. INTERACTIVE DEMO IFRAME - Full screen for better visibility */}
                 {showDemo && (
-                    <div className="absolute inset-0 z-20 flex items-center justify-center bg-black/90 transition-all duration-700 ease-in-out animation-fade-in">
+                    <div className="fixed inset-0 z-20 bg-black transition-all duration-700 ease-in-out animation-fade-in">
                         <iframe
                             src="https://godeskless.com/lp/interactive-demo/"
-                            className="w-full h-full border-0 rounded-lg shadow-2xl opacity-100"
+                            className="w-full h-full border-0"
                         />
-                        {/* Demo Mode Controls - Higher z-index to appear above iframe */}
-                        <div className="absolute bottom-8 right-8 z-[200] flex items-center gap-3">
+                        {/* Demo Mode Controls - Left side to not overlap Morgan */}
+                        <div className="absolute bottom-8 left-8 z-[200] flex items-center gap-3">
                             {/* Share Screen Button - Let Morgan see the demo */}
                             <button
                                 onClick={handleScreenShare}
@@ -229,9 +237,9 @@ export default function InteractiveAvatar() {
                     </div>
                 )}
 
-                {/* B. MORGAN AVATAR CONTAINER */}
+                {/* B. MORGAN AVATAR CONTAINER - Vertically centered on right in PIP mode */}
                 <div className={`transition-all duration-700 ease-in-out ${showDemo
-                    ? 'fixed bottom-24 right-8 w-[320px] h-[180px] z-[100] rounded-xl overflow-hidden border-2 border-emerald-500/50 shadow-[0_0_30px_rgba(16,185,129,0.2)]' // PIP Mode - Moved up to not overlap End Demo button
+                    ? 'fixed right-4 top-1/2 -translate-y-1/2 w-[280px] h-[360px] z-[100] rounded-xl overflow-hidden border-2 border-emerald-500/50 shadow-[0_0_40px_rgba(16,185,129,0.3)]' // PIP Mode - Vertical stack, centered on right
                     : 'relative w-full max-w-6xl h-[80vh] z-30 rounded-2xl overflow-hidden shadow-[0_0_80px_rgba(0,0,0,0.6)] border border-white/10' // Full Mode - Larger!
                     }`}>
                     {conversation ? (
