@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 
 export async function POST(request: Request) {
     try {
-        const { name, email, company, message } = await request.json();
+        const { name, email, phone, company, companyName, message } = await request.json();
 
         // Validate required fields
         if (!name || !email) {
@@ -17,7 +17,9 @@ export async function POST(request: Request) {
         console.log('📧 New Lead Captured:');
         console.log('  Name:', name);
         console.log('  Email:', email);
+        console.log('  Phone:', phone || 'Not provided');
         console.log('  Company:', company || 'Not provided');
+        console.log('  Role:', companyName || 'Not provided');
         console.log('  Message:', message || 'No message');
 
         // Send email using fetch to a simple email service
@@ -27,7 +29,9 @@ New Lead from Morgan AI Demo
 
 Name: ${name}
 Email: ${email}
+Phone: ${phone || 'Not provided'}
 Company: ${company || 'Not provided'}
+Role: ${companyName || 'Not provided'}
 Message: ${message || 'No message'}
 
 Submitted: ${new Date().toISOString()}
