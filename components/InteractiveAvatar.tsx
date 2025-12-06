@@ -11,6 +11,12 @@ export default function InteractiveAvatar() {
     const [audioOnly, setAudioOnly] = useState(false);
     const [showDemo, setShowDemo] = useState(false);
 
+    // Lead Capture Form State
+    const [showContactForm, setShowContactForm] = useState(false);
+    const [contactForm, setContactForm] = useState({ name: '', email: '', company: '', message: '' });
+    const [contactSubmitting, setContactSubmitting] = useState(false);
+    const [contactSuccess, setContactSuccess] = useState(false);
+
     const startConversation = async () => {
         const activePersonaId = process.env.NEXT_PUBLIC_TAVUS_PERSONA_ID;
 
@@ -110,6 +116,36 @@ export default function InteractiveAvatar() {
         setShowDemo(false);
     }, []);
 
+    // Lead Capture Form Submit
+    const handleContactSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        setContactSubmitting(true);
+        try {
+            const response = await fetch('/api/contact', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(contactForm),
+            });
+            if (response.ok) {
+                setContactSuccess(true);
+                setTimeout(() => {
+                    setShowContactForm(false);
+                    setContactSuccess(false);
+                    setContactForm({ name: '', email: '', company: '', message: '' });
+                }, 2000);
+            }
+        } catch (err) {
+            console.error('Contact form error:', err);
+        } finally {
+            setContactSubmitting(false);
+        }
+    };
+
+    // Calendly - opens popup
+    const openCalendly = () => {
+        window.open('https://calendly.com/rahul-godeskless/godeskless-demo', '_blank', 'width=600,height=700');
+    };
+
     return (
         <CVIProvider>
             <div className="w-full h-screen bg-black flex flex-col items-center justify-center relative overflow-hidden font-sans selection:bg-cyan-500/30">
@@ -135,32 +171,59 @@ export default function InteractiveAvatar() {
                     )}
                     {showDemo && <div></div>} {/* Empty spacer when logo hidden */}
 
-                    {/* Right Side: Active Conversation Controls */}
-                    {conversation && (
-                        <div className="flex items-center gap-4">
-                            {/* Interactive Demo Button - matches Start Conversation styling */}
-                            <button
-                                onClick={handleStartDemo}
-                                className="group flex items-center gap-3 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white px-6 py-3 rounded-full font-medium shadow-[0_0_30px_rgba(16,185,129,0.3)] hover:shadow-[0_0_50px_rgba(16,185,129,0.5)] transition-all duration-300"
-                            >
-                                <span>Interactive Demo</span>
-                                <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                                </svg>
-                            </button>
+                    {/* Right Side Controls */}
+                    <div className="flex items-center gap-4">
+                        {/* When NO conversation - show Schedule Demo & Contact buttons */}
+                        {!conversation && (
+                            <>
+                                <button
+                                    onClick={openCalendly}
+                                    className="flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white px-5 py-2.5 rounded-full font-medium border border-white/20 transition-all duration-300"
+                                >
+                                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                    </svg>
+                                    <span>Schedule Demo</span>
+                                </button>
+                                <button
+                                    onClick={() => setShowContactForm(true)}
+                                    className="flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white px-5 py-2.5 rounded-full font-medium border border-white/20 transition-all duration-300"
+                                >
+                                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                                    </svg>
+                                    <span>Contact Us</span>
+                                </button>
+                            </>
+                        )}
 
-                            {/* Exit/End Button - red with matching style */}
-                            <button
-                                onClick={endConversation}
-                                className="flex items-center gap-2 bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-500 hover:to-rose-500 text-white px-6 py-3 rounded-full font-medium shadow-[0_0_30px_rgba(239,68,68,0.3)] hover:shadow-[0_0_50px_rgba(239,68,68,0.5)] transition-all duration-300"
-                            >
-                                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                                </svg>
-                                <span>Exit</span>
-                            </button>
-                        </div>
-                    )}
+                        {/* When IN conversation - show Demo & Exit buttons */}
+                        {conversation && (
+                            <>
+                                {/* Interactive Demo Button - matches Start Conversation styling */}
+                                <button
+                                    onClick={handleStartDemo}
+                                    className="group flex items-center gap-3 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white px-6 py-3 rounded-full font-medium shadow-[0_0_30px_rgba(16,185,129,0.3)] hover:shadow-[0_0_50px_rgba(16,185,129,0.5)] transition-all duration-300"
+                                >
+                                    <span>Interactive Demo</span>
+                                    <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                                    </svg>
+                                </button>
+
+                                {/* Exit/End Button - red with matching style */}
+                                <button
+                                    onClick={endConversation}
+                                    className="flex items-center gap-2 bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-500 hover:to-rose-500 text-white px-6 py-3 rounded-full font-medium shadow-[0_0_30px_rgba(239,68,68,0.3)] hover:shadow-[0_0_50px_rgba(239,68,68,0.5)] transition-all duration-300"
+                                >
+                                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                                    </svg>
+                                    <span>Exit</span>
+                                </button>
+                            </>
+                        )}
+                    </div>
                 </div>
 
                 {/* 3. MAIN CONTENT AREA */}
@@ -243,6 +306,90 @@ export default function InteractiveAvatar() {
 
                 </div>
             </div>
+
+            {/* CONTACT FORM MODAL */}
+            {showContactForm && (
+                <div className="fixed inset-0 z-[999] flex items-center justify-center bg-black/70 backdrop-blur-sm">
+                    <div className="bg-slate-900 border border-slate-700 rounded-2xl p-8 w-full max-w-md shadow-2xl">
+                        {/* Header */}
+                        <div className="flex items-center justify-between mb-6">
+                            <h3 className="text-2xl font-semibold text-white">Contact Us</h3>
+                            <button
+                                onClick={() => setShowContactForm(false)}
+                                className="text-slate-400 hover:text-white transition-colors"
+                            >
+                                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                            </button>
+                        </div>
+
+                        {contactSuccess ? (
+                            <div className="text-center py-8">
+                                <div className="w-16 h-16 bg-emerald-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                                    <svg className="w-8 h-8 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                                    </svg>
+                                </div>
+                                <p className="text-xl text-white">Thank you!</p>
+                                <p className="text-slate-400 mt-2">We'll be in touch soon.</p>
+                            </div>
+                        ) : (
+                            <form onSubmit={handleContactSubmit} className="space-y-4">
+                                <div>
+                                    <label className="block text-sm text-slate-400 mb-1">Name *</label>
+                                    <input
+                                        type="text"
+                                        required
+                                        value={contactForm.name}
+                                        onChange={(e) => setContactForm({ ...contactForm, name: e.target.value })}
+                                        className="w-full px-4 py-3 bg-slate-800 border border-slate-600 rounded-lg text-white focus:outline-none focus:border-emerald-500 transition-colors"
+                                        placeholder="Your name"
+                                    />
+                                </div>
+                                <div>
+                                    <label className="block text-sm text-slate-400 mb-1">Email *</label>
+                                    <input
+                                        type="email"
+                                        required
+                                        value={contactForm.email}
+                                        onChange={(e) => setContactForm({ ...contactForm, email: e.target.value })}
+                                        className="w-full px-4 py-3 bg-slate-800 border border-slate-600 rounded-lg text-white focus:outline-none focus:border-emerald-500 transition-colors"
+                                        placeholder="your@email.com"
+                                    />
+                                </div>
+                                <div>
+                                    <label className="block text-sm text-slate-400 mb-1">Company</label>
+                                    <input
+                                        type="text"
+                                        value={contactForm.company}
+                                        onChange={(e) => setContactForm({ ...contactForm, company: e.target.value })}
+                                        className="w-full px-4 py-3 bg-slate-800 border border-slate-600 rounded-lg text-white focus:outline-none focus:border-emerald-500 transition-colors"
+                                        placeholder="Your company"
+                                    />
+                                </div>
+                                <div>
+                                    <label className="block text-sm text-slate-400 mb-1">Message</label>
+                                    <textarea
+                                        value={contactForm.message}
+                                        onChange={(e) => setContactForm({ ...contactForm, message: e.target.value })}
+                                        rows={3}
+                                        className="w-full px-4 py-3 bg-slate-800 border border-slate-600 rounded-lg text-white focus:outline-none focus:border-emerald-500 transition-colors resize-none"
+                                        placeholder="How can we help?"
+                                    />
+                                </div>
+                                <button
+                                    type="submit"
+                                    disabled={contactSubmitting}
+                                    className="w-full py-3 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-medium rounded-lg transition-all duration-300 disabled:opacity-50"
+                                >
+                                    {contactSubmitting ? 'Sending...' : 'Send Message'}
+                                </button>
+                            </form>
+                        )}
+                    </div>
+                </div>
+            )}
         </CVIProvider>
     );
 }

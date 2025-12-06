@@ -1,0 +1,229 @@
+GODESKLESS INTERACTIVE DEMO - MORGAN'S NARRATION GUIDE
+======================================================
+
+This knowledge base document helps Morgan understand and narrate the GoDeskless interactive demo. Morgan should use this information naturally, not read it verbatim. Respond based on user engagement - stay quiet if they're clicking through confidently, offer context if they pause or ask questions.
+
+DEMO OVERVIEW
+-------------
+The demo follows Beth King, a Head of IT at BizTech whose network goes down. It shows how GoDeskless enables fast response from her service provider (Telesis) using the full platform: customer portal, dispatcher console, field agent app.
+
+Total Steps: 25
+Primary Story: Network outage → ticket creation → remote troubleshooting → field dispatch → resolution → customer feedback
+Key Characters: Beth (customer), Toby Morgan (service advisor/dispatcher), Joe Dempsy (field technician)
+
+
+STEP-BY-STEP CONTEXT
+====================
+
+STEP 1 - Welcome Screen
+-----------------------
+Visual: GoDeskless logo with "Let's Go" and "Maybe Later" buttons
+Context: This is the entry point to the interactive demo experience
+If user pauses: "Ready to dive in? Just click 'Let's Go' - I'll walk you through a real-world scenario."
+If user asks: "This demo shows how GoDeskless transforms field service from the customer's first message to job completion."
+
+STEP 2 - Click Here Introduction
+--------------------------------
+Visual: "CLICK HERE" button highlighted, "1 of 25" indicator
+Context: The demo uses guided hotspots to navigate
+If user pauses: "Just follow the highlighted buttons - they'll guide you through the story."
+
+STEP 3 - Industry Selection
+---------------------------
+Visual: List of industries - Construction, Manufacturing, Utilities, Retail, Healthcare, Real Estate, Public Sector
+Context: GoDeskless serves multiple verticals
+If user asks about industries: "We work across many verticals. This demo uses telecom as the example, but the platform adapts to any field service operation - HVAC, utilities, property management, you name it."
+If user asks about their specific industry: Reference relevant case studies or ask what industry they're in.
+
+STEP 4 - Beth's Problem Begins
+------------------------------
+Visual: iPhone showing Beth texting "Urgent! Our network is down and no one in the building is able to work!"
+Context: Customer initiates contact via text message
+Key point: "Notice how Beth can reach out via text - no phone trees, no hold times. That's SnapHelp in action."
+If user asks: "SnapHelp is our customer communication portal. Customers can text, chat, or submit requests without downloading an app."
+
+STEP 5 - Immediate Response
+---------------------------
+Visual: Automated response message with ticket #725 and link to SnapHelp portal
+Context: System auto-generates ticket and confirms receipt instantly
+Key point: "The system immediately creates a ticket and sends Beth confirmation. No waiting, no uncertainty."
+Feature highlight: Ticket auto-generation, real-time status updates, CRM integration
+
+STEP 6 - Beth Views Her Ticket
+------------------------------
+Visual: SnapHelp web portal showing ticket details - Subject, Priority (Critical), Status (Open), Reported Date
+Context: Customer has full visibility into their service request
+Key point: "Beth can see her ticket status anytime. No more calling to ask 'where's my technician?'"
+Feature highlight: Customer self-service portal, real-time status tracking
+
+STEP 7 - SmartAgent Console (Dispatcher View)
+---------------------------------------------
+Visual: Split screen - left side shows ticket list (Toby's console), right side shows engagement interface
+Context: Service advisors/dispatchers manage tickets from a unified console
+Key point: "This is what Toby, the service advisor, sees. Everything in one place - conversations, history, scheduling."
+Features: Native CRM integration, conversation threading, service history access, remote triage
+
+STEP 8 - Video-Assist Option
+----------------------------
+Visual: Console with video call icons highlighted, engagement options visible
+Context: Dispatcher can initiate video call to troubleshoot remotely
+Key point: "Before sending a truck, Toby can try to resolve this remotely with Video-Assist. That saves truck rolls and gets Beth back online faster."
+Cost benefit: "Every avoided truck roll saves $150-300 on average."
+
+STEP 9 - Communication is Key
+-----------------------------
+Visual: Beth receiving video call invitation via text
+Context: Video-Assist invitation sent to customer
+Key point: "Beth gets a simple link - no app download required. She clicks and joins instantly."
+
+STEP 10 - Video Call in Action
+------------------------------
+Visual: Split screen video call showing Toby and Beth
+Context: Live video troubleshooting session
+Key point: "With camera flip, Beth can show Toby exactly what's happening with the equipment. It's like having eyes on-site without the drive time."
+Features: Two-way video, camera flip, screen annotation (if relevant)
+
+STEP 11 - Toby Determines Dispatch Needed
+-----------------------------------------
+Visual: Console showing ticket with decision to dispatch
+Context: Video-Assist couldn't resolve - field visit required
+Key point: "Sometimes you need boots on the ground. Toby determines a field agent needs to be dispatched."
+Transition: "Now watch how easy it is to find and schedule the right technician."
+
+STEP 12 - Scheduling Options Overview
+-------------------------------------
+Visual: List of scheduling methods - Best Match AI, Drag-n-Drop, Broadcast, Cherry Pick, Work Order Pull, Self Schedule
+Context: Multiple ways to assign work to field agents
+Key point: "We give you options. AI can auto-match, or dispatchers can manually assign. Whatever fits your workflow."
+If user asks about specific option: Explain that method in detail.
+
+STEP 13 - Best Match AI Selection
+---------------------------------
+Visual: Best Match AI interface showing agent qualifiers
+Context: AI selects optimal technician based on multiple factors
+Key point: "Best Match AI considers expertise, proximity, availability, vehicle inventory, and even customer satisfaction ratings."
+Differentiator: "Most competitors just look at location. We factor in who's actually best for this specific job."
+
+STEP 14 - The Scheduler View
+----------------------------
+Visual: Map with field agents and calendar/timeline view
+Context: Visual scheduling interface with geo-location
+Key point: "Dispatchers see everyone's location and schedule at a glance. Drag-and-drop to reassign, click to see details."
+Features: Real-time GPS, availability calendar, skill-based filtering
+
+STEP 15 - Work Order Assigned
+-----------------------------
+Visual: Scheduler showing Joe Dempsy assigned to Beth's ticket
+Context: Job assigned to specific field agent
+Key point: "Joe Dempsy gets the job. He's qualified, nearby, and has the right parts in his van."
+
+STEP 16 - TrackHelp Pro (Field Agent App)
+-----------------------------------------
+Visual: Mobile app showing Joe's work order with map and details
+Context: Field agents receive jobs on mobile app
+Key point: "Joe sees everything he needs - location, customer info, job details, even the conversation history."
+Features: Mobile-first design, offline capability, turn-by-turn navigation
+
+STEP 17 - Knowledge is Key
+--------------------------
+Visual: Parent Ticket Details with conversation history and attachments
+Context: Field agent has full context before arriving
+Key point: "Joe can review the video call, read the messages, see what was already tried. He shows up prepared, not asking Beth to repeat everything."
+Customer experience: "Customers hate repeating themselves. This solves that."
+
+STEP 18 - Start Travel
+----------------------
+Visual: Work order with "Start Travel" button, customer and dispatcher contacts
+Context: One-tap to begin route and notify customer
+Key point: "One tap and Beth gets notified Joe is on his way. Toby sees it too."
+Features: Automatic ETA updates, customer notifications
+
+STEP 19 - Beth Tracks Joe's ETA
+-------------------------------
+Visual: Two phones - Beth receiving notification, SnapHelp showing map with ETA
+Context: Customer can track technician in real-time
+Key point: "Beth can watch Joe approach on the map. No more 3-4 hour appointment windows - she knows exactly when he'll arrive."
+Differentiator: "This is what customers expect from Uber. Now you deliver it for field service."
+
+STEP 20 - Joe Arrives and Gets to Work
+--------------------------------------
+Visual: TrackHelp Pro menu showing all job actions - History, Logs, Notes, Navigate, Work Journey, Add Parts, Checklists
+Context: Comprehensive mobile toolkit for field agents
+Key point: "Watch this menu - history, notes, parts, checklists, reschedule, request help. Everything Joe needs is here."
+Features: Digital checklists, parts tracking, photo/video documentation
+
+STEP 21 - Problem Solved
+------------------------
+Visual: Checklist completion screen with photo of replaced fiber-optic cable
+Context: Work completed and documented
+Key point: "Joe followed his checklist, replaced the fiber-optic cable, and documented it with a photo. Beth's network is back up."
+Compliance: "That photo is timestamped and geotagged - important for audits and warranty claims."
+
+STEP 22 - Closing the Work Order
+--------------------------------
+Visual: Service Call Report with closure options and customer signature
+Context: Digital signature capture and job closure
+Key point: "Beth signs right on Joe's phone. No paper, no lost forms, no 'I never approved that' disputes."
+Features: Digital signatures, closure reason tracking, automatic report generation
+
+STEP 23 - Customer Feedback
+---------------------------
+Visual: SnapHelp feedback form with 5-star rating
+Context: Automatic feedback request sent to customer
+Key point: "Beth rates the experience right away while it's fresh. That feeds into Joe's agent rating and company analytics."
+Business value: "Real-time CSAT scores help you identify your stars and coach those who need help."
+
+STEP 24 - Dashboard Analytics
+-----------------------------
+Visual: GoDeskless dashboard showing KPIs - Field Agents, Tickets, Response Time, Charts
+Context: Management visibility into field operations
+Key point: "Leadership sees it all - who's active, what's open, response times, trends. Real-time visibility, not monthly reports."
+Metrics shown: 18 active agents, 17 min average response time, ticket distribution by priority/status
+
+STEP 25 - Demo Finale
+---------------------
+Visual: GoDeskless logo with "AMAZING RIGHT?" and CTA to request customized demo
+Context: Demo completion and call-to-action
+Key point: "That's the full journey - from Beth's first text to 5-star feedback. Want to see this for YOUR industry?"
+Call to action: Encourage booking a personalized demo to discuss their specific needs.
+
+
+MORGAN'S BEHAVIOR GUIDELINES
+============================
+
+DO:
+- Let users explore at their own pace
+- Offer context when they pause or seem confused
+- Answer questions naturally, referencing specific features
+- Connect features to business outcomes (cost savings, customer satisfaction, efficiency)
+- Celebrate when they reach key milestones ("Great, you just saw Video-Assist in action!")
+
+DON'T:
+- Read these descriptions verbatim
+- Interrupt when they're clicking confidently
+- Overwhelm with too much detail unsolicited
+- Sound scripted or robotic
+- Forget this is a sales conversation - listen for buying signals
+
+
+COMMON QUESTIONS AND ANSWERS
+============================
+
+"How long does implementation take?"
+- Typical: 4-8 weeks depending on complexity
+- We handle integrations, training, and data migration
+
+"What does it cost?"
+- Pricing is based on number of users and features
+- Offer to connect them with sales for a custom quote
+
+"Does it integrate with [X CRM]?"
+- We have native integrations with Salesforce, ServiceNow, Microsoft Dynamics, and others
+- Custom integrations available via API
+
+"Can field agents work offline?"
+- Yes, TrackHelp Pro works offline and syncs when connected
+
+"What about [competitor]?"
+- Focus on our differentiators: mobile-first, customer communication (SnapHelp), AI scheduling
+- Avoid badmouthing competitors directly
