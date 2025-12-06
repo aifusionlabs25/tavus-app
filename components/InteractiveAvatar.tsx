@@ -197,33 +197,21 @@ export default function InteractiveAvatar() {
                             </>
                         )}
 
-                        {/* When IN conversation - show Demo & Exit buttons */}
-                        {conversation && (
+                        {/* When IN conversation and NOT in demo - show Demo & Exit in header */}
+                        {conversation && !showDemo && (
                             <>
-                                {/* Interactive Demo Button - toggles demo on/off */}
-                                {!showDemo ? (
-                                    <button
-                                        onClick={handleStartDemo}
-                                        className="group flex items-center gap-3 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white px-6 py-3 rounded-full font-medium shadow-[0_0_30px_rgba(16,185,129,0.3)] hover:shadow-[0_0_50px_rgba(16,185,129,0.5)] transition-all duration-300"
-                                    >
-                                        <span>Interactive Demo</span>
-                                        <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                                        </svg>
-                                    </button>
-                                ) : (
-                                    <button
-                                        onClick={handleEndDemo}
-                                        className="flex items-center gap-2 bg-slate-700 hover:bg-slate-600 text-white px-5 py-2.5 rounded-full font-medium border border-slate-500 transition-all duration-300"
-                                    >
-                                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-                                        </svg>
-                                        <span>Back to Morgan</span>
-                                    </button>
-                                )}
+                                {/* Interactive Demo Button */}
+                                <button
+                                    onClick={handleStartDemo}
+                                    className="group flex items-center gap-3 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white px-6 py-3 rounded-full font-medium shadow-[0_0_30px_rgba(16,185,129,0.3)] hover:shadow-[0_0_50px_rgba(16,185,129,0.5)] transition-all duration-300"
+                                >
+                                    <span>Interactive Demo</span>
+                                    <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                                    </svg>
+                                </button>
 
-                                {/* Exit/End Conversation Button - red with matching style */}
+                                {/* Exit/End Conversation Button */}
                                 <button
                                     onClick={endConversation}
                                     className="flex items-center gap-2 bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-500 hover:to-rose-500 text-white px-6 py-3 rounded-full font-medium shadow-[0_0_30px_rgba(239,68,68,0.3)] hover:shadow-[0_0_50px_rgba(239,68,68,0.5)] transition-all duration-300"
@@ -258,12 +246,38 @@ export default function InteractiveAvatar() {
                         }`}>
 
                         {conversation ? (
-                            <div className="flex-1 bg-slate-900 overflow-hidden">
+                            <div className="flex-1 bg-slate-900 overflow-hidden flex flex-col">
                                 {/* Official Tavus CVI Conversation Component */}
-                                <Conversation
-                                    conversationUrl={conversation.conversation_url}
-                                    onLeave={handleConversationLeave}
-                                />
+                                <div className="flex-1 overflow-hidden">
+                                    <Conversation
+                                        conversationUrl={conversation.conversation_url}
+                                        onLeave={handleConversationLeave}
+                                    />
+                                </div>
+
+                                {/* Demo mode controls - at bottom of sidebar */}
+                                {showDemo && (
+                                    <div className="p-4 border-t border-slate-700/50 bg-slate-800/80 flex gap-3">
+                                        <button
+                                            onClick={handleEndDemo}
+                                            className="flex-1 flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-500 text-white px-4 py-3 rounded-lg font-medium transition-all duration-300"
+                                        >
+                                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                                            </svg>
+                                            <span>Back to Morgan</span>
+                                        </button>
+                                        <button
+                                            onClick={endConversation}
+                                            className="flex items-center justify-center gap-2 bg-red-600 hover:bg-red-500 text-white px-4 py-3 rounded-lg font-medium transition-all duration-300"
+                                        >
+                                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                                            </svg>
+                                            <span>Exit</span>
+                                        </button>
+                                    </div>
+                                )}
                             </div>
                         ) : (
                             /* IDLE STATE UI */
