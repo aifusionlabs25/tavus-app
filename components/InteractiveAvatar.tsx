@@ -177,9 +177,9 @@ export default function InteractiveAvatar() {
                 )}
 
                 {/* B. MORGAN AVATAR CONTAINER */}
-                <div className={`relative transition-all duration-700 ease-in-out ${showDemo
-                    ? 'w-[320px] h-[180px] absolute bottom-8 right-8 z-40 rounded-xl overflow-hidden border-2 border-emerald-500/50 shadow-[0_0_30px_rgba(16,185,129,0.2)]' // PIP Mode
-                    : 'w-full max-w-6xl h-[80vh] z-30 rounded-2xl overflow-hidden shadow-[0_0_80px_rgba(0,0,0,0.6)] border border-white/10' // Full Mode - Larger!
+                <div className={`transition-all duration-700 ease-in-out ${showDemo
+                    ? 'fixed bottom-8 right-8 w-[320px] h-[180px] z-[100] rounded-xl overflow-hidden border-2 border-emerald-500/50 shadow-[0_0_30px_rgba(16,185,129,0.2)]' // PIP Mode - Fixed to viewport corner
+                    : 'relative w-full max-w-6xl h-[80vh] z-30 rounded-2xl overflow-hidden shadow-[0_0_80px_rgba(0,0,0,0.6)] border border-white/10' // Full Mode - Larger!
                     }`}>
                     {conversation ? (
                         <div className="w-full h-full">
@@ -231,21 +231,6 @@ export default function InteractiveAvatar() {
                         </div>
                     )}
                 </div>
-
-                {/* DEMO TRIGGER (Hidden/Auto or visible for testing?) - Currently Morgan triggers it via context, but we can keep a manual button if needed. 
-                    For now, the UI relies on 'showDemo' state which is toggled via the demo functions. 
-                    If we need a manual trigger for the USER to test: 
-                */}
-                {conversation && !showDemo && (
-                    <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-50 flex gap-4">
-                        <button
-                            onClick={handleStartDemo}
-                            className="bg-slate-800/80 hover:bg-slate-700/80 text-white/50 hover:text-white px-4 py-2 rounded-full text-xs font-medium backdrop-blur-sm border border-white/5 transition-all"
-                        >
-                            [DEV] Trigger Demo
-                        </button>
-                    </div>
-                )}
 
             </div>
         </div>
