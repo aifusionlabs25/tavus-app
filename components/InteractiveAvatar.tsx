@@ -192,14 +192,14 @@ export default function InteractiveAvatar() {
                             src="https://godeskless.com/lp/interactive-demo/"
                             className="w-full h-full border-0 rounded-lg shadow-2xl opacity-100"
                         />
-                        {/* Demo Mode Controls */}
-                        <div className="absolute bottom-8 right-8 z-50 flex items-center gap-3">
+                        {/* Demo Mode Controls - Higher z-index to appear above iframe */}
+                        <div className="absolute bottom-8 right-8 z-[200] flex items-center gap-3">
                             {/* Share Screen Button - Let Morgan see the demo */}
                             <button
                                 onClick={handleScreenShare}
                                 className={`px-6 py-3 rounded-full font-medium backdrop-blur-md transition-all flex items-center gap-2 ${isScreenSharing
-                                        ? 'bg-emerald-600/90 text-white border border-emerald-400'
-                                        : 'bg-blue-600/90 hover:bg-blue-500/90 text-white border border-blue-400'
+                                    ? 'bg-emerald-600/90 text-white border border-emerald-400'
+                                    : 'bg-blue-600/90 hover:bg-blue-500/90 text-white border border-blue-400'
                                     }`}
                             >
                                 {isScreenSharing ? (
