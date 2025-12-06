@@ -65,7 +65,7 @@ interface LeadData {
 }
 
 // Persona IDs
-const PERSONA_V18_7 = 'p17be47caaec';
+const PERSONA_V18_7 = 'p518a2f6eba9'; // Morgan III - Dec 6, 2025 (without Perception)
 const PERSONA_V18_8 = 'p485e5b31290'; // Morgan v18.8 (Tavus-Native)
 
 export async function POST(request: Request) {
