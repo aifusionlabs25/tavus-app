@@ -162,7 +162,7 @@ export default function InteractiveAvatar() {
                 {showDemo && (
                     <div className="absolute inset-0 z-20 flex items-center justify-center bg-black/90 transition-all duration-700 ease-in-out animation-fade-in">
                         <iframe
-                            src="https://godeskless.com"
+                            src="https://godeskless.com/lp/interactive-demo/"
                             className="w-full h-full border-0 rounded-lg shadow-2xl opacity-100"
                         />
                         {/* "Back to Morgan" Button */}
