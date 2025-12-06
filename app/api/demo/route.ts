@@ -47,11 +47,8 @@ export async function POST(request: Request) {
         }
 
         return NextResponse.json({ success: true, action });
+    } catch (error: any) {
+        console.error('Error in demo route:', error);
+        return NextResponse.json({ error: error.message }, { status: 500 });
     }
-
-        return NextResponse.json({ success: true, action });
-} catch (error: any) {
-    console.error('Error in demo route:', error);
-    return NextResponse.json({ error: error.message }, { status: 500 });
-}
 }
