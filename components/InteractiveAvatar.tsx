@@ -157,8 +157,8 @@ export default function InteractiveAvatar() {
                     <div className="absolute bottom-0 right-0 w-[800px] h-[600px] bg-emerald-900/10 rounded-full blur-[120px]"></div>
                 </div>
 
-                {/* 2. HEADER: Minimal & Tech-Focused - Hide logo when demo is active */}
-                <div className="absolute top-0 left-0 w-full z-50 flex items-center justify-between px-8 py-6">
+                {/* 2. HEADER: Minimal & Tech-Focused */}
+                <div className={`absolute top-0 left-0 w-full z-[300] flex items-center justify-between px-8 py-4 ${showDemo ? 'bg-slate-900/95 backdrop-blur-sm border-b border-slate-700/50' : ''}`} style={showDemo ? { right: '420px', width: 'auto' } : {}}>
                     {/* Logo - Hidden when demo is showing */}
                     {!showDemo && (
                         <a href="https://godeskless.com" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 hover:opacity-80 transition-opacity">
@@ -243,7 +243,7 @@ export default function InteractiveAvatar() {
 
                     {/* A. INTERACTIVE DEMO IFRAME - Takes left portion, leaving room for Morgan sidebar */}
                     {showDemo && (
-                        <div className="fixed inset-0 z-20 bg-black transition-all duration-700 ease-in-out" style={{ right: '340px' }}>
+                        <div className="fixed inset-0 z-20 bg-black transition-all duration-700 ease-in-out" style={{ right: '420px', top: '60px' }}>
                             <iframe
                                 src="https://godeskless.com/lp/interactive-demo/"
                                 className="w-full h-full border-0"
@@ -253,11 +253,27 @@ export default function InteractiveAvatar() {
 
                     {/* B. MORGAN AVATAR CONTAINER - Vertical sidebar when in demo mode */}
                     <div className={`transition-all duration-700 ease-in-out ${showDemo
-                        ? 'fixed right-0 top-0 bottom-0 w-[340px] z-[100] bg-slate-900 border-l border-slate-700/50 shadow-[-20px_0_60px_rgba(0,0,0,0.5)] flex flex-col'
+                        ? 'fixed right-0 top-0 bottom-0 w-[420px] z-[100] bg-slate-900 border-l border-slate-700/50 shadow-[-20px_0_60px_rgba(0,0,0,0.5)] flex flex-col'
                         : 'relative w-full max-w-6xl h-[80vh] z-30 rounded-2xl overflow-hidden shadow-[0_0_80px_rgba(0,0,0,0.6)] border border-white/10'
                         }`}>
+
+                        {/* Back to Morgan button - visible in sidebar when demo is active */}
+                        {showDemo && conversation && (
+                            <div className="p-3 border-b border-slate-700/50 bg-slate-800/50">
+                                <button
+                                    onClick={handleEndDemo}
+                                    className="w-full flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-500 text-white px-4 py-2.5 rounded-lg font-medium transition-all duration-300"
+                                >
+                                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                                    </svg>
+                                    <span>Back to Full Morgan View</span>
+                                </button>
+                            </div>
+                        )}
+
                         {conversation ? (
-                            <div className="w-full h-full bg-slate-900">
+                            <div className="flex-1 bg-slate-900 overflow-hidden">
                                 {/* Official Tavus CVI Conversation Component */}
                                 <Conversation
                                     conversationUrl={conversation.conversation_url}
