@@ -257,21 +257,6 @@ export default function InteractiveAvatar() {
                         : 'relative w-full max-w-6xl h-[80vh] z-30 rounded-2xl overflow-hidden shadow-[0_0_80px_rgba(0,0,0,0.6)] border border-white/10'
                         }`}>
 
-                        {/* Back to Morgan button - visible in sidebar when demo is active */}
-                        {showDemo && conversation && (
-                            <div className="p-3 border-b border-slate-700/50 bg-slate-800/50">
-                                <button
-                                    onClick={handleEndDemo}
-                                    className="w-full flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-500 text-white px-4 py-2.5 rounded-lg font-medium transition-all duration-300"
-                                >
-                                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-                                    </svg>
-                                    <span>Back to Full Morgan View</span>
-                                </button>
-                            </div>
-                        )}
-
                         {conversation ? (
                             <div className="flex-1 bg-slate-900 overflow-hidden">
                                 {/* Official Tavus CVI Conversation Component */}
