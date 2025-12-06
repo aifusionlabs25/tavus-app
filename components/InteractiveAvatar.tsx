@@ -123,7 +123,7 @@ export default function InteractiveAvatar() {
                     <img
                         src="/godeskless-logo-white-clean.png"
                         alt="GoDeskless"
-                        className="h-14 w-auto object-contain"
+                        className="h-9 w-auto object-contain"
                     />
                 </div>
             </div>
@@ -187,7 +187,7 @@ export default function InteractiveAvatar() {
                             <button
                                 onClick={startConversation}
                                 disabled={loading}
-                                className="group relative px-10 py-5 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 rounded-full text-white font-medium text-xl shadow-[0_0_40px_rgba(16,185,129,0.3)] hover:shadow-[0_0_60px_rgba(16,185,129,0.5)] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed overflow-hidden flex items-center justify-center"
+                                className="group relative px-8 py-4 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 rounded-full text-white font-medium text-lg shadow-[0_0_40px_rgba(16,185,129,0.3)] hover:shadow-[0_0_60px_rgba(16,185,129,0.5)] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed overflow-hidden flex items-center justify-center"
                             >
                                 <span className="relative z-10 flex items-center gap-3 justify-center">
                                     {loading ? 'Connecting...' : 'Start Conversation'}
