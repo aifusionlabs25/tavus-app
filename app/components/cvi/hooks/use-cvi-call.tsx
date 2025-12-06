@@ -13,6 +13,8 @@ export const useCVICall = (): {
 		({ url }: { url: string }) => {
 			daily?.join({
 				url: url,
+				startVideoOff: false, // Camera ON by default - so Morgan can see user
+				startAudioOff: false, // Mic ON by default
 				inputSettings: {
 					audio: {
 						processor: {

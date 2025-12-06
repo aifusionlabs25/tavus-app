@@ -20,7 +20,7 @@ export const useLocalScreenshare = (): {
 			daily?.startScreenShare({
 				displayMediaOptions: {
 					audio: false,
-					selfBrowserSurface: 'exclude',
+					selfBrowserSurface: 'include', // FIXED: Include current tab so Morgan can see demo
 					surfaceSwitching: 'include',
 					video: {
 						width: 1920,
