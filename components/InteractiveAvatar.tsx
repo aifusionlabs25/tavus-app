@@ -231,11 +231,27 @@ export default function InteractiveAvatar() {
 
                     {/* A. INTERACTIVE DEMO IFRAME - Takes left portion, leaving room for Morgan sidebar */}
                     {showDemo && (
-                        <div className="fixed inset-0 z-20 bg-black transition-all duration-700 ease-in-out" style={{ right: '500px', top: '60px' }}>
-                            <iframe
-                                src="https://godeskless.com/lp/interactive-demo/"
-                                className="w-full h-full border-0"
-                            />
+                        <div
+                            className="fixed z-20 bg-white transition-all duration-700 ease-in-out overflow-hidden"
+                            style={{
+                                left: 0,
+                                top: '60px',
+                                right: '500px',
+                                bottom: 0
+                            }}
+                        >
+                            {/* Scaled iframe container - 80% zoom to fit more content */}
+                            <div style={{
+                                width: '125%',      /* 100 / 0.8 = 125% to compensate for scale */
+                                height: '125%',
+                                transform: 'scale(0.8)',
+                                transformOrigin: 'top left'
+                            }}>
+                                <iframe
+                                    src="https://godeskless.com/lp/interactive-demo/"
+                                    className="w-full h-full border-0"
+                                />
+                            </div>
                         </div>
                     )}
 
