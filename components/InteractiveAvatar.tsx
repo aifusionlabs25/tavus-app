@@ -200,18 +200,30 @@ export default function InteractiveAvatar() {
                         {/* When IN conversation - show Demo & Exit buttons */}
                         {conversation && (
                             <>
-                                {/* Interactive Demo Button - matches Start Conversation styling */}
-                                <button
-                                    onClick={handleStartDemo}
-                                    className="group flex items-center gap-3 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white px-6 py-3 rounded-full font-medium shadow-[0_0_30px_rgba(16,185,129,0.3)] hover:shadow-[0_0_50px_rgba(16,185,129,0.5)] transition-all duration-300"
-                                >
-                                    <span>Interactive Demo</span>
-                                    <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                                    </svg>
-                                </button>
+                                {/* Interactive Demo Button - toggles demo on/off */}
+                                {!showDemo ? (
+                                    <button
+                                        onClick={handleStartDemo}
+                                        className="group flex items-center gap-3 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white px-6 py-3 rounded-full font-medium shadow-[0_0_30px_rgba(16,185,129,0.3)] hover:shadow-[0_0_50px_rgba(16,185,129,0.5)] transition-all duration-300"
+                                    >
+                                        <span>Interactive Demo</span>
+                                        <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                                        </svg>
+                                    </button>
+                                ) : (
+                                    <button
+                                        onClick={handleEndDemo}
+                                        className="flex items-center gap-2 bg-slate-700 hover:bg-slate-600 text-white px-5 py-2.5 rounded-full font-medium border border-slate-500 transition-all duration-300"
+                                    >
+                                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                                        </svg>
+                                        <span>Back to Morgan</span>
+                                    </button>
+                                )}
 
-                                {/* Exit/End Button - red with matching style */}
+                                {/* Exit/End Conversation Button - red with matching style */}
                                 <button
                                     onClick={endConversation}
                                     className="flex items-center gap-2 bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-500 hover:to-rose-500 text-white px-6 py-3 rounded-full font-medium shadow-[0_0_30px_rgba(239,68,68,0.3)] hover:shadow-[0_0_50px_rgba(239,68,68,0.5)] transition-all duration-300"
@@ -229,30 +241,19 @@ export default function InteractiveAvatar() {
                 {/* 3. MAIN CONTENT AREA */}
                 <div className="relative w-full h-full flex items-center justify-center">
 
-                    {/* A. INTERACTIVE DEMO IFRAME - Full screen for better visibility */}
+                    {/* A. INTERACTIVE DEMO IFRAME - Takes left portion, leaving room for Morgan sidebar */}
                     {showDemo && (
-                        <div className="fixed inset-0 z-20 bg-black transition-all duration-700 ease-in-out">
+                        <div className="fixed inset-0 z-20 bg-black transition-all duration-700 ease-in-out" style={{ right: '340px' }}>
                             <iframe
                                 src="https://godeskless.com/lp/interactive-demo/"
                                 className="w-full h-full border-0"
                             />
-                            {/* Demo Mode Controls - Left side to not overlap Morgan */}
-                            <div className="absolute bottom-8 left-8 z-[200] flex items-center gap-3">
-                                {/* End Demo Button */}
-                                <button
-                                    onClick={handleEndDemo}
-                                    className="bg-slate-900/80 text-white px-6 py-3 rounded-full border border-slate-700 hover:bg-slate-800 transition-all flex items-center gap-2 backdrop-blur-md"
-                                >
-                                    <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse"></span>
-                                    End Demo
-                                </button>
-                            </div>
                         </div>
                     )}
 
-                    {/* B. MORGAN AVATAR CONTAINER - Using Official Tavus CVI */}
+                    {/* B. MORGAN AVATAR CONTAINER - Vertical sidebar when in demo mode */}
                     <div className={`transition-all duration-700 ease-in-out ${showDemo
-                        ? 'fixed right-4 top-1/2 -translate-y-1/2 w-[320px] h-[450px] z-[100] rounded-xl overflow-hidden border-2 border-emerald-500/50 shadow-[0_0_40px_rgba(16,185,129,0.3)]'
+                        ? 'fixed right-0 top-0 bottom-0 w-[340px] z-[100] bg-slate-900 border-l border-slate-700/50 shadow-[-20px_0_60px_rgba(0,0,0,0.5)] flex flex-col'
                         : 'relative w-full max-w-6xl h-[80vh] z-30 rounded-2xl overflow-hidden shadow-[0_0_80px_rgba(0,0,0,0.6)] border border-white/10'
                         }`}>
                         {conversation ? (
