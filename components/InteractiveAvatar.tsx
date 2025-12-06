@@ -162,7 +162,7 @@ export default function InteractiveAvatar() {
                 {showDemo && (
                     <div className="absolute inset-0 z-20 flex items-center justify-center bg-black/90 transition-all duration-700 ease-in-out animation-fade-in">
                         <iframe
-                            src="https://app.godeskless.com"
+                            src="https://godeskless.com"
                             className="w-full h-full border-0 rounded-lg shadow-2xl opacity-100"
                         />
                         {/* "Back to Morgan" Button */}
@@ -178,7 +178,7 @@ export default function InteractiveAvatar() {
 
                 {/* B. MORGAN AVATAR CONTAINER */}
                 <div className={`transition-all duration-700 ease-in-out ${showDemo
-                    ? 'fixed bottom-8 right-8 w-[320px] h-[180px] z-[100] rounded-xl overflow-hidden border-2 border-emerald-500/50 shadow-[0_0_30px_rgba(16,185,129,0.2)]' // PIP Mode - Fixed to viewport corner
+                    ? 'fixed bottom-24 right-8 w-[320px] h-[180px] z-[100] rounded-xl overflow-hidden border-2 border-emerald-500/50 shadow-[0_0_30px_rgba(16,185,129,0.2)]' // PIP Mode - Moved up to not overlap End Demo button
                     : 'relative w-full max-w-6xl h-[80vh] z-30 rounded-2xl overflow-hidden shadow-[0_0_80px_rgba(0,0,0,0.6)] border border-white/10' // Full Mode - Larger!
                     }`}>
                     {conversation ? (
