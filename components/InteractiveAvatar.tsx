@@ -160,6 +160,7 @@ export default function InteractiveAvatar() {
                             <tavus-broadcast-view
                                 conversation-id={conversation.conversation_id}
                                 className="w-full h-full object-cover"
+                                style={{ width: '100%', height: '100%', display: 'block' }}
                             />
                         </div>
                     ) : (
