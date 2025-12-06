@@ -1,4 +1,15 @@
 import { NextResponse } from 'next/server';
+import { Resend } from 'resend';
+
+// Lazy initialize Resend to avoid build-time errors
+let resendClient: Resend | null = null;
+
+function getResendClient(): Resend | null {
+    if (!resendClient && process.env.RESEND_API_KEY) {
+        resendClient = new Resend(process.env.RESEND_API_KEY);
+    }
+    return resendClient;
+}
 
 export async function POST(request: Request) {
     try {
@@ -12,8 +23,7 @@ export async function POST(request: Request) {
             );
         }
 
-        // For now, we'll log and send via a simple email approach
-        // In production, integrate with SendGrid, Resend, or similar
+        // Log for debugging
         console.log('📧 New Lead Captured:');
         console.log('  Name:', name);
         console.log('  Email:', email);
@@ -22,29 +32,90 @@ export async function POST(request: Request) {
         console.log('  Role:', companyName || 'Not provided');
         console.log('  Message:', message || 'No message');
 
-        // Send email using fetch to a simple email service
-        // Using Resend or similar would be ideal, but for now we'll use a webhook approach
-        const emailContent = `
-New Lead from Morgan AI Demo
+        // Build email HTML content
+        const emailHtml = `
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+        .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+        .header { background: linear-gradient(135deg, #10B981, #14B8A6); color: white; padding: 20px; border-radius: 8px 8px 0 0; }
+        .content { background: #f9fafb; padding: 20px; border: 1px solid #e5e7eb; }
+        .field { margin-bottom: 15px; }
+        .label { font-weight: bold; color: #374151; }
+        .value { color: #1f2937; }
+        .footer { background: #1f2937; color: #9ca3af; padding: 15px; text-align: center; font-size: 12px; border-radius: 0 0 8px 8px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h2 style="margin: 0;">🚀 New Lead from Morgan AI Demo</h2>
+        </div>
+        <div class="content">
+            <div class="field">
+                <span class="label">Name:</span>
+                <span class="value">${name}</span>
+            </div>
+            <div class="field">
+                <span class="label">Email:</span>
+                <span class="value"><a href="mailto:${email}">${email}</a></span>
+            </div>
+            <div class="field">
+                <span class="label">Phone:</span>
+                <span class="value">${phone || 'Not provided'}</span>
+            </div>
+            <div class="field">
+                <span class="label">Company:</span>
+                <span class="value">${company || 'Not provided'}</span>
+            </div>
+            <div class="field">
+                <span class="label">Role:</span>
+                <span class="value">${companyName || 'Not provided'}</span>
+            </div>
+            <div class="field">
+                <span class="label">Message:</span>
+                <p class="value" style="margin: 5px 0 0 0; padding: 10px; background: white; border-radius: 4px;">${message || 'No message provided'}</p>
+            </div>
+        </div>
+        <div class="footer">
+            Submitted via Morgan AI Demo • ${new Date().toLocaleString()}
+        </div>
+    </div>
+</body>
+</html>
+        `.trim();
 
-Name: ${name}
-Email: ${email}
-Phone: ${phone || 'Not provided'}
-Company: ${company || 'Not provided'}
-Role: ${companyName || 'Not provided'}
-Message: ${message || 'No message'}
+        // Try to send email via Resend
+        const resend = getResendClient();
 
-Submitted: ${new Date().toISOString()}
-    `.trim();
+        if (resend) {
+            try {
+                const { data, error } = await resend.emails.send({
+                    from: 'Morgan AI <onboarding@resend.dev>', // Default Resend sender for dev
+                    to: ['aifusionlabs@gmail.com'],
+                    subject: `New Lead: ${name} from ${company || 'Unknown Company'}`,
+                    html: emailHtml,
+                    replyTo: email, // Makes it easy to reply directly to the lead
+                });
 
-        // Try to send via email webhook (can be configured later)
-        // For now, just log it
-        console.log('Email would be sent to: aifusionlabs@gmail.com');
-        console.log('Content:', emailContent);
+                if (error) {
+                    console.error('Resend error:', error);
+                } else {
+                    console.log('✅ Email sent successfully:', data);
+                }
+            } catch (emailError) {
+                console.error('Email send failed:', emailError);
+            }
+        } else {
+            console.warn('⚠️ RESEND_API_KEY not configured - email not sent');
+        }
 
+        // Always return success to user (we have the data logged)
         return NextResponse.json({
             success: true,
-            message: 'Thank you! We\'ll be in touch soon.'
+            message: "Thank you! We'll be in touch soon."
         });
 
     } catch (error) {
