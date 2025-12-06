@@ -87,24 +87,75 @@ export async function POST(request: Request) {
 </html>
         `.trim();
 
-        // Try to send email via Resend
+        // Try to send emails via Resend
         const resend = getResendClient();
 
         if (resend) {
             try {
+                // 1. Send notification to you (aifusionlabs)
                 const { data, error } = await resend.emails.send({
-                    from: 'Morgan AI <onboarding@resend.dev>', // Default Resend sender for dev
+                    from: 'Morgan AI <onboarding@resend.dev>',
                     to: ['aifusionlabs@gmail.com'],
                     subject: `New Lead: ${name} from ${company || 'Unknown Company'}`,
                     html: emailHtml,
-                    replyTo: email, // Makes it easy to reply directly to the lead
+                    replyTo: email,
                 });
 
                 if (error) {
-                    console.error('Resend error:', error);
+                    console.error('Resend error (notification):', error);
                 } else {
-                    console.log('✅ Email sent successfully:', data);
+                    console.log('✅ Notification email sent:', data);
                 }
+
+                // 2. Send confirmation to the lead
+                const confirmationHtml = `
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; margin: 0; padding: 0; }
+        .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+        .header { background: linear-gradient(135deg, #10B981, #14B8A6); color: white; padding: 30px; text-align: center; border-radius: 8px 8px 0 0; }
+        .content { background: #ffffff; padding: 30px; border: 1px solid #e5e7eb; }
+        .footer { background: #f9fafb; color: #6b7280; padding: 20px; text-align: center; font-size: 12px; border-radius: 0 0 8px 8px; border: 1px solid #e5e7eb; border-top: none; }
+        .button { display: inline-block; background: #10B981; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; margin-top: 15px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1 style="margin: 0; font-size: 24px;">Thanks for reaching out! 🎉</h1>
+        </div>
+        <div class="content">
+            <p>Hi ${name},</p>
+            <p>We received your message and appreciate you taking the time to connect with us about GoDeskless.</p>
+            <p>One of our team members will be in touch shortly to discuss how we can help transform your field service operations.</p>
+            <p>In the meantime, feel free to explore more about what we do:</p>
+            <a href="https://godeskless.com" class="button" style="color: white;">Visit GoDeskless</a>
+            <p style="margin-top: 25px;">Best regards,<br><strong>The GoDeskless Team</strong></p>
+        </div>
+        <div class="footer">
+            <p>GoDeskless - AI-Powered Field Service Management</p>
+            <p>This email was sent in response to your inquiry.</p>
+        </div>
+    </div>
+</body>
+</html>
+                `.trim();
+
+                const { data: confirmData, error: confirmError } = await resend.emails.send({
+                    from: 'GoDeskless <onboarding@resend.dev>',
+                    to: [email],
+                    subject: `Thanks for reaching out, ${name}!`,
+                    html: confirmationHtml,
+                });
+
+                if (confirmError) {
+                    console.error('Resend error (confirmation):', confirmError);
+                } else {
+                    console.log('✅ Confirmation email sent to lead:', confirmData);
+                }
+
             } catch (emailError) {
                 console.error('Email send failed:', emailError);
             }
