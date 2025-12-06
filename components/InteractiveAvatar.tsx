@@ -130,23 +130,21 @@ export default function InteractiveAvatar() {
                 {/* Right Side: Active Conversation Controls */}
                 {conversation && (
                     <div className="flex items-center gap-4">
-                        {/* Interactive Demo Button */}
+                        {/* Interactive Demo Button - matches Start Conversation styling */}
                         <button
                             onClick={handleStartDemo}
-                            className="group flex items-center gap-2 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-500 hover:to-cyan-500 text-white px-4 py-2 rounded-full font-medium shadow-lg hover:shadow-xl transition-all duration-300"
+                            className="group flex items-center gap-3 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white px-6 py-3 rounded-full font-medium shadow-[0_0_30px_rgba(16,185,129,0.3)] hover:shadow-[0_0_50px_rgba(16,185,129,0.5)] transition-all duration-300"
                         >
-                            <img
-                                src="/interactive-demo-button.png"
-                                alt="Interactive Demo"
-                                className="h-6 w-auto object-contain"
-                            />
                             <span>Interactive Demo</span>
+                            <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                            </svg>
                         </button>
 
-                        {/* Exit/End Button */}
+                        {/* Exit/End Button - red with matching style */}
                         <button
                             onClick={endConversation}
-                            className="flex items-center gap-2 bg-red-600 hover:bg-red-500 text-white px-4 py-2 rounded-full font-medium shadow-lg hover:shadow-xl transition-all duration-300"
+                            className="flex items-center gap-2 bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-500 hover:to-rose-500 text-white px-6 py-3 rounded-full font-medium shadow-[0_0_30px_rgba(239,68,68,0.3)] hover:shadow-[0_0_50px_rgba(239,68,68,0.5)] transition-all duration-300"
                         >
                             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
