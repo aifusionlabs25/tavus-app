@@ -243,7 +243,7 @@ export default function InteractiveAvatar() {
 
                     {/* A. INTERACTIVE DEMO IFRAME - Takes left portion, leaving room for Morgan sidebar */}
                     {showDemo && (
-                        <div className="fixed inset-0 z-20 bg-black transition-all duration-700 ease-in-out" style={{ right: '420px', top: '60px' }}>
+                        <div className="fixed inset-0 z-20 bg-black transition-all duration-700 ease-in-out" style={{ right: '500px', top: '60px' }}>
                             <iframe
                                 src="https://godeskless.com/lp/interactive-demo/"
                                 className="w-full h-full border-0"
@@ -253,7 +253,7 @@ export default function InteractiveAvatar() {
 
                     {/* B. MORGAN AVATAR CONTAINER - Vertical sidebar when in demo mode */}
                     <div className={`transition-all duration-700 ease-in-out ${showDemo
-                        ? 'fixed right-0 top-0 bottom-0 w-[420px] z-[100] bg-slate-900 border-l border-slate-700/50 shadow-[-20px_0_60px_rgba(0,0,0,0.5)] flex flex-col'
+                        ? 'fixed right-0 top-0 bottom-0 w-[500px] z-[100] bg-slate-900 border-l border-slate-700/50 shadow-[-20px_0_60px_rgba(0,0,0,0.5)] flex flex-col'
                         : 'relative w-full max-w-6xl h-[80vh] z-30 rounded-2xl overflow-hidden shadow-[0_0_80px_rgba(0,0,0,0.6)] border border-white/10'
                         }`}>
 
