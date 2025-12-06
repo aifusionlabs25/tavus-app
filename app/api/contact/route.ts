@@ -94,7 +94,7 @@ export async function POST(request: Request) {
             try {
                 // 1. Send notification to you (aifusionlabs)
                 const { data, error } = await resend.emails.send({
-                    from: 'Morgan AI <onboarding@resend.dev>',
+                    from: 'Morgan AI <noreply@aifusionlabs.app>',
                     to: ['aifusionlabs@gmail.com'],
                     subject: `New Lead: ${name} from ${company || 'Unknown Company'}`,
                     html: emailHtml,
@@ -144,7 +144,7 @@ export async function POST(request: Request) {
                 `.trim();
 
                 const { data: confirmData, error: confirmError } = await resend.emails.send({
-                    from: 'GoDeskless <onboarding@resend.dev>',
+                    from: 'GoDeskless <noreply@aifusionlabs.app>',
                     to: [email],
                     subject: `Thanks for reaching out, ${name}!`,
                     html: confirmationHtml,
