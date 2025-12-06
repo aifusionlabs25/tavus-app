@@ -13,7 +13,7 @@ export default function InteractiveAvatar() {
 
     // Lead Capture Form State
     const [showContactForm, setShowContactForm] = useState(false);
-    const [contactForm, setContactForm] = useState({ name: '', email: '', company: '', message: '' });
+    const [contactForm, setContactForm] = useState({ name: '', email: '', phone: '', company: '', companyName: '', message: '' });
     const [contactSubmitting, setContactSubmitting] = useState(false);
     const [contactSuccess, setContactSuccess] = useState(false);
 
@@ -131,7 +131,7 @@ export default function InteractiveAvatar() {
                 setTimeout(() => {
                     setShowContactForm(false);
                     setContactSuccess(false);
-                    setContactForm({ name: '', email: '', company: '', message: '' });
+                    setContactForm({ name: '', email: '', phone: '', company: '', companyName: '', message: '' });
                 }, 2000);
             }
         } catch (err) {
@@ -143,7 +143,7 @@ export default function InteractiveAvatar() {
 
     // Calendly - opens popup
     const openCalendly = () => {
-        window.open('https://calendly.com/rahul-godeskless/godeskless-demo', '_blank', 'width=600,height=700');
+        window.open('https://calendly.com/aifusionlabs', '_blank', 'width=600,height=700');
     };
 
     return (
@@ -161,13 +161,13 @@ export default function InteractiveAvatar() {
                 <div className="absolute top-0 left-0 w-full z-50 flex items-center justify-between px-8 py-6">
                     {/* Logo - Hidden when demo is showing */}
                     {!showDemo && (
-                        <div className="flex items-center gap-3">
+                        <a href="https://godeskless.com" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 hover:opacity-80 transition-opacity">
                             <img
                                 src="/godeskless-logo-white-clean.png"
                                 alt="GoDeskless"
                                 className="h-9 w-auto object-contain"
                             />
-                        </div>
+                        </a>
                     )}
                     {showDemo && <div></div>} {/* Empty spacer when logo hidden */}
 
@@ -359,13 +359,33 @@ export default function InteractiveAvatar() {
                                     />
                                 </div>
                                 <div>
+                                    <label className="block text-sm text-slate-400 mb-1">Phone</label>
+                                    <input
+                                        type="tel"
+                                        value={contactForm.phone}
+                                        onChange={(e) => setContactForm({ ...contactForm, phone: e.target.value })}
+                                        className="w-full px-4 py-3 bg-slate-800 border border-slate-600 rounded-lg text-white focus:outline-none focus:border-emerald-500 transition-colors"
+                                        placeholder="(555) 123-4567"
+                                    />
+                                </div>
+                                <div>
                                     <label className="block text-sm text-slate-400 mb-1">Company</label>
                                     <input
                                         type="text"
                                         value={contactForm.company}
                                         onChange={(e) => setContactForm({ ...contactForm, company: e.target.value })}
                                         className="w-full px-4 py-3 bg-slate-800 border border-slate-600 rounded-lg text-white focus:outline-none focus:border-emerald-500 transition-colors"
-                                        placeholder="Your company"
+                                        placeholder="Company name"
+                                    />
+                                </div>
+                                <div>
+                                    <label className="block text-sm text-slate-400 mb-1">Your Role</label>
+                                    <input
+                                        type="text"
+                                        value={contactForm.companyName}
+                                        onChange={(e) => setContactForm({ ...contactForm, companyName: e.target.value })}
+                                        className="w-full px-4 py-3 bg-slate-800 border border-slate-600 rounded-lg text-white focus:outline-none focus:border-emerald-500 transition-colors"
+                                        placeholder="Your title/role"
                                     />
                                 </div>
                                 <div>
