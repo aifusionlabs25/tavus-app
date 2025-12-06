@@ -382,7 +382,9 @@ async function handleNativeMorgan(body: any) {
         const result = await model.generateContent(analysisPrompt);
         const response = await result.response;
         const text = response.text();
-        const jsonString = text.replace(/```json/g, '').replace(/```/g, '').trim();
+        const cleanText = text.replace(/```json/g, '').replace(/```/g, '').trim();
+        const jsonMatch = cleanText.match(/\{[\s\S]*\}/);
+        const jsonString = jsonMatch ? jsonMatch[0] : cleanText;
         extracted = JSON.parse(jsonString);
         console.log('✅ Gemini Analysis Complete');
     } catch (e: any) {
