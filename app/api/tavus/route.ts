@@ -58,6 +58,8 @@ export async function POST(request: Request) {
       properties: {
         max_call_duration: 3600,
         enable_recording: true,
+        participant_absent_timeout: 600, // 10 minutes before ending if no participant joins
+        participant_left_timeout: 120,   // 2 minutes after last participant leaves
       },
     };
 
