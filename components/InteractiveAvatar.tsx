@@ -126,6 +126,35 @@ export default function InteractiveAvatar() {
                         className="h-9 w-auto object-contain"
                     />
                 </div>
+
+                {/* Right Side: Active Conversation Controls */}
+                {conversation && (
+                    <div className="flex items-center gap-4">
+                        {/* Interactive Demo Button */}
+                        <button
+                            onClick={handleStartDemo}
+                            className="group flex items-center gap-2 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-500 hover:to-cyan-500 text-white px-4 py-2 rounded-full font-medium shadow-lg hover:shadow-xl transition-all duration-300"
+                        >
+                            <img
+                                src="/interactive-demo-button.png"
+                                alt="Interactive Demo"
+                                className="h-6 w-auto object-contain"
+                            />
+                            <span>Interactive Demo</span>
+                        </button>
+
+                        {/* Exit/End Button */}
+                        <button
+                            onClick={endConversation}
+                            className="flex items-center gap-2 bg-red-600 hover:bg-red-500 text-white px-4 py-2 rounded-full font-medium shadow-lg hover:shadow-xl transition-all duration-300"
+                        >
+                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                            <span>Exit</span>
+                        </button>
+                    </div>
+                )}
             </div>
 
             {/* 3. MAIN CONTENT AREA */}
@@ -152,7 +181,7 @@ export default function InteractiveAvatar() {
                 {/* B. MORGAN AVATAR CONTAINER */}
                 <div className={`relative transition-all duration-700 ease-in-out ${showDemo
                     ? 'w-[320px] h-[180px] absolute bottom-8 right-8 z-40 rounded-xl overflow-hidden border-2 border-emerald-500/50 shadow-[0_0_30px_rgba(16,185,129,0.2)]' // PIP Mode
-                    : 'w-full max-w-4xl aspect-video z-30 rounded-2xl overflow-hidden shadow-[0_0_80px_rgba(0,0,0,0.6)] border border-white/10' // Full Mode
+                    : 'w-full max-w-6xl h-[80vh] z-30 rounded-2xl overflow-hidden shadow-[0_0_80px_rgba(0,0,0,0.6)] border border-white/10' // Full Mode - Larger!
                     }`}>
                     {conversation ? (
                         <div className="w-full h-full">
