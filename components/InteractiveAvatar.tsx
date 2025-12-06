@@ -240,11 +240,11 @@ export default function InteractiveAvatar() {
                                 bottom: 0
                             }}
                         >
-                            {/* Scaled iframe container - 65% zoom to fit more content */}
+                            {/* Scaled iframe container - 55% zoom to fit more content */}
                             <div style={{
-                                width: '153.85%',   /* 100 / 0.65 = 153.85% to compensate for scale */
-                                height: '153.85%',
-                                transform: 'scale(0.65)',
+                                width: '181.82%',   /* 100 / 0.55 = 181.82% to compensate for scale */
+                                height: '181.82%',
+                                transform: 'scale(0.55)',
                                 transformOrigin: 'top left'
                             }}>
                                 <iframe
