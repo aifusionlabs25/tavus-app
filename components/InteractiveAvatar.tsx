@@ -156,11 +156,11 @@ export default function InteractiveAvatar() {
                     }`}>
                     {conversation ? (
                         <div className="w-full h-full">
-                            {/* @ts-ignore */}
-                            <tavus-broadcast-view
-                                conversation-id={conversation.conversation_id}
-                                className="w-full h-full object-cover"
-                                style={{ width: '100%', height: '100%', display: 'block' }}
+                            <iframe
+                                src={conversation.conversation_url}
+                                className="w-full h-full border-0"
+                                allow="camera; microphone; autoplay; display-capture"
+                                allowFullScreen
                             />
                         </div>
                     ) : (
