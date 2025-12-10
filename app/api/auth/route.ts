@@ -9,12 +9,11 @@ export async function POST(request: Request) {
         const validToken = process.env.DEMO_ACCESS_TOKEN
 
         if (!validToken) {
-            console.error('DEMO_ACCESS_TOKEN not configured')
-            // If no token configured, allow access (for backwards compatibility)
+            console.error('CRITICAL: DEMO_ACCESS_TOKEN not configured in environment')
             return NextResponse.json({
-                success: true,
-                message: 'Access granted (no token required)'
-            })
+                success: false,
+                message: 'System Integrity Error: Auth not configured.'
+            }, { status: 500 })
         }
 
         // Validate token
