@@ -229,15 +229,15 @@ export default function InteractiveAvatar() {
                             style={{
                                 left: 0,
                                 top: '60px',
-                                right: '500px',
+                                right: '400px', // Reduced 500px -> 400px to give iframe more width
                                 bottom: 0
                             }}
                         >
-                            {/* Scaled iframe container - 55% zoom to fit more content */}
+                            {/* Scaled iframe container - 65% zoom (up from 55%) */}
                             <div style={{
-                                width: '181.82%',   /* 100 / 0.55 = 181.82% to compensate for scale */
-                                height: '181.82%',
-                                transform: 'scale(0.55)',
+                                width: '153.84%',   /* 100 / 0.65 = 153.84% */
+                                height: '153.84%',
+                                transform: 'scale(0.65)',
                                 transformOrigin: 'top left'
                             }}>
                                 <iframe
@@ -250,7 +250,7 @@ export default function InteractiveAvatar() {
 
                     {/* B. MORGAN AVATAR CONTAINER - Vertical sidebar when in demo mode */}
                     <div className={`transition-all duration-700 ease-in-out ${showDemo
-                        ? 'fixed right-0 top-0 bottom-0 w-[500px] z-[100] bg-slate-900 border-l border-slate-700/50 shadow-[-20px_0_60px_rgba(0,0,0,0.5)] flex flex-col'
+                        ? 'fixed right-0 top-0 bottom-0 w-[400px] z-[100] bg-slate-900 border-l border-slate-700/50 shadow-[-20px_0_60px_rgba(0,0,0,0.5)] flex flex-col'
                         : 'relative w-full max-w-6xl h-[80vh] z-30 rounded-2xl overflow-hidden shadow-[0_0_80px_rgba(0,0,0,0.6)] border border-white/10'
                         }`}>
 
