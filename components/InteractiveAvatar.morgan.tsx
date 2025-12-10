@@ -8,30 +8,17 @@ export default function InteractiveAvatar() {
     const [error, setError] = useState('');
 
     const startConversation = async () => {
-        const personaId = process.env.NEXT_PUBLIC_TAVUS_PERSONA_ID;
-
-        if (!personaId) {
-            setError('Persona ID not found in environment variables');
-            return;
-        }
-
         setLoading(true);
-        setError('');
+        setError("");
 
         try {
-            const response = await fetch('/api/tavus', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ persona_id: personaId }),
+            const response = await fetch("/api/tavus", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({}), // no persona_id sent from client
             });
 
-            if (!response.ok) {
-                const data = await response.json();
-                throw new Error(data.error || 'Failed to start conversation');
-            }
-
+            if (!response.ok) throw new Error((await response.json()).error);
             const data = await response.json();
             setConversation(data);
         } catch (err: any) {

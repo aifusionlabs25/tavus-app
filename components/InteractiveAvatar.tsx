@@ -18,13 +18,6 @@ export default function InteractiveAvatar() {
     const [contactSuccess, setContactSuccess] = useState(false);
 
     const startConversation = async () => {
-        const activePersonaId = process.env.NEXT_PUBLIC_TAVUS_PERSONA_ID;
-
-        if (!activePersonaId) {
-            setError('Please enter a Persona ID or configure it in environment variables');
-            return;
-        }
-
         setLoading(true);
         setError('');
 
@@ -35,8 +28,8 @@ export default function InteractiveAvatar() {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    persona_id: activePersonaId,
                     audio_only: audioOnly,
+                    // persona_id inferred on server
                 }),
             });
 

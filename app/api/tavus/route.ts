@@ -31,68 +31,66 @@ const DEFAULT_KB_TAGS = [
 ];
 
 export async function POST(request: Request) {
-  const { persona_id, audio_only, memory_id, document_tags } = await request.json();
+  // Destructure body, but we will IGNORE persona_id from client to ensure security
+  const { persona_id: _ignored, audio_only, memory_id, document_tags, custom_greeting, context_url, conversation_name, conversational_context } = await request.json();
 
-  if (!process.env.TAVUS_API_KEY) {
-    return NextResponse.json({ error: 'API key not configured' }, { status: 500 });
+  // 1. Get Persona ID secure from server
+  const serverPersonaId = process.env.TAVUS_PERSONA_ID;
+  if (!serverPersonaId) {
+    console.error('SERVER ERROR: TAVUS_PERSONA_ID not set in env');
+    return NextResponse.json({ error: 'Server configuration error' }, { status: 500 });
   }
 
   try {
-    const baseUrl = process.env.NEXT_PUBLIC_APP_URL?.replace(/\/$/, '');
+    const baseUrl = process.env.NEXT_PUBLIC_APP_URL?.replace(/\/$/, '') || 'http://localhost:3000';
     const callbackUrl = baseUrl ? `${baseUrl}/api/webhook` : undefined;
 
-    console.log('Creating conversation with callback:', callbackUrl);
-    console.log('DEBUG: Full Base URL:', baseUrl);
+    console.log('Creating conversation for Persona:', serverPersonaId);
 
     // Clean the greeting
-    const rawGreeting = "Hey! I'm Morgan, your goDeskless guide. I'm here to answer questions, share ideas, or just talk through what you're working on. What brings you here today?";
+    const rawGreeting = custom_greeting || "Hey! I'm Morgan, your goDeskless guide. I'm here to answer questions, share ideas, or just talk through what you're working on. What brings you here today?";
     const cleanedGreeting = cleanGreetingForTTS(rawGreeting);
 
     // Merge default tags with any custom tags
     const finalTags = Array.from(new Set([...DEFAULT_KB_TAGS, ...(document_tags || [])]));
 
     const body: any = {
-      persona_id: persona_id,
+      persona_id: serverPersonaId, // Reverting to 'persona_id' as verified working in previous version
       custom_greeting: cleanedGreeting,
-      document_tags: finalTags, // NEW: Attach KB tags
+      conversation_name: conversation_name || "Morgan Demo Session",
+      conversational_context: conversational_context || "You are Morgan, a helpful guide.",
+      document_tags: finalTags,
       properties: {
         max_call_duration: 3600,
         enable_recording: true,
-        participant_absent_timeout: 600, // 10 minutes before ending if no participant joins
-        participant_left_timeout: 120,   // 2 minutes after last participant leaves
+        participant_absent_timeout: 600,
       },
+      audio_only: audio_only,
+      memory_id: memory_id,
+      callback_url: callbackUrl,
     };
 
-    // Apply audio_only preference from client
-    if (audio_only) {
-      body.audio_only = true;
-      console.log('Audio Only mode enabled by user');
-    }
-
-    if (callbackUrl) {
-      body.callback_url = callbackUrl;
-    }
-
-    const response = await fetch('https://tavusapi.com/v2/conversations', {
-      method: 'POST',
+    const response = await fetch("https://tavusapi.com/v2/conversations", {
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': process.env.TAVUS_API_KEY,
+        "Content-Type": "application/json",
+        "x-api-key": process.env.TAVUS_API_KEY || "",
       },
       body: JSON.stringify(body),
     });
 
     if (!response.ok) {
       const errorData = await response.json();
-      console.error('Tavus API Error Details:', JSON.stringify(errorData, null, 2));
-      return NextResponse.json({ error: errorData.message || JSON.stringify(errorData) || 'Failed to create conversation' }, { status: response.status });
+      console.error('[Tavus API] Request Failed:', JSON.stringify(errorData, null, 2)); // Detailed logging
+      return NextResponse.json({ error: errorData.message || 'Failed to start conversation' }, { status: response.status });
     }
 
     const data = await response.json();
-    console.log('Conversation Created:', JSON.stringify(data, null, 2));
+    console.log('[Tavus API] Conversation created:', data.conversation_id);
+
     return NextResponse.json(data);
-  } catch (error) {
-    console.error('Error creating conversation:', error);
-    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+  } catch (error: any) {
+    console.error('[Tavus API] Error:', error);
+    return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }
