@@ -1,21 +1,89 @@
 'use client';
 
-import { useState, useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { CVIProvider } from '@/app/components/cvi/components/cvi-provider';
 import { Conversation } from '@/app/components/cvi/components/conversation';
 
+type TavusConversation = {
+    conversation_id: string;
+    conversation_url: string;
+};
+
+const SIDEBAR_WIDTH = 400; // px
+const HEADER_HEIGHT = 68;  // px (used for the demo iframe top offset)
+
+function IconArrowRight(props: React.SVGProps<SVGSVGElement>) {
+    return (
+        <svg {...props} viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+        </svg>
+    );
+}
+
+function IconCalendar(props: React.SVGProps<SVGSVGElement>) {
+    return (
+        <svg {...props} viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+        </svg>
+    );
+}
+
+function IconMail(props: React.SVGProps<SVGSVGElement>) {
+    return (
+        <svg {...props} viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+        </svg>
+    );
+}
+
+function IconX(props: React.SVGProps<SVGSVGElement>) {
+    return (
+        <svg {...props} viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+        </svg>
+    );
+}
+
+function ShellBackground() {
+    return (
+        <div className="absolute inset-0 -z-10 pointer-events-none overflow-hidden">
+            {/* Base gradient */}
+            <div className="absolute inset-0 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950" />
+            {/* Tech glows */}
+            <div className="absolute left-1/2 top-[35%] -translate-x-1/2 -translate-y-1/2 h-[780px] w-[780px] rounded-full bg-blue-500/10 blur-[110px]" />
+            <div className="absolute left-[-120px] top-[-180px] h-[520px] w-[620px] rounded-full bg-indigo-500/10 blur-[110px]" />
+            <div className="absolute right-[-180px] bottom-[-220px] h-[640px] w-[840px] rounded-full bg-emerald-500/10 blur-[130px]" />
+            {/* Subtle grid (masked) */}
+            <div className="absolute inset-0 gd-grid opacity-[0.45]" />
+            {/* Vignette */}
+            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(0,0,0,0)_0%,rgba(0,0,0,0.55)_70%,rgba(0,0,0,0.8)_100%)]" />
+        </div>
+    );
+}
+
 export default function InteractiveAvatar() {
-    const [conversation, setConversation] = useState<any>(null);
+    const [conversation, setConversation] = useState<TavusConversation | null>(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
-    const [audioOnly, setAudioOnly] = useState(false);
+    const [audioOnly] = useState(false); // kept for API compatibility (toggled elsewhere if you re-add UI)
     const [showDemo, setShowDemo] = useState(false);
 
-    // Lead Capture Form State
+    // Lead capture
     const [showContactForm, setShowContactForm] = useState(false);
-    const [contactForm, setContactForm] = useState({ name: '', email: '', phone: '', company: '', companyName: '', message: '' });
+    const [contactForm, setContactForm] = useState({
+        name: '',
+        email: '',
+        phone: '',
+        company: '',
+        companyName: '',
+        message: '',
+    });
     const [contactSubmitting, setContactSubmitting] = useState(false);
     const [contactSuccess, setContactSuccess] = useState(false);
+
+    const openCalendly = () => {
+        window.open('https://calendly.com/aifusionlabs', '_blank', 'width=600,height=700');
+    };
 
     const startConversation = async () => {
         setLoading(true);
@@ -24,24 +92,19 @@ export default function InteractiveAvatar() {
         try {
             const response = await fetch('/api/tavus', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    audio_only: audioOnly,
-                    // persona_id inferred on server
-                }),
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ audio_only: audioOnly }),
             });
 
             if (!response.ok) {
-                const data = await response.json();
-                throw new Error(data.error || 'Failed to start conversation');
+                const data = await response.json().catch(() => ({} as any));
+                throw new Error((data as any).error || 'Failed to start conversation');
             }
 
-            const data = await response.json();
+            const data = (await response.json()) as TavusConversation;
             setConversation(data);
         } catch (err: any) {
-            setError(err.message);
+            setError(err?.message || 'Something went sideways starting the conversation.');
         } finally {
             setLoading(false);
         }
@@ -64,22 +127,20 @@ export default function InteractiveAvatar() {
         }
     };
 
-    // v18.8: Interactive Demo Handlers (Context Injection)
+    const handleConversationLeave = useCallback(() => {
+        setConversation(null);
+        setShowDemo(false);
+    }, []);
+
     const handleStartDemo = async () => {
         if (!conversation) return;
 
-        // 1. Update UI immediately for responsiveness
         setShowDemo(true);
-
-        // 2. Tell Backend to Inject "Demo Mode" Context
         try {
             await fetch('/api/demo', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    conversation_id: conversation.conversation_id,
-                    action: 'start'
-                }),
+                body: JSON.stringify({ conversation_id: conversation.conversation_id, action: 'start' }),
             });
         } catch (err) {
             console.error('Failed to inject demo context:', err);
@@ -87,45 +148,38 @@ export default function InteractiveAvatar() {
     };
 
     const handleEndDemo = async () => {
-        setShowDemo(false);
+        if (!conversation) return;
 
-        // Tell Morgan the demo has ended
+        setShowDemo(false);
         try {
             await fetch('/api/demo', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    conversation_id: conversation.conversation_id,
-                    action: 'end'
-                }),
+                body: JSON.stringify({ conversation_id: conversation.conversation_id, action: 'end' }),
             });
         } catch (err) {
             console.error('Failed to end demo context:', err);
         }
     };
 
-    const handleConversationLeave = useCallback(() => {
-        setConversation(null);
-        setShowDemo(false);
-    }, []);
-
-    // Lead Capture Form Submit
     const handleContactSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setContactSubmitting(true);
+
         try {
             const response = await fetch('/api/contact', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(contactForm),
             });
+
             if (response.ok) {
                 setContactSuccess(true);
                 setTimeout(() => {
                     setShowContactForm(false);
                     setContactSuccess(false);
                     setContactForm({ name: '', email: '', phone: '', company: '', companyName: '', message: '' });
-                }, 2000);
+                }, 1600);
             }
         } catch (err) {
             console.error('Contact form error:', err);
@@ -134,325 +188,317 @@ export default function InteractiveAvatar() {
         }
     };
 
-    // Browser Tab Close Cleanup (The "Zombie Killer")
+    // “Zombie killer” — ensure the Tavus conversation is ended on tab close.
     useEffect(() => {
         const handleBeforeUnload = () => {
-            if (conversation?.conversation_id) {
-                // keepalive: true ensures the request completes even after the tab closes
-                fetch('/api/tavus/end', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ conversation_id: conversation.conversation_id }),
-                    keepalive: true
-                }).catch(console.error);
-            }
+            if (!conversation?.conversation_id) return;
+
+            fetch('/api/tavus/end', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ conversation_id: conversation.conversation_id }),
+                keepalive: true,
+            }).catch(console.error);
         };
 
         window.addEventListener('beforeunload', handleBeforeUnload);
         return () => window.removeEventListener('beforeunload', handleBeforeUnload);
     }, [conversation]);
 
-    // Calendly - opens popup
-    const openCalendly = () => {
-        window.open('https://calendly.com/aifusionlabs', '_blank', 'width=600,height=700');
-    };
+    // Quality-of-life keyboard shortcuts: Esc closes modal; Shift+Esc ends demo; Ctrl+Enter starts convo (idle).
+    useEffect(() => {
+        const onKeyDown = (e: KeyboardEvent) => {
+            if (e.key === 'Escape') {
+                if (e.shiftKey && showDemo) handleEndDemo();
+                if (showContactForm) setShowContactForm(false);
+            }
+            if ((e.ctrlKey || e.metaKey) && e.key === 'Enter' && !conversation && !loading) {
+                startConversation();
+            }
+        };
+        window.addEventListener('keydown', onKeyDown);
+        return () => window.removeEventListener('keydown', onKeyDown);
+    }, [conversation, loading, showDemo, showContactForm]);
+
+    const headerStyle = useMemo(() => {
+        // In demo mode we leave room for the Morgan sidebar so the header never hides behind it.
+        return showDemo ? { right: `${SIDEBAR_WIDTH}px` } : undefined;
+    }, [showDemo]);
 
     return (
         <CVIProvider>
-            <div className="w-full h-screen bg-black flex flex-col items-center justify-center relative overflow-hidden font-sans selection:bg-cyan-500/30">
-                {/* 1. BACKGROUND: Deep Void with Tech Glows */}
-                <div className="absolute inset-0 pointer-events-none">
-                    <div className="absolute inset-0 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950"></div>
-                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-blue-900/10 rounded-full blur-[100px]"></div>
-                    <div className="absolute top-0 left-0 w-[600px] h-[400px] bg-indigo-900/10 rounded-full blur-[100px]"></div>
-                    <div className="absolute bottom-0 right-0 w-[800px] h-[600px] bg-emerald-900/10 rounded-full blur-[120px]"></div>
-                </div>
+            <div className="relative h-screen w-full overflow-hidden text-white selection:bg-emerald-500/25">
+                <ShellBackground />
 
-                {/* 2. HEADER: Minimal & Tech-Focused */}
-                <div className={`absolute top-0 left-0 w-full z-[300] flex items-center justify-between px-8 py-4 ${showDemo ? 'bg-slate-900/95 backdrop-blur-sm border-b border-slate-700/50' : ''}`} style={showDemo ? { right: '420px', width: 'auto' } : {}}>
-                    {/* Logo - Hidden when demo is showing */}
-                    {!showDemo && (
-                        <a href="https://godeskless.com" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 hover:opacity-80 transition-opacity">
-                            <img
-                                src="/godeskless-logo-white-clean.png"
-                                alt="GoDeskless"
-                                className="h-9 w-auto object-contain"
-                            />
-                        </a>
-                    )}
-                    {showDemo && <div></div>} {/* Empty spacer when logo hidden */}
-
-                    {/* Right Side Controls */}
-                    <div className="flex items-center gap-4">
-                        {/* When NO conversation - show Schedule Demo & Contact buttons */}
-                        {!conversation && (
-                            <>
-                                <button
-                                    onClick={openCalendly}
-                                    className="flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white px-5 py-2.5 rounded-full font-medium border border-white/20 transition-all duration-300"
-                                >
-                                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                                    </svg>
-                                    <span>Schedule Demo</span>
-                                </button>
-                                <button
-                                    onClick={() => setShowContactForm(true)}
-                                    className="flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white px-5 py-2.5 rounded-full font-medium border border-white/20 transition-all duration-300"
-                                >
-                                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                                    </svg>
-                                    <span>Contact Us</span>
-                                </button>
-                            </>
-                        )}
-
-                        {/* When IN conversation and NOT in demo - show Demo & Exit in header */}
-                        {conversation && !showDemo && (
-                            <>
-                                {/* Interactive Demo Button */}
-                                <button
-                                    onClick={handleStartDemo}
-                                    className="group flex items-center gap-3 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white px-6 py-3 rounded-full font-medium shadow-[0_0_30px_rgba(16,185,129,0.3)] hover:shadow-[0_0_50px_rgba(16,185,129,0.5)] transition-all duration-300"
-                                >
-                                    <span>Interactive Demo</span>
-                                    <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                                    </svg>
-                                </button>
-
-                                {/* Exit/End Conversation Button */}
-                                <button
-                                    onClick={endConversation}
-                                    className="flex items-center gap-2 bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-500 hover:to-rose-500 text-white px-6 py-3 rounded-full font-medium shadow-[0_0_30px_rgba(239,68,68,0.3)] hover:shadow-[0_0_50px_rgba(239,68,68,0.5)] transition-all duration-300"
-                                >
-                                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                                    </svg>
-                                    <span>Exit</span>
-                                </button>
-                            </>
-                        )}
-                    </div>
-                </div>
-
-                {/* 3. MAIN CONTENT AREA */}
-                <div className="relative w-full h-full flex items-center justify-center">
-
-                    {/* A. INTERACTIVE DEMO IFRAME - Takes left portion, leaving room for Morgan sidebar */}
-                    {showDemo && (
-                        <div
-                            className="fixed z-20 bg-white transition-all duration-700 ease-in-out overflow-hidden"
-                            style={{
-                                left: 0,
-                                top: '60px',
-                                right: '400px', // Reduced 500px -> 400px to give iframe more width
-                                bottom: 0
-                            }}
-                        >
-                            {/* Scaled iframe container - 65% zoom (up from 55%) */}
-                            <div style={{
-                                width: '153.84%',   /* 100 / 0.65 = 153.84% */
-                                height: '153.84%',
-                                transform: 'scale(0.65)',
-                                transformOrigin: 'top left'
-                            }}>
-                                <iframe
-                                    src="https://godeskless.com/lp/interactive-demo/"
-                                    className="w-full h-full border-0"
-                                />
-                            </div>
-                        </div>
-                    )}
-
-                    {/* B. MORGAN AVATAR CONTAINER - Vertical sidebar when in demo mode */}
-                    <div className={`transition-all duration-700 ease-in-out ${showDemo
-                        ? 'fixed right-0 top-0 bottom-0 w-[400px] z-[100] bg-slate-900 border-l border-slate-700/50 shadow-[-20px_0_60px_rgba(0,0,0,0.5)] flex flex-col'
-                        : 'relative w-full max-w-6xl h-[80vh] z-30 rounded-2xl overflow-hidden shadow-[0_0_80px_rgba(0,0,0,0.6)] border border-white/10'
-                        }`}>
-
-                        {conversation ? (
-                            <div className="flex-1 bg-slate-900 overflow-hidden flex flex-col">
-                                {/* Official Tavus CVI Conversation Component */}
-                                <div className="flex-1 overflow-hidden">
-                                    <Conversation
-                                        conversationUrl={conversation.conversation_url}
-                                        onLeave={handleConversationLeave}
-                                    />
-                                </div>
-
-                                {/* Demo mode controls - at bottom of sidebar */}
-                                {showDemo && (
-                                    <div className="p-4 border-t border-slate-700/50 bg-slate-800/80 flex gap-3">
-                                        <button
-                                            onClick={handleEndDemo}
-                                            className="flex-1 flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-500 text-white px-4 py-3 rounded-lg font-medium transition-all duration-300"
-                                        >
-                                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-                                            </svg>
-                                            <span>Back to Morgan</span>
-                                        </button>
-                                        <button
-                                            onClick={endConversation}
-                                            className="flex items-center justify-center gap-2 bg-red-600 hover:bg-red-500 text-white px-4 py-3 rounded-lg font-medium transition-all duration-300"
-                                        >
-                                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                                            </svg>
-                                            <span>Exit</span>
-                                        </button>
-                                    </div>
-                                )}
-                            </div>
-                        ) : (
-                            /* IDLE STATE UI */
-                            <div className="w-full h-full bg-slate-900/50 backdrop-blur-sm flex flex-col items-center justify-center text-center p-12">
-                                {/* Avatar Image */}
-                                <div className="rounded-full bg-gradient-to-tr from-blue-500/10 to-emerald-500/10 mb-8 relative group">
-                                    <div className="absolute inset-0 rounded-full bg-emerald-500/20 blur-xl group-hover:blur-2xl transition-all duration-500"></div>
-                                    <img
-                                        src="/morgan-headshot-circle.png"
-                                        alt="Morgan Headshot"
-                                        className="w-60 h-60 object-cover rounded-full relative z-10 opacity-90 group-hover:scale-105 transition-transform duration-500"
-                                    />
-                                </div>
-
-                                <h2 className="text-4xl md:text-5xl font-light text-white mb-6 tracking-tight">
-                                    Meet <span className="font-semibold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-emerald-400">Morgan</span>
-                                </h2>
-
-                                <p className="text-lg text-slate-400 max-w-lg leading-relaxed mb-10">
-                                    Your GoDeskless Field Service Specialist.
-                                </p>
-
-                                <button
-                                    onClick={startConversation}
-                                    disabled={loading}
-                                    className="group relative px-8 py-4 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 rounded-full text-white font-medium text-lg shadow-[0_0_40px_rgba(16,185,129,0.3)] hover:shadow-[0_0_60px_rgba(16,185,129,0.5)] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed overflow-hidden flex items-center justify-center"
-                                >
-                                    <span className="relative z-10 flex items-center gap-3 justify-center">
-                                        {loading ? 'Connecting...' : 'Start Conversation'}
-                                        {!loading && <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" /></svg>}
-                                    </span>
-                                </button>
-
-                                {error && (
-                                    <div className="mt-6 px-4 py-2 bg-red-500/10 border border-red-500/20 rounded-full text-red-400 text-sm">
-                                        {error}
-                                    </div>
-                                )}
-                            </div>
-                        )}
-                    </div>
-
-                </div>
-            </div>
-
-            {/* CONTACT FORM MODAL */}
-            {showContactForm && (
-                <div className="fixed inset-0 z-[999] flex items-center justify-center bg-black/70 backdrop-blur-sm">
-                    <div className="bg-slate-900 border border-slate-700 rounded-2xl p-8 w-full max-w-md shadow-2xl">
-                        {/* Header */}
-                        <div className="flex items-center justify-between mb-6">
-                            <h3 className="text-2xl font-semibold text-white">Contact Us</h3>
-                            <button
-                                onClick={() => setShowContactForm(false)}
-                                className="text-slate-400 hover:text-white transition-colors"
+                {/* HEADER */}
+                <header
+                    className={[
+                        'fixed left-0 top-0 z-[300] w-full',
+                        'px-6 md:px-10',
+                        'py-4',
+                        showDemo ? 'bg-slate-950/75 backdrop-blur-md border-b border-slate-700/40' : '',
+                    ].join(' ')}
+                    style={headerStyle}
+                >
+                    <div className="mx-auto flex max-w-7xl items-center justify-between">
+                        {/* Logo (hide during demo, consistent with current behavior) */}
+                        {!showDemo ? (
+                            <a
+                                href="https://godeskless.com"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="flex items-center gap-3 hover:opacity-85 transition-opacity"
                             >
-                                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                                </svg>
+                                <img
+                                    src="/godeskless-logo-white-clean.png"
+                                    alt="GoDeskless"
+                                    className="h-9 w-auto object-contain"
+                                />
+                            </a>
+                        ) : (
+                            <div />
+                        )}
+
+                        {/* Right-side actions */}
+                        <div className="flex items-center gap-3">
+                            {!conversation && (
+                                <>
+                                    <button onClick={openCalendly} className="gd-btn" type="button">
+                                        <IconCalendar className="h-4 w-4" />
+                                        <span>Schedule Demo</span>
+                                    </button>
+
+                                    <button onClick={() => setShowContactForm(true)} className="gd-btn" type="button">
+                                        <IconMail className="h-4 w-4" />
+                                        <span>Contact Us</span>
+                                    </button>
+                                </>
+                            )}
+
+                            {conversation && !showDemo && (
+                                <>
+                                    <button onClick={handleStartDemo} className="gd-btn gd-btn-primary" type="button">
+                                        <span>Interactive Demo</span>
+                                        <IconArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
+                                    </button>
+
+                                    <button onClick={endConversation} className="gd-btn gd-btn-danger" type="button">
+                                        <IconX className="h-5 w-5" />
+                                        <span>Exit</span>
+                                    </button>
+                                </>
+                            )}
+                        </div>
+                    </div>
+                </header>
+
+                {/* MAIN */}
+                <main className="h-full w-full pt-[72px]">
+                    {/* Demo Mode: iframe left + Morgan sidebar right */}
+                    {showDemo && (
+                        <>
+                            <section
+                                className="fixed left-0 z-20 overflow-hidden"
+                                style={{
+                                    top: `${HEADER_HEIGHT}px`,
+                                    right: `${SIDEBAR_WIDTH}px`,
+                                    bottom: 0,
+                                }}
+                            >
+                                <div className="h-full w-full bg-white">
+                                    {/* A little “browser chrome” to feel enterprise, not “random iframe” */}
+                                    <div className="flex items-center justify-between px-4 py-3 border-b border-slate-200">
+                                        <div className="flex items-center gap-2 text-slate-700">
+                                            <span className="inline-flex h-2.5 w-2.5 rounded-full bg-red-400" />
+                                            <span className="inline-flex h-2.5 w-2.5 rounded-full bg-yellow-400" />
+                                            <span className="inline-flex h-2.5 w-2.5 rounded-full bg-green-400" />
+                                            <span className="ml-3 text-sm font-semibold">GoDeskless Interactive Demo</span>
+                                        </div>
+                                        <div className="text-xs text-slate-500">Embedded demo</div>
+                                    </div>
+
+                                    {/* Scaled iframe container (keeps your existing 65% zoom behavior) */}
+                                    <div
+                                        style={{
+                                            width: '153.84%', // 100 / 0.65
+                                            height: '153.84%',
+                                            transform: 'scale(0.65)',
+                                            transformOrigin: 'top left',
+                                        }}
+                                    >
+                                        <iframe
+                                            src="https://godeskless.com/lp/interactive-demo/"
+                                            className="h-full w-full border-0"
+                                            title="GoDeskless Interactive Demo"
+                                        />
+                                    </div>
+                                </div>
+                            </section>
+
+                            <aside
+                                className="fixed right-0 top-0 bottom-0 z-[100] flex w-[400px] flex-col border-l border-slate-700/50 bg-slate-900 shadow-[-20px_0_60px_rgba(0,0,0,0.55)]"
+                            >
+                                <div className="flex h-[72px] items-center justify-between px-5">
+                                    <div className="gd-badge">
+                                        <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
+                                        <span className="text-sm font-semibold">Morgan live</span>
+                                    </div>
+
+                                    <button onClick={handleEndDemo} className="gd-btn" type="button" title="Back to Morgan">
+                                        <span>Back</span>
+                                    </button>
+                                </div>
+
+                                <div className="flex-1 overflow-hidden">
+                                    {conversation ? (
+                                        <Conversation conversationUrl={conversation.conversation_url} onLeave={handleConversationLeave} />
+                                    ) : null}
+                                </div>
+
+                                <div className="flex gap-3 border-t border-slate-700/50 bg-slate-800/60 p-4">
+                                    <button onClick={handleEndDemo} className="gd-btn gd-btn-primary flex-1" type="button">
+                                        <span>Back to Morgan</span>
+                                    </button>
+                                    <button onClick={endConversation} className="gd-btn gd-btn-danger flex-1" type="button">
+                                        <span>Exit</span>
+                                    </button>
+                                </div>
+                            </aside>
+                        </>
+                    )}
+
+                    {/* Not demo mode: show hero or conversation stage */}
+                    {!showDemo && (
+                        <section className="flex h-[calc(100vh-72px)] w-full items-center justify-center px-6">
+                            <div className={conversation ? 'w-full max-w-6xl' : 'w-full max-w-4xl'}>
+                                {conversation ? (
+                                    <div className="gd-stage">
+                                        <div className="bg-slate-900">
+                                            <Conversation conversationUrl={conversation.conversation_url} onLeave={handleConversationLeave} />
+                                        </div>
+                                    </div>
+                                ) : (
+                  <div className="gd-glass mx-auto flex flex-col items-center justify-center text-center px-10 py-14 md:px-14 md:py-16">
+                    <div className="relative mb-8 gd-float">
+                      <div className="absolute inset-0 rounded-full bg-emerald-500/18 blur-2xl" />
+                      <div className="rounded-full bg-gradient-to-tr from-blue-500/10 to-emerald-500/10 p-2">
+                        <img
+                          src="/morgan-headshot-circle.png"
+                          alt="Morgan Headshot"
+                          className="h-44 w-44 md:h-52 md:w-52 rounded-full object-cover opacity-95"
+                        />
+                      </div>
+                    </div>
+
+                    <h1 className="text-balance text-4xl md:text-5xl font-light tracking-tight">
+                      Meet <span className="gd-gradient-text font-semibold">Morgan</span>
+                    </h1>
+                    <p className="mt-4 max-w-xl text-lg text-slate-300/90 leading-relaxed">
+                      Your GoDeskless Field Service Specialist.
+                    </p>
+
+                    <div className="mt-10 flex flex-col items-center gap-3">
+                      <button
+                        onClick={startConversation}
+                        disabled={loading}
+                        className="gd-btn gd-btn-primary px-8 py-4 text-lg disabled:opacity-50 disabled:cursor-not-allowed"
+                        type="button"
+                      >
+                        <span>{loading ? 'Connecting…' : 'Start Conversation'}</span>
+                        {!loading && <IconArrowRight className="h-5 w-5" />}
+                      </button>
+
+                      {error && (
+                        <div className="gd-badge border-red-500/25 bg-red-500/10 text-red-200">
+                          <span className="h-2 w-2 rounded-full bg-red-400" />
+                          <span className="text-sm">{error}</span>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+
+                  <p className="mt-10 text-xs text-slate-400/90">
+                    Morgan uses AI to generate responses. Information may be inaccurate or incomplete. Please review and verify.
+                  </p>
+                </div>
+              )}
+                        </div>
+          </section>
+        )}
+            </main>
+
+            {/* CONTACT MODAL */}
+            {showContactForm && (
+                <div className="fixed inset-0 z-[999] flex items-center justify-center bg-black/70 backdrop-blur-sm px-6">
+                    <div className="gd-glass w-full max-w-md p-7 md:p-8">
+                        <div className="mb-5 flex items-center justify-between">
+                            <h3 className="text-xl font-semibold">Contact Us</h3>
+                            <button onClick={() => setShowContactForm(false)} className="gd-btn" type="button" aria-label="Close">
+                                <IconX className="h-5 w-5" />
                             </button>
                         </div>
 
                         {contactSuccess ? (
-                            <div className="text-center py-8">
-                                <div className="w-16 h-16 bg-emerald-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
-                                    <svg className="w-8 h-8 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                                    </svg>
-                                </div>
-                                <p className="text-xl text-white">Thank you!</p>
-                                <p className="text-slate-400 mt-2">We'll be in touch soon.</p>
+                            <div className="gd-badge border-emerald-500/25 bg-emerald-500/10">
+                                <span className="h-2 w-2 rounded-full bg-emerald-400" />
+                                <span className="text-sm">Message sent. We’ll reach out shortly.</span>
                             </div>
                         ) : (
                             <form onSubmit={handleContactSubmit} className="space-y-4">
-                                <div>
-                                    <label className="block text-sm text-slate-400 mb-1">Name *</label>
+                                <div className="grid grid-cols-1 gap-4">
                                     <input
-                                        type="text"
-                                        required
+                                        className="w-full rounded-xl border border-slate-700/60 bg-slate-950/40 px-4 py-3 text-white placeholder:text-slate-500 focus:border-emerald-500/50"
+                                        placeholder="Name"
                                         value={contactForm.name}
                                         onChange={(e) => setContactForm({ ...contactForm, name: e.target.value })}
-                                        className="w-full px-4 py-3 bg-slate-800 border border-slate-600 rounded-lg text-white focus:outline-none focus:border-emerald-500 transition-colors"
-                                        placeholder="Your name"
-                                    />
-                                </div>
-                                <div>
-                                    <label className="block text-sm text-slate-400 mb-1">Email *</label>
-                                    <input
-                                        type="email"
                                         required
+                                    />
+                                    <input
+                                        className="w-full rounded-xl border border-slate-700/60 bg-slate-950/40 px-4 py-3 text-white placeholder:text-slate-500 focus:border-emerald-500/50"
+                                        placeholder="Email"
+                                        type="email"
                                         value={contactForm.email}
                                         onChange={(e) => setContactForm({ ...contactForm, email: e.target.value })}
-                                        className="w-full px-4 py-3 bg-slate-800 border border-slate-600 rounded-lg text-white focus:outline-none focus:border-emerald-500 transition-colors"
-                                        placeholder="your@email.com"
+                                        required
                                     />
-                                </div>
-                                <div>
-                                    <label className="block text-sm text-slate-400 mb-1">Phone</label>
                                     <input
-                                        type="tel"
+                                        className="w-full rounded-xl border border-slate-700/60 bg-slate-950/40 px-4 py-3 text-white placeholder:text-slate-500 focus:border-emerald-500/50"
+                                        placeholder="Phone (optional)"
                                         value={contactForm.phone}
                                         onChange={(e) => setContactForm({ ...contactForm, phone: e.target.value })}
-                                        className="w-full px-4 py-3 bg-slate-800 border border-slate-600 rounded-lg text-white focus:outline-none focus:border-emerald-500 transition-colors"
-                                        placeholder="(555) 123-4567"
                                     />
-                                </div>
-                                <div>
-                                    <label className="block text-sm text-slate-400 mb-1">Company</label>
                                     <input
-                                        type="text"
-                                        value={contactForm.company}
-                                        onChange={(e) => setContactForm({ ...contactForm, company: e.target.value })}
-                                        className="w-full px-4 py-3 bg-slate-800 border border-slate-600 rounded-lg text-white focus:outline-none focus:border-emerald-500 transition-colors"
-                                        placeholder="Company name"
-                                    />
-                                </div>
-                                <div>
-                                    <label className="block text-sm text-slate-400 mb-1">Your Role</label>
-                                    <input
-                                        type="text"
+                                        className="w-full rounded-xl border border-slate-700/60 bg-slate-950/40 px-4 py-3 text-white placeholder:text-slate-500 focus:border-emerald-500/50"
+                                        placeholder="Company"
                                         value={contactForm.companyName}
-                                        onChange={(e) => setContactForm({ ...contactForm, companyName: e.target.value })}
-                                        className="w-full px-4 py-3 bg-slate-800 border border-slate-600 rounded-lg text-white focus:outline-none focus:border-emerald-500 transition-colors"
-                                        placeholder="Your title/role"
+                                        onChange={(e) => setContactForm({ ...contactForm, companyName: e.target.value, company: e.target.value })}
                                     />
-                                </div>
-                                <div>
-                                    <label className="block text-sm text-slate-400 mb-1">Message</label>
                                     <textarea
+                                        className="min-h-[110px] w-full resize-none rounded-xl border border-slate-700/60 bg-slate-950/40 px-4 py-3 text-white placeholder:text-slate-500 focus:border-emerald-500/50"
+                                        placeholder="What would you like to discuss?"
                                         value={contactForm.message}
                                         onChange={(e) => setContactForm({ ...contactForm, message: e.target.value })}
-                                        rows={3}
-                                        className="w-full px-4 py-3 bg-slate-800 border border-slate-600 rounded-lg text-white focus:outline-none focus:border-emerald-500 transition-colors resize-none"
-                                        placeholder="How can we help?"
+                                        required
                                     />
                                 </div>
+
                                 <button
                                     type="submit"
                                     disabled={contactSubmitting}
-                                    className="w-full py-3 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-medium rounded-lg transition-all duration-300 disabled:opacity-50"
+                                    className="gd-btn gd-btn-primary w-full py-3 disabled:opacity-50 disabled:cursor-not-allowed"
                                 >
-                                    {contactSubmitting ? 'Sending...' : 'Send Message'}
+                                    {contactSubmitting ? 'Sending…' : 'Send message'}
                                 </button>
+
+                                <p className="text-xs text-slate-400/90">
+                                    Tip: Press <span className="gd-badge px-2 py-1 text-xs">Esc</span> to close this dialog.
+                                </p>
                             </form>
                         )}
                     </div>
                 </div>
             )}
-        </CVIProvider>
-    );
+        </div>
+  </CVIProvider >
+  );
 }
