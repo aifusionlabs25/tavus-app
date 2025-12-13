@@ -565,7 +565,7 @@ export default function InteractiveAvatar() {
                             <div className={conversation ? 'w-full max-w-6xl' : 'w-full max-w-4xl'}>
                                 {conversation ? (
                                     <div className="gd-stage">
-                                        <div className="bg-slate-900">
+                                        <div className="h-full w-full bg-slate-900 rounded-2xl overflow-hidden shadow-2xl border border-slate-700/50">
                                             <Conversation conversationUrl={conversation.conversation_url} onLeave={handleConversationLeave} />
                                         </div>
                                     </div>

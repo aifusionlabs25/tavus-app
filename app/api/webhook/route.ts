@@ -136,7 +136,7 @@ export async function POST(request: Request) {
                     console.warn('[Webhook] Gemini returned null lead data.');
                 }
             } else {
-                console.error('[Webhook] No transcript available for analysis.');
+                console.warn('[Webhook] No transcript available (Session too short or silent). Skipping analysis.');
             }
         }
 
