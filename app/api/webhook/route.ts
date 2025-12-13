@@ -64,7 +64,8 @@ export async function POST(request: Request) {
 
                 for (let attempt = 0; attempt < 5; attempt++) {
                     try {
-                        const transcriptResponse = await fetch(`${CONFIG.TAVUS.API_URL}/conversations/${conversation_id}`, {
+                        // CRITICAL FIX: Must use ?verbose=true to get transcript data
+                        const transcriptResponse = await fetch(`${CONFIG.TAVUS.API_URL}/conversations/${conversation_id}?verbose=true`, {
                             method: 'GET',
                             headers: { 'x-api-key': process.env.TAVUS_API_KEY },
                         });

@@ -13,8 +13,8 @@ SOURCES = [
         "file": "task.md"
     },
     {
-        "title": "THE RULES (X Agent Factory Policy)",
-        "file": "X_AGENT_FACTORY_POLICY.md"
+        "title": "IMPLEMENTATION PLAN (The Forensic Fix)",
+        "file": "implementation_plan.md"
     },
     {
         "title": "THE PRODUCT (Morgan v19.1 Master)",
@@ -25,38 +25,47 @@ SOURCES = [
 # External Design Assets to Include
 DESIGN_ASSETS = [
     {
-        "title": "DESIGN SYSTEM (Globals.css)",
-        "path": r"C:\AI Fusion Labs\Tavus\API\tavus-app\app\globals.css"
+        "title": "WEBHOOK (Analysis Pipeline)",
+        "path": r"C:\AI Fusion Labs\Tavus\API\tavus-app\app\api\webhook\route.ts"
     },
     {
-        "title": "CORE COMPONENT (InteractiveAvatar.tsx)",
-        "path": r"C:\AI Fusion Labs\Tavus\API\tavus-app\components\InteractiveAvatar.tsx"
+        "title": "END ROUTE (Session Report)",
+        "path": r"C:\AI Fusion Labs\Tavus\API\tavus-app\app\api\tavus\end\route.ts"
+    },
+    {
+        "title": "CONFIG (Single Source of Truth)",
+        "path": r"C:\AI Fusion Labs\Tavus\API\tavus-app\lib\config.ts"
+    },
+    {
+        "title": "GEMINI SERVICE (Analysis Logic)",
+        "path": r"C:\AI Fusion Labs\Tavus\API\tavus-app\lib\gemini-service.ts"
     }
 ]
 
-OUTPUT_FILE = os.path.join(ARTIFACTS_DIR, "NOVA_BRIEFING_PACKET_DEC12.md")
+OUTPUT_FILE = os.path.join(ARTIFACTS_DIR, "NOVA_BRIEFING_PACKET_DEC13.md")
 
 def create_briefing():
     timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     
     with open(OUTPUT_FILE, 'w', encoding='utf-8') as outfile:
         # 1. Header
-        outfile.write(f"# NOVA BRIEFING PACKET - {timestamp}\\n")
-        outfile.write("**TO:** Nova (Specialist)\\n")
-        outfile.write("**FROM:** Alpha (Lead)\\n")
-        outfile.write("**SUBJECT:** Morgan Project Status & Critical Handoff\\n\\n")
+        outfile.write(f"# NOVA BRIEFING PACKET - {timestamp}\n")
+        outfile.write("**TO:** Nova (Specialist)\n")
+        outfile.write("**FROM:** Antigravity (Alpha Agent)\n")
+        outfile.write("**SUBJECT:** Critical Bug: Missing Hot Lead Email (Transcript Extraction)\n\n")
         outfile.write("---\n\n")
         outfile.write("> [!IMPORTANT]\n")
-        outfile.write("> This packet aggregates the most current state of the Morgan project as of Dec 12.\n")
-        outfile.write("> It includes the Security Patch (CVE-2025-55184), the ElevenLabs Fix, and the v19.1 Master Persona.\n\n")
+        outfile.write("> **MISSION:** Debug and fix the Hot Lead Email failure.\n")
+        outfile.write("> **STATUS:** Session Report works (Timezone Fixed). Webhook fires (Retries 30s). Transcript is EMPTY/FAILING.\n")
+        outfile.write("> **HYPOTHESIS:** Previously suspected `body.properties` vs `body.transcript` mismatch. Fix deployed but user reports failure.\n\n")
 
         # 3. Design Focus (User Request)
-        outfile.write("# SPECIAL INSTRUCTION: DESIGN POLISH & AESTHETICS\n")
+        outfile.write("# SPECIAL INSTRUCTION: DEEP BACKEND DEBUGGING\n")
         outfile.write("**ATTENTION NOVA:**\n")
-        outfile.write("The CEO has explicitly requested that your primary focus for this next phase is **Site Design & Aesthetics**.\n")
-        outfile.write("Please review the `walkthrough.md` and the existing components.\n")
-        outfile.write("**Goal:** Improve and polish the look. Make it premium. The CEO wants 'Wow' factor.\n")
-        outfile.write("**Context:** This is a high-stakes demo for a major enterprise client.\n\n")
+        outfile.write("The CEO needs the 'Hot Lead' email to fire immediately after the session.\n")
+        outfile.write("Current architecture uses a dual-trigger webhook (`transcription_ready` OR `shutdown`).\n")
+        outfile.write("The critical failure point is **Transcript Extraction**.\n")
+        outfile.write("**Goal:** Ensure `webhook/route.ts` successfully extracts text and triggers Gemini + Gmail.\n\n")
         outfile.write("---\n")
 
         
@@ -78,7 +87,7 @@ def create_briefing():
                 print(f"Missing: {title}")
 
         # 3. Append Design Assets (Code)
-        outfile.write("\n# APPENDIX: DESIGN SOURCE CODE\n\n")
+        outfile.write("\n# APPENDIX: BACKEND SOURCE CODE\n\n")
         for item in DESIGN_ASSETS:
             path = item["path"]
             title = item["title"]
