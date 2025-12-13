@@ -1,12 +1,20 @@
 'use client';
 
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState, useRef } from 'react';
 import { CVIProvider } from '@/app/components/cvi/components/cvi-provider';
 import { Conversation } from '@/app/components/cvi/components/conversation';
 
 type TavusConversation = {
     conversation_id: string;
     conversation_url: string;
+};
+
+// Safe Log Types
+type SafeLogEntry = {
+    id: string;
+    text: string;
+    type: 'note' | 'marker';
+    timestamp: Date;
 };
 
 const SIDEBAR_WIDTH = 400; // px
@@ -44,6 +52,22 @@ function IconX(props: React.SVGProps<SVGSVGElement>) {
     );
 }
 
+function IconSend(props: React.SVGProps<SVGSVGElement>) {
+    return (
+        <svg {...props} viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z" />
+        </svg>
+    )
+}
+
+function IconFlag(props: React.SVGProps<SVGSVGElement>) {
+    return (
+        <svg {...props} viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1zM4 22v-7" />
+        </svg>
+    )
+}
+
 function ShellBackground() {
     return (
         <div className="absolute inset-0 -z-10 pointer-events-none overflow-hidden">
@@ -70,6 +94,44 @@ export default function InteractiveAvatar() {
 
     // Safety Modal
     const [confirmExit, setConfirmExit] = useState(false);
+
+    // Safe Log State
+    const [logMode, setLogMode] = useState(false); // 'Enable typing (notes)'
+    const [logEntries, setLogEntries] = useState<SafeLogEntry[]>([]);
+    const [noteInput, setNoteInput] = useState('');
+    const logEndRef = useRef<HTMLDivElement>(null);
+
+    // Auto-scroll log
+    useEffect(() => {
+        logEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    }, [logEntries, logMode]);
+
+    const handleAddNote = (e?: React.FormEvent) => {
+        e?.preventDefault();
+        if (!noteInput.trim()) return;
+
+        setLogEntries(prev => [...prev, {
+            id: Math.random().toString(36).substr(2, 9),
+            text: noteInput.trim(),
+            type: 'note',
+            timestamp: new Date()
+        }]);
+        setNoteInput('');
+    };
+
+    const handleAddMarker = () => {
+        setLogEntries(prev => [...prev, {
+            id: Math.random().toString(36).substr(2, 9),
+            text: 'Demo Step Completed',
+            type: 'marker',
+            timestamp: new Date()
+        }]);
+    };
+
+    const handleClearNotes = () => {
+        setLogEntries([]);
+    };
+
 
     // Lead capture
     const [showContactForm, setShowContactForm] = useState(false);
@@ -128,6 +190,8 @@ export default function InteractiveAvatar() {
         } finally {
             setConversation(null);
             setShowDemo(false);
+            setLogEntries([]); // Clear logs on exit
+            setLogMode(false);
         }
     };
 
@@ -360,40 +424,128 @@ export default function InteractiveAvatar() {
                                     </button>
                                 </div>
 
-                                <div className="flex-1 overflow-hidden relative">
+                                <div className="flex-1 flex flex-col overflow-hidden relative">
                                     {/* Conversation View */}
-                                    <div className="h-[300px] w-full bg-slate-950">
+                                    <div className="h-[280px] w-full bg-slate-950 shrink-0">
                                         {conversation ? (
                                             <Conversation conversationUrl={conversation.conversation_url} onLeave={handleConversationLeave} />
                                         ) : null}
                                     </div>
 
-                                    {/* Status Panel (Fills dead zone) */}
-                                    <div className="p-6">
-                                        <div className="border border-slate-700/50 bg-slate-900/40 rounded-2xl p-5">
-                                            <div className="flex items-center justify-between mb-3">
-                                                <span className="text-sm font-semibold text-slate-200">Session Status</span>
-                                                <span className="text-xs text-emerald-400 font-medium">● Connected</span>
+                                    {/* SAFE CONVERSATION LOG */}
+                                    <div className="flex-1 flex flex-col border-t border-slate-700/50 bg-slate-950/20">
+                                        {/* Log Header */}
+                                        <div className="flex items-center justify-between px-4 py-3 bg-slate-900/40 border-b border-slate-700/50">
+                                            <div>
+                                                <div className="text-xs font-semibold text-slate-300">Conversation Log</div>
+                                                <div className="text-[10px] text-slate-500">
+                                                    {logMode ? 'Text Mode Enabled' : 'Transcript not available'}
+                                                </div>
                                             </div>
-                                            <p className="text-xs text-slate-300 leading-relaxed">
-                                                If you’re not on camera, Morgan will guide the demo via voice command.
-                                                You can also use the controls below to navigate chapters.
-                                            </p>
-
-                                            <div className="mt-4 grid grid-cols-3 gap-2">
-                                                <button className="gd-btn px-2 py-2 text-[10px] opacity-50 cursor-not-allowed">Next</button>
-                                                <button className="gd-btn px-2 py-2 text-[10px] opacity-50 cursor-not-allowed">Repeat</button>
-                                                <button className="gd-btn px-2 py-2 text-[10px] opacity-50 cursor-not-allowed">Jump</button>
-                                            </div>
+                                            <button
+                                                onClick={() => setLogMode(!logMode)}
+                                                className={`text-[10px] px-2 py-1 rounded border transition-all ${logMode ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-400' : 'bg-transparent border-slate-600 text-slate-400 hover:text-white'}`}
+                                            >
+                                                {logMode ? 'Disable Notes' : 'Enable typing (notes)'}
+                                            </button>
                                         </div>
+
+                                        {/* Log Body */}
+                                        <div className="flex-1 overflow-y-auto p-4 space-y-3 relative">
+                                            {(!logMode && logEntries.length === 0) && (
+                                                <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-6 opacity-40">
+                                                    <div className="text-2xl mb-2">🎙️</div>
+                                                    <p className="text-xs text-slate-400">Voice session active.</p>
+                                                    <p className="text-[10px] text-slate-600 mt-1">Real-time transcript not available in this build.</p>
+                                                </div>
+                                            )}
+
+                                            {logEntries.map((entry) => (
+                                                <div key={entry.id} className={`flex flex-col ${entry.type === 'marker' ? 'items-center my-4' : 'items-end'}`}>
+                                                    {entry.type === 'marker' ? (
+                                                        <div className="flex items-center gap-2">
+                                                            <div className="h-px w-8 bg-slate-700/50" />
+                                                            <span className="text-[10px] text-slate-500 font-medium uppercase tracking-wider">{entry.text}</span>
+                                                            <div className="h-px w-8 bg-slate-700/50" />
+                                                        </div>
+                                                    ) : (
+                                                        <div className="max-w-[85%] bg-slate-800/80 border border-slate-700/50 rounded-l-xl rounded-tr-xl rounded-br-[2px] px-3 py-2 text-xs text-slate-200">
+                                                            {entry.text}
+                                                            <div className="mt-1 flex items-center justify-end gap-1 opacity-50">
+                                                                <span className="text-[9px]">You (typed note)</span>
+                                                            </div>
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            ))}
+                                            <div ref={logEndRef} />
+                                        </div>
+
+                                        {/* Inputs (Only when Log Mode is ON) */}
+                                        {logMode && (
+                                            <div className="p-3 bg-slate-900 border-t border-slate-700/50">
+                                                <form
+                                                    onSubmit={(e) => {
+                                                        e.preventDefault();
+                                                        handleAddNote();
+                                                    }}
+                                                    className="relative"
+                                                >
+                                                    <textarea
+                                                        className="w-full bg-slate-950/50 border border-slate-700 rounded-lg pl-3 pr-10 py-2 text-xs text-white placeholder:text-slate-500 resize-none focus:border-emerald-500/50 focus:outline-none"
+                                                        rows={2}
+                                                        placeholder="Type notes or questions (read aloud to Morgan)..."
+                                                        value={noteInput}
+                                                        onChange={(e) => setNoteInput(e.target.value)}
+                                                        onKeyDown={(e) => {
+                                                            if (e.key === 'Enter' && !e.shiftKey) {
+                                                                e.preventDefault();
+                                                                handleAddNote();
+                                                            }
+                                                        }}
+                                                    />
+                                                    <button
+                                                        type="submit"
+                                                        className="absolute right-2 bottom-2 p-1.5 text-slate-400 hover:text-emerald-400 transition-colors"
+                                                        disabled={!noteInput.trim()}
+                                                    >
+                                                        <IconSend className="h-4 w-4" />
+                                                    </button>
+                                                </form>
+                                                <div className="mt-2 flex items-center justify-between">
+                                                    <p className="text-[9px] text-slate-500">
+                                                        Tip: Use this for backup if audio is choppy.
+                                                    </p>
+                                                    <div className="flex gap-2">
+                                                        <button
+                                                            onClick={handleClearNotes}
+                                                            type="button"
+                                                            className="text-[10px] text-slate-600 hover:text-red-400 transition-colors"
+                                                            title="Clear all notes"
+                                                        >
+                                                            Clear
+                                                        </button>
+                                                        <button
+                                                            onClick={handleAddMarker}
+                                                            type="button"
+                                                            className="text-slate-500 hover:text-emerald-400 transition-colors"
+                                                            title="Add Marker"
+                                                        >
+                                                            <IconFlag className="h-4 w-4" />
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        )}
                                     </div>
+
                                 </div>
 
                                 <div className="flex gap-3 border-t border-slate-700/50 bg-slate-800/60 p-4">
                                     <button onClick={handleEndDemo} className="gd-btn gd-btn-primary flex-1" type="button">
                                         <span>Back to Morgan</span>
                                     </button>
-                                    <button onClick={() => setConfirmExit(true)} className="gd-btn gd-btn-danger flex-1" type="button">
+                                    <button onClick={() => setConfirmExit(true)} className="gd-btn" type="button">
                                         <span>Exit</span>
                                     </button>
                                 </div>
