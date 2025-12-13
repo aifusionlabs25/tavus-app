@@ -1,4 +1,6 @@
+
 import { NextResponse } from 'next/server';
+import { CONFIG } from '@/lib/config';
 
 export async function POST(request: Request) {
     const { conversation_id, action, pre_demo_context } = await request.json();
@@ -9,6 +11,12 @@ export async function POST(request: Request) {
 
     if (!conversation_id) {
         return NextResponse.json({ error: 'Conversation ID required' }, { status: 400 });
+    }
+
+    // CHECK FEATURE FLAG
+    if (!CONFIG.TAVUS.ENABLE_CONTEXT_UPDATE) {
+        console.log(`[Demo] Skipping context update for ${action} (Feature Flag Disabled)`);
+        return NextResponse.json({ success: true, action, message: 'Context update skipped by config' });
     }
 
     let conversational_context = '';
@@ -27,7 +35,7 @@ export async function POST(request: Request) {
     try {
         console.log(`Injecting Context for Demo (${action}):`, conversational_context);
 
-        const response = await fetch(`https://tavusapi.com/v2/conversations/${conversation_id}`, {
+        const response = await fetch(`${CONFIG.TAVUS.API_URL}/conversations/${conversation_id}`, {
             method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json',

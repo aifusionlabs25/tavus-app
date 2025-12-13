@@ -1,5 +1,6 @@
 
 import { GoogleGenerativeAI, GenerativeModel } from '@google/generative-ai';
+import { CONFIG } from './config';
 
 // Interface matching the format we need for GmailDraftService
 export interface LeadData {
@@ -30,8 +31,9 @@ export class GeminiService {
         }
 
         this.genAI = new GoogleGenerativeAI(apiKey || '');
-        // Using 'gemini-1.5-flash' for speed and cost efficiency ( Free tier eligible)
-        this.model = this.genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+        // Using centralized config for model validation and easy upgrades
+        console.log(`[GeminiService] Initializing with model: ${CONFIG.GEMINI.MODEL}`);
+        this.model = this.genAI.getGenerativeModel({ model: CONFIG.GEMINI.MODEL });
     }
 
     async analyzeTranscript(transcript: string): Promise<LeadData | null> {
