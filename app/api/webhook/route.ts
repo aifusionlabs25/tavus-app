@@ -71,6 +71,11 @@ export async function POST(request: Request) {
 
                         if (transcriptResponse.ok) {
                             const convoData = await transcriptResponse.json();
+
+                            // DEBUG LOG: Inspect structure
+                            console.log(`[Webhook] API Response Keys (Attempt ${attempt + 1}):`, Object.keys(convoData));
+                            if (convoData.transcript) console.log(`[Webhook] API Transcript Length: ${convoData.transcript.length}`);
+
                             transcriptText = convoData.transcript || "";
                             if (convoData.recording_url) tavusRecordingUrl = convoData.recording_url;
 
@@ -78,6 +83,8 @@ export async function POST(request: Request) {
                                 console.log(`[Webhook] Transcript fetched successfully on attempt ${attempt + 1} (${transcriptText.length} chars)`);
                                 break; // Success!
                             }
+                        } else {
+                            console.error(`[Webhook] API Error ${transcriptResponse.status}:`, await transcriptResponse.text());
                         }
                     } catch (err) {
                         console.error(`[Webhook] API fetch failed attempt ${attempt + 1}:`, err);
@@ -93,7 +100,12 @@ export async function POST(request: Request) {
 
             if (!transcriptText) {
                 console.warn('[Webhook] Transcript text empty after api retries. Checking payload...');
-                if (body.transcript) transcriptText = body.transcript;
+                if (body.transcript) {
+                    console.log(`[Webhook] Found transcript in payload! Length: ${body.transcript.length}`);
+                    transcriptText = body.transcript;
+                } else {
+                    console.warn('[Webhook] No transcript in payload either.');
+                }
             }
 
             if (transcriptText && transcriptText.length > 20) {

@@ -44,7 +44,8 @@ export async function POST(request: Request) {
 
         const resend = getResendClient();
         if (resend) {
-            const sessionDate = new Date().toLocaleString();
+            // Use Phoenix Timezone as requested
+            const sessionDate = new Date().toLocaleString('en-US', { timeZone: 'America/Phoenix' });
             const hasNotes = notes && notes.length > 0;
 
             // Format notes
@@ -89,7 +90,7 @@ export async function POST(request: Request) {
                             </div>
                             <div class="metric">
                                 <div class="metric-label">Time</div>
-                                <div class="metric-value">${sessionDate.split(',')[1]}</div>
+                                <div class="metric-value">${sessionDate.split(',')[1]} (Phoenix)</div>
                             </div>
                         </div>
 
