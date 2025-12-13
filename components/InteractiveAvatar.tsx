@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { CVIProvider } from '@/app/components/cvi/components/cvi-provider';
 import { Conversation } from '@/app/components/cvi/components/conversation';
 
@@ -133,6 +133,24 @@ export default function InteractiveAvatar() {
             setContactSubmitting(false);
         }
     };
+
+    // Browser Tab Close Cleanup (The "Zombie Killer")
+    useEffect(() => {
+        const handleBeforeUnload = () => {
+            if (conversation?.conversation_id) {
+                // keepalive: true ensures the request completes even after the tab closes
+                fetch('/api/tavus/end', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ conversation_id: conversation.conversation_id }),
+                    keepalive: true
+                }).catch(console.error);
+            }
+        };
+
+        window.addEventListener('beforeunload', handleBeforeUnload);
+        return () => window.removeEventListener('beforeunload', handleBeforeUnload);
+    }, [conversation]);
 
     // Calendly - opens popup
     const openCalendly = () => {

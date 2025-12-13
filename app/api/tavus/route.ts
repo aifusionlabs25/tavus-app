@@ -2,17 +2,21 @@ import { NextResponse } from 'next/server';
 
 // Helper to clean greeting for TTS
 function cleanGreetingForTTS(greeting: string): string {
-  // Strip ellipsis (spoken as "dot dot dot")
+  // 1. Collapse whitespace (newlines/spaces) -> single space
+  greeting = greeting.replace(/\s+/g, ' ');
+
+  // 2. Strip ellipsis (spoken as "dot dot dot")
   greeting = greeting.replace(/\.\.\./g, ',');
 
-  // Fix brand name (avoid "Geo-Deskless" mispronunciation)
+  // 3. Fix brand name (avoid "Geo-Deskless" mispronunciation)
   greeting = greeting.replace(/goDeskless/g, 'go-deskless');
   greeting = greeting.replace(/GoDeskless/g, 'go-deskless');
 
-  // Remove em-dashes (TTS may stumble on special chars)
+  // 4. Remove em-dashes
   greeting = greeting.replace(/—/g, ',');
 
-  return greeting;
+  // 5. Trim final result
+  return greeting.trim();
 }
 
 // Default KB Tags (v18.8)
@@ -61,9 +65,10 @@ export async function POST(request: Request) {
       conversational_context: conversational_context || "You are Morgan, a helpful guide.",
       document_tags: finalTags,
       properties: {
-        max_call_duration: 3600,
+        max_call_duration: 2700, // 45 Minutes (CEO Demo Limit)
         enable_recording: true,
-        participant_absent_timeout: 600,
+        participant_absent_timeout: 300, // 5 Minutes (Reduced from 10)
+        participant_left_timeout: 60, // 1 Minute (Aggressive Cleanup)
       },
       audio_only: audio_only,
       memory_id: memory_id,
