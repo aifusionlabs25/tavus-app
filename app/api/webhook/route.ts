@@ -5,6 +5,9 @@ import { GmailDraftService } from '@/lib/gmail-draft-service';
 import { GeminiService } from '@/lib/gemini-service';
 import { CONFIG } from '@/lib/config';
 
+// Allow webhook to run for up to 60 seconds (Vercel Limit) to wait for transcripts
+export const maxDuration = 60;
+
 // Google Sheets Auth Helper
 const getPrivateKey = () => {
     const key = process.env.GOOGLE_PRIVATE_KEY;
@@ -50,12 +53,16 @@ export async function POST(request: Request) {
             console.log(`[Webhook] 📜 Event '${eventType}' received for ${conversation_id}. Attempting Hot Lead Analysis...`);
 
             // 1. Fetch Full Transcript (With Retry)
+            // Enterprise Grade Retry: Wait up to 30+ seconds for long sessions to process.
             let transcriptText = "";
             let tavusRecordingUrl = `https://platform.tavus.io/conversations/${conversation_id}`;
 
             if (process.env.TAVUS_API_KEY) {
-                // Retry loop: Try up to 3 times to get the transcript (Wait 2s, 4s, 6s)
-                for (let attempt = 1; attempt <= 3; attempt++) {
+                // Retry loop: 5 attempts with increasing backoff
+                // Delays: 2s, 4s, 6s, 8s, 10s -> Total cover ~30s
+                const delays = [2000, 4000, 6000, 8000, 10000];
+
+                for (let attempt = 0; attempt < 5; attempt++) {
                     try {
                         const transcriptResponse = await fetch(`${CONFIG.TAVUS.API_URL}/conversations/${conversation_id}`, {
                             method: 'GET',
@@ -68,17 +75,18 @@ export async function POST(request: Request) {
                             if (convoData.recording_url) tavusRecordingUrl = convoData.recording_url;
 
                             if (transcriptText.length > 50) {
-                                console.log(`[Webhook] Transcript fetched successfully on attempt ${attempt} (${transcriptText.length} chars)`);
+                                console.log(`[Webhook] Transcript fetched successfully on attempt ${attempt + 1} (${transcriptText.length} chars)`);
                                 break; // Success!
                             }
                         }
                     } catch (err) {
-                        console.error(`[Webhook] API fetch failed attempt ${attempt}:`, err);
+                        console.error(`[Webhook] API fetch failed attempt ${attempt + 1}:`, err);
                     }
 
-                    if (attempt < 3) {
-                        console.log(`[Webhook] Transcript empty or short. Waiting 2000ms... (Attempt ${attempt}/3)`);
-                        await new Promise(r => setTimeout(r, 2000));
+                    if (attempt < 4) {
+                        const waitTime = delays[attempt];
+                        console.log(`[Webhook] Transcript processing... waiting ${waitTime}ms (Attempt ${attempt + 1}/5)`);
+                        await new Promise(r => setTimeout(r, waitTime));
                     }
                 }
             }
