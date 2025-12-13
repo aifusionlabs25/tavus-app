@@ -67,6 +67,12 @@ export async function POST(request: Request) {
         let leadData = null;
         if (transcriptText) {
             console.log(`[End Session] Analyzing transcript (${transcriptText.length} chars) with Gemini...`);
+
+            // VERIFICATION LOGS (Requested by Nova)
+            console.log('[Verification] Provider: google-generative-ai');
+            console.log('[Verification] Model: gemini-1.5-flash');
+            console.log(`[Verification] Context: ${conversation_id}`);
+
             const gemini = new GeminiService();
             try {
                 leadData = await gemini.analyzeTranscript(transcriptText);

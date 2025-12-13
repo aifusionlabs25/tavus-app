@@ -80,26 +80,26 @@ export class GmailDraftService {
 
         // Replace dynamic placeholders
         htmlTemplate = htmlTemplate
-            .replace('{{lead_score}}', leadScore.toString())
-            .replace('{{badges}}', badgeHTML)
+            .replace(/{{lead_score}}/g, leadScore.toString())
+            .replace(/{{badges}}/g, badgeHTML)
             .replace(/{{contact_name}}/g, leadData.lead_name || 'Not provided')
-            .replace('{{contact_role}}', leadData.role || 'Not provided')
-            .replace('{{company_name}}', leadData.company_name || 'Not provided')
-            .replace('{{industry}}', leadData.vertical || 'Not provided')
-            .replace('{{team_size}}', leadData.teamSize || 'Not provided')
-            .replace('{{location}}', leadData.geography || 'Not provided')
+            .replace(/{{contact_role}}/g, leadData.role || 'Not provided')
+            .replace(/{{company_name}}/g, leadData.company_name || 'Not provided')
+            .replace(/{{industry}}/g, leadData.vertical || 'Not provided')
+            .replace(/{{team_size}}/g, leadData.teamSize || 'Not provided')
+            .replace(/{{location}}/g, leadData.geography || 'Not provided')
             .replace(/{{email}}/g, leadData.lead_email || 'Not provided')
             .replace(/{{phone}}/g, leadData.lead_phone || 'Not provided')
-            .replace('{{pain_point_1}}', extractPainPoint(leadData.pain_points, 0))
-            .replace('{{pain_point_2}}', extractPainPoint(leadData.pain_points, 1))
-            .replace('{{pain_point_3}}', extractPainPoint(leadData.pain_points, 2))
+            .replace(/{{pain_point_1}}/g, extractPainPoint(leadData.pain_points, 0))
+            .replace(/{{pain_point_2}}/g, extractPainPoint(leadData.pain_points, 1))
+            .replace(/{{pain_point_3}}/g, extractPainPoint(leadData.pain_points, 2))
             .replace(/{{budget}}/g, leadData.budget_range || 'Not discussed')
             .replace(/{{timeline}}/g, leadData.timeline || 'Not discussed')
-            .replace('{{decision_maker}}', extractDecisionMaker(leadData.buying_committee))
-            .replace('{{buying_committee}}', leadData.buying_committee.join(', ') || 'Not mentioned')
-            .replace('{{sales_strategy}}', formatSalesStrategy(leadData.salesPlan))
-            .replace('{{demo_focus_areas}}', generateDemoFocusAreas(leadData))
-            .replace('{{current_systems}}', leadData.currentSystems || 'Not mentioned');
+            .replace(/{{decision_maker}}/g, extractDecisionMaker(leadData.buying_committee))
+            .replace(/{{buying_committee}}/g, leadData.buying_committee.join(', ') || 'Not mentioned')
+            .replace(/{{sales_strategy}}/g, formatSalesStrategy(leadData.salesPlan))
+            .replace(/{{demo_focus_areas}}/g, generateDemoFocusAreas(leadData))
+            .replace(/{{current_systems}}/g, leadData.currentSystems || 'Not mentioned');
 
         return htmlTemplate;
     }
