@@ -100,11 +100,21 @@ export async function POST(request: Request) {
 
             if (!transcriptText) {
                 console.warn('[Webhook] Transcript text empty after api retries. Checking payload...');
-                if (body.transcript) {
-                    console.log(`[Webhook] Found transcript in payload! Length: ${body.transcript.length}`);
+
+                // FORENSIC FIX: The working version accessed body.properties.transcript
+                if (body.properties && body.properties.transcript) {
+                    console.log(`[Webhook] Found transcript in payload properties! Length: ${body.properties.transcript.length}`);
+                    transcriptText = body.properties.transcript;
+                }
+                // Fallback for older/different event structures
+                else if (body.transcript) {
+                    console.log(`[Webhook] Found transcript in payload root! Length: ${body.transcript.length}`);
                     transcriptText = body.transcript;
                 } else {
-                    console.warn('[Webhook] No transcript in payload either.');
+                    console.warn('[Webhook] No transcript in payload either (checked body.properties.transcript & body.transcript).');
+                    // DEBUG: Log Keys to see where it is hiding
+                    console.log('[Webhook] Payload Keys:', Object.keys(body));
+                    if (body.properties) console.log('[Webhook] Payload Properties Keys:', Object.keys(body.properties));
                 }
             }
 
