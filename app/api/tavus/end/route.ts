@@ -1,6 +1,7 @@
 
 import { NextResponse } from 'next/server';
 import { Resend } from 'resend';
+import { google } from 'googleapis';
 import { GmailDraftService } from '@/lib/gmail-draft-service';
 import { GeminiService } from '@/lib/gemini-service';
 
@@ -11,6 +12,36 @@ function getResendClient(): Resend | null {
         resendClient = new Resend(process.env.RESEND_API_KEY);
     }
     return resendClient;
+}
+
+// Google Sheets Auth Setup
+const getPrivateKey = () => {
+    const key = process.env.GOOGLE_PRIVATE_KEY;
+    if (!key) return undefined;
+    return key.replace(/\\n/g, '\n').replace(/"/g, '');
+};
+
+let sheetsClient: any = null;
+function getSheetsClient() {
+    if (sheetsClient) return sheetsClient;
+
+    if (process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL && process.env.GOOGLE_PRIVATE_KEY && process.env.GOOGLE_SHEET_ID) {
+        try {
+            const auth = new google.auth.GoogleAuth({
+                credentials: {
+                    client_email: process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL,
+                    private_key: getPrivateKey(),
+                },
+                scopes: ['https://www.googleapis.com/auth/spreadsheets'],
+            });
+            sheetsClient = google.sheets({ version: 'v4', auth });
+            return sheetsClient;
+        } catch (e) {
+            console.error('[Sheets Auth Error]', e);
+            return null;
+        }
+    }
+    return null;
 }
 
 export async function POST(request: Request) {
@@ -64,14 +95,13 @@ export async function POST(request: Request) {
         }
 
         // 3. AI Analysis (GEMINI 1.5 FLASH - Zero Cost Tier)
-        let leadData = null;
+        let leadData: any = null;
         if (transcriptText) {
             console.log(`[End Session] Analyzing transcript (${transcriptText.length} chars) with Gemini...`);
 
-            // VERIFICATION LOGS (Requested by Nova)
+            // VERIFICATION LOGS
             console.log('[Verification] Provider: google-generative-ai');
             console.log('[Verification] Model: gemini-1.5-flash');
-            console.log(`[Verification] Context: ${conversation_id}`);
 
             const gemini = new GeminiService();
             try {
@@ -83,10 +113,11 @@ export async function POST(request: Request) {
             console.log('[End Session] No transcript available for analysis.');
         }
 
-        // 4. Send "Hot Lead" Report via Gmail (The Executive Update)
+        // 4. Send "Hot Lead" Report via Gmail (Executive Update)
         if (leadData) {
             console.log('[End Session] Generating Gmail Hot Lead Report...');
             const gmailService = new GmailDraftService();
+
             // Supplement with empty fields if missing to match interface
             const finalLeadData = {
                 ...leadData,
@@ -96,6 +127,44 @@ export async function POST(request: Request) {
             };
 
             await gmailService.createDraft(finalLeadData);
+
+            // 4.5 Save to Google Sheets (Original Logic Restored)
+            const sheets = getSheetsClient();
+            if (sheets && process.env.GOOGLE_SHEET_ID) {
+                try {
+                    console.log('[End Session] SAVING TO GOOGLE SHEETS...');
+                    const values = [[
+                        new Date().toISOString(),
+                        finalLeadData.lead_name || 'Not Provided',
+                        finalLeadData.role || 'Not Provided',
+                        finalLeadData.company_name || 'Not Provided',
+                        finalLeadData.lead_email || 'Not Provided',
+                        finalLeadData.lead_phone || 'Not Provided',
+                        finalLeadData.budget_range || 'Not Provided',
+                        finalLeadData.timeline || 'Not Provided',
+                        Array.isArray(finalLeadData.pain_points) ? finalLeadData.pain_points.join(', ') : (finalLeadData.pain_points || ''),
+                        Array.isArray(finalLeadData.buying_committee) ? finalLeadData.buying_committee.join(', ') : (finalLeadData.buying_committee || ''),
+                        finalLeadData.vertical || 'Field Service',
+                        finalLeadData.teamSize || 'Not Provided',
+                        finalLeadData.geography || 'Not Provided',
+                        finalLeadData.currentSystems || 'Not Provided',
+                        finalLeadData.salesPlan || '',
+                        finalLeadData.tavusRecordingUrl
+                    ]];
+
+                    await sheets.spreadsheets.values.append({
+                        spreadsheetId: process.env.GOOGLE_SHEET_ID,
+                        range: 'Sheet1!A:Q',
+                        valueInputOption: 'USER_ENTERED',
+                        requestBody: { values },
+                    });
+                    console.log('✅ Saved row to Google Sheets');
+                } catch (sheetError: any) {
+                    console.error('❌ Google Sheets Error:', sheetError.message);
+                }
+            } else {
+                console.warn('⚠️ Google Sheets Skipped (Credentials or ID missing)');
+            }
         }
 
         // 5. Send "Session Report" via Resend (The User Notes Update)
@@ -160,6 +229,8 @@ export async function POST(request: Request) {
                             <p style="font-size: 13px; color: #6b7280;">
                                 A separate "Hot Lead" report has been sent to the sales team with full analysis: 
                                 <strong>${leadData.lead_name || 'Prospect'} from ${leadData.company_name || 'Company'}</strong>.
+                                <br/>
+                                <span style="font-size: 11px; color: #34d399;">(Also saved to Google Sheets)</span>
                             </p>
                         </div>
                         ` : ''}
