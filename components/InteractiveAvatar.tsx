@@ -287,7 +287,7 @@ export default function InteractiveAvatar() {
                                         <IconArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
                                     </button>
 
-                                    <button onClick={() => setConfirmExit(true)} className="gd-btn gd-btn-danger" type="button">
+                                    <button onClick={() => setConfirmExit(true)} className="gd-btn" type="button">
                                         <IconX className="h-5 w-5" />
                                         <span>Exit</span>
                                     </button>
@@ -355,8 +355,8 @@ export default function InteractiveAvatar() {
                                         <span className="text-sm font-semibold">Morgan live</span>
                                     </div>
 
-                                    <button onClick={handleEndDemo} className="gd-btn" type="button" title="Back to Morgan">
-                                        <span>Back</span>
+                                    <button onClick={handleEndDemo} className="text-xs text-slate-500 hover:text-white transition-colors" type="button" title="Back to Morgan">
+                                        Back
                                     </button>
                                 </div>
 
@@ -375,7 +375,7 @@ export default function InteractiveAvatar() {
                                                 <span className="text-sm font-semibold text-slate-200">Session Status</span>
                                                 <span className="text-xs text-emerald-400 font-medium">● Connected</span>
                                             </div>
-                                            <p className="text-xs text-slate-400 leading-relaxed">
+                                            <p className="text-xs text-slate-300 leading-relaxed">
                                                 If you’re not on camera, Morgan will guide the demo via voice command.
                                                 You can also use the controls below to navigate chapters.
                                             </p>

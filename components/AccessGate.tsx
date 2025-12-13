@@ -101,9 +101,9 @@ export default function AccessGate({ children }: AccessGateProps) {
                 {/* Logout button - small, in corner */}
                 <button
                     onClick={handleLogout}
-                    className="fixed bottom-4 left-4 z-[500] text-xs text-slate-500 hover:text-white bg-slate-900/80 hover:bg-slate-800 px-3 py-1.5 rounded-full border border-slate-700/50 transition-all"
+                    className="fixed bottom-4 left-4 z-[500] text-[10px] text-slate-600 hover:text-white bg-transparent hover:bg-slate-900/80 px-2 py-1 rounded-md border border-transparent hover:border-slate-700/50 transition-all opacity-30 hover:opacity-100"
                 >
-                    Sign Out
+                    Admin
                 </button>
                 {children}
             </div>
