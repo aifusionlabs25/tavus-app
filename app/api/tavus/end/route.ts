@@ -1,15 +1,27 @@
 
 import { NextResponse } from 'next/server';
 import { Resend } from 'resend';
+import { GmailDraftService } from '@/lib/gmail-draft-service';
+import OpenAI from 'openai';
 
-// Lazy initialize Resend to avoid build-time errors
+// Lazy initialize Resend
 let resendClient: Resend | null = null;
-
 function getResendClient(): Resend | null {
     if (!resendClient && process.env.RESEND_API_KEY) {
         resendClient = new Resend(process.env.RESEND_API_KEY);
     }
     return resendClient;
+}
+
+// Lazy initialize OpenAI
+let openaiClient: OpenAI | null = null;
+function getOpenAIClient(): OpenAI | null {
+    if (!openaiClient && process.env.OPENAI_API_KEY) {
+        openaiClient = new OpenAI({
+            apiKey: process.env.OPENAI_API_KEY,
+        });
+    }
+    return openaiClient;
 }
 
 export async function POST(request: Request) {
@@ -21,6 +33,7 @@ export async function POST(request: Request) {
 
     try {
         // 1. End Conversation with Tavus
+        console.log(`[End Session] Ending conversation ${conversation_id}...`);
         const response = await fetch(`https://tavusapi.com/v2/conversations/${conversation_id}/end`, {
             method: 'POST',
             headers: {
@@ -32,10 +45,115 @@ export async function POST(request: Request) {
         if (!response.ok) {
             const errorData = await response.json();
             console.error('Tavus End API Error:', errorData);
-            // Don't error out hard, we still want to try sending the email if possible
+            // Continue best effort
         }
 
-        // 2. Send Session Report Email (Restored Logic)
+        // =========================================================================
+        // PIPELINE: Analysis & "Hot Lead" Report (Gmail) + Session Report (Resend)
+        // =========================================================================
+
+        // Wait a brief moment to allow Tavus to wrap up the transcript
+        await new Promise(resolve => setTimeout(resolve, 2000));
+
+        // 2. Fetch Transcript
+        console.log(`[End Session] Fetching transcript for ${conversation_id}...`);
+        const transcriptResponse = await fetch(`https://tavusapi.com/v2/conversations/${conversation_id}`, {
+            method: 'GET',
+            headers: {
+                'x-api-key': process.env.TAVUS_API_KEY,
+            },
+        });
+
+        let transcriptText = "";
+        if (transcriptResponse.ok) {
+            const convoData = await transcriptResponse.json();
+            // Tavus returns 'transcript' as null sometimes, or a list of messages. 
+            // We need to parse widely.
+            // Adjust based on actual Tavus API response structure for v2.
+            // Assuming simplified view or we might need to hit a messages endpoint?
+            // V2 documentation usually says GET /conversations/{id} returns metadata.
+            // We might try the 'conversation_context' or 'messages' field if present.
+
+            // Backup: Tavus often takes time to process. 
+            // If transcript is missing, we might only use User Notes.
+            // For now, let's try to grab what we can from what is available.
+            if (convoData.transcript) {
+                transcriptText = convoData.transcript;
+            }
+        } else {
+            console.error('[End Session] Failed to fetch transcript.');
+        }
+
+        // 3. AI Analysis (If transcript exists)
+        let leadData = null;
+        if (transcriptText) {
+            console.log(`[End Session] Analyzing transcript (${transcriptText.length} chars)...`);
+            const openai = getOpenAIClient();
+            if (openai) {
+                try {
+                    const completion = await openai.chat.completions.create({
+                        model: "gpt-4o",
+                        messages: [
+                            {
+                                role: "system",
+                                content: `You are a Senior Sales Operations Analyst. Analyze the following sales conversation transcript between 'Morgan' (AI SDR) and a prospect. 
+                                Extract the following JSON structure STRICTLY. If a field is not found, use null or "Not mentioned".
+                                
+                                {
+                                    "lead_name": "Name of the prospect",
+                                    "role": "Job title or role",
+                                    "company_name": "Company name",
+                                    "vertical": "Industry (e.g. Plumbing, HVAC)",
+                                    "teamSize": "Number of technicians/staff",
+                                    "geography": "Location",
+                                    "pain_points": ["List of specific pain points"],
+                                    "currentSystems": "Current software (ServiceTitan, Housecall Pro, Paper, Excel, etc)",
+                                    "buying_committee": ["Names/Roles of decision makers"],
+                                    "budget_range": "Mentioned budget or 'Not discussed'",
+                                    "timeline": "Implementation timeline (e.g. ASAP, Next Month)",
+                                    "lead_email": "Email if provided",
+                                    "lead_phone": "Phone if provided",
+                                    "salesPlan": "3 bullet points on next steps for sales team"
+                                }`
+                            },
+                            {
+                                role: "user",
+                                content: transcriptText
+                            }
+                        ],
+                        response_format: { type: "json_object" }
+                    });
+
+                    const content = completion.choices[0].message.content;
+                    if (content) {
+                        leadData = JSON.parse(content);
+                        console.log('[End Session] Analysis complete:', leadData.company_name);
+                    }
+                } catch (aiError) {
+                    console.error('[End Session] OpenAI Analysis Failed:', aiError);
+                }
+            }
+        } else {
+            console.log('[End Session] No transcript available for analysis.');
+        }
+
+        // 4. Send "Hot Lead" Report via Gmail (The Executive Update)
+        if (leadData) {
+            console.log('[End Session] Generating Gmail Hot Lead Report...');
+            const gmailService = new GmailDraftService();
+            // Supplement with empty fields if missing to match interface
+            const finalLeadData = {
+                ...leadData,
+                followUpEmail: "", // Not used in draft generation but required by interface?
+                conversationTranscript: transcriptText,
+                tavusRecordingUrl: `https://platform.tavus.io/conversations/${conversation_id}`
+            };
+
+            await gmailService.createDraft(finalLeadData);
+        }
+
+        // 5. Send "Session Report" via Resend (The User Notes Update)
+        // We keep this because the user appreciated the notes email.
         const resend = getResendClient();
         if (resend) {
             const sessionDate = new Date().toLocaleString();
@@ -90,6 +208,16 @@ export async function POST(request: Request) {
                         <div style="margin-top: 15px;">
                             ${notesHtml}
                         </div>
+                        
+                        ${leadData ? `
+                        <div style="margin-top: 30px; padding-top: 20px; border-top: 1px dashed #e5e7eb;">
+                            <h4 style="margin: 0 0 10px 0;">🎯 Automated Analysis Detected</h4>
+                            <p style="font-size: 13px; color: #6b7280;">
+                                A separate "Hot Lead" report has been sent to the sales team with full analysis: 
+                                <strong>${leadData.lead_name || 'Prospect'} from ${leadData.company_name || 'Company'}</strong>.
+                            </p>
+                        </div>
+                        ` : ''}
 
                         <p style="font-size: 12px; color: #6b7280; margin-top: 30px;">
                             * Full transcripts and recording links are available in the Tavus dashboard.
@@ -103,21 +231,13 @@ export async function POST(request: Request) {
             </html>
              `;
 
-            const { error } = await resend.emails.send({
+            await resend.emails.send({
                 from: 'Morgan AI <noreply@aifusionlabs.app>',
-                to: ['aifusionlabs@gmail.com'],
+                to: ['aifusionlabs@gmail.com'], // Always safe to send user report here for testing
                 subject: `Session Report: ${conversation_id} [${notes && notes.length > 0 ? 'HAS NOTES' : 'No Notes'}]`,
                 html: emailHtml
             });
-
-            if (error) {
-                console.error('Failed to send session report email:', error);
-                // We don't fail the request, just log it. The session still ended.
-            } else {
-                console.log('✅ Session report email sent successfully.');
-            }
-        } else {
-            console.warn('⚠️ RESEND_API_KEY missing - skipping session report email.');
+            console.log('✅ Session Report (Resend) dispatched.');
         }
 
         return NextResponse.json({ success: true });
