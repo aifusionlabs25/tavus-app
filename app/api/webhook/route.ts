@@ -43,41 +43,52 @@ export async function POST(request: Request) {
 
         console.log(`[Webhook] Received event: ${eventType} from conversation: ${conversation_id}`);
 
-        // Handle Transcript Ready: This is the authoritative trigger for analysis.
-        if (eventType === 'application.transcription_ready') {
+        // Handle Transcript Ready OR Shutdown: Use both as triggers to be safe.
+        // Reason: Sometimes 'transcription_ready' is delayed or missed, but 'shutdown' always fires.
+        if (eventType === 'application.transcription_ready' || eventType === 'system.shutdown') {
 
-            console.log(`[Webhook] 📜 Transcript Ready for ${conversation_id}. Starting Hot Lead Analysis...`);
+            console.log(`[Webhook] 📜 Event '${eventType}' received for ${conversation_id}. Attempting Hot Lead Analysis...`);
 
-            // 1. Fetch Full Transcript & Recording URL
-            // Even though payload might have it, fetching ensures we get the official full text.
+            // 1. Fetch Full Transcript (With Retry)
             let transcriptText = "";
             let tavusRecordingUrl = `https://platform.tavus.io/conversations/${conversation_id}`;
 
             if (process.env.TAVUS_API_KEY) {
-                try {
-                    const transcriptResponse = await fetch(`${CONFIG.TAVUS.API_URL}/conversations/${conversation_id}`, {
-                        method: 'GET',
-                        headers: { 'x-api-key': process.env.TAVUS_API_KEY },
-                    });
+                // Retry loop: Try up to 3 times to get the transcript (Wait 2s, 4s, 6s)
+                for (let attempt = 1; attempt <= 3; attempt++) {
+                    try {
+                        const transcriptResponse = await fetch(`${CONFIG.TAVUS.API_URL}/conversations/${conversation_id}`, {
+                            method: 'GET',
+                            headers: { 'x-api-key': process.env.TAVUS_API_KEY },
+                        });
 
-                    if (transcriptResponse.ok) {
-                        const convoData = await transcriptResponse.json();
-                        transcriptText = convoData.transcript || "";
-                        if (convoData.recording_url) tavusRecordingUrl = convoData.recording_url;
+                        if (transcriptResponse.ok) {
+                            const convoData = await transcriptResponse.json();
+                            transcriptText = convoData.transcript || "";
+                            if (convoData.recording_url) tavusRecordingUrl = convoData.recording_url;
+
+                            if (transcriptText.length > 50) {
+                                console.log(`[Webhook] Transcript fetched successfully on attempt ${attempt} (${transcriptText.length} chars)`);
+                                break; // Success!
+                            }
+                        }
+                    } catch (err) {
+                        console.error(`[Webhook] API fetch failed attempt ${attempt}:`, err);
                     }
-                } catch (err) {
-                    console.error('[Webhook] Failed to fetch transcript from API:', err);
+
+                    if (attempt < 3) {
+                        console.log(`[Webhook] Transcript empty or short. Waiting 2000ms... (Attempt ${attempt}/3)`);
+                        await new Promise(r => setTimeout(r, 2000));
+                    }
                 }
             }
 
             if (!transcriptText) {
-                console.warn('[Webhook] Transcript text empty. Using payload or aborting.');
-                // Fallback to payload if available? (Usually payload.transcript maps to body).
-                // If still empty, we can't analyze.
+                console.warn('[Webhook] Transcript text empty after api retries. Checking payload...');
                 if (body.transcript) transcriptText = body.transcript;
             }
 
-            if (transcriptText) {
+            if (transcriptText && transcriptText.length > 20) {
                 // 2. Gemini Analysis
                 console.log(`[Webhook] Analyzing ${transcriptText.length} chars with ${CONFIG.GEMINI.MODEL}...`);
                 const gemini = new GeminiService();
