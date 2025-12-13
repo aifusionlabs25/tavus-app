@@ -378,127 +378,127 @@ export default function InteractiveAvatar() {
                                         </div>
                                     </div>
                                 ) : (
-                  <div className="gd-glass mx-auto flex flex-col items-center justify-center text-center px-10 py-14 md:px-14 md:py-16">
-                    <div className="relative mb-8 gd-float">
-                      <div className="absolute inset-0 rounded-full bg-emerald-500/18 blur-2xl" />
-                      <div className="rounded-full bg-gradient-to-tr from-blue-500/10 to-emerald-500/10 p-2">
-                        <img
-                          src="/morgan-headshot-circle.png"
-                          alt="Morgan Headshot"
-                          className="h-44 w-44 md:h-52 md:w-52 rounded-full object-cover opacity-95"
-                        />
-                      </div>
-                    </div>
+                                    <div className="gd-glass mx-auto flex flex-col items-center justify-center text-center px-10 py-14 md:px-14 md:py-16">
+                                        <div className="relative mb-8 gd-float">
+                                            <div className="absolute inset-0 rounded-full bg-emerald-500/18 blur-2xl" />
+                                            <div className="rounded-full bg-gradient-to-tr from-blue-500/10 to-emerald-500/10 p-2">
+                                                <img
+                                                    src="/morgan-headshot-circle.png"
+                                                    alt="Morgan Headshot"
+                                                    className="h-44 w-44 md:h-52 md:w-52 rounded-full object-cover opacity-95"
+                                                />
+                                            </div>
+                                        </div>
 
-                    <h1 className="text-balance text-4xl md:text-5xl font-light tracking-tight">
-                      Meet <span className="gd-gradient-text font-semibold">Morgan</span>
-                    </h1>
-                    <p className="mt-4 max-w-xl text-lg text-slate-300/90 leading-relaxed">
-                      Your GoDeskless Field Service Specialist.
-                    </p>
+                                        <h1 className="text-balance text-4xl md:text-5xl font-light tracking-tight">
+                                            Meet <span className="gd-gradient-text font-semibold">Morgan</span>
+                                        </h1>
+                                        <p className="mt-4 max-w-xl text-lg text-slate-300/90 leading-relaxed">
+                                            Your GoDeskless Field Service Specialist.
+                                        </p>
 
-                    <div className="mt-10 flex flex-col items-center gap-3">
-                      <button
-                        onClick={startConversation}
-                        disabled={loading}
-                        className="gd-btn gd-btn-primary px-8 py-4 text-lg disabled:opacity-50 disabled:cursor-not-allowed"
-                        type="button"
-                      >
-                        <span>{loading ? 'Connecting…' : 'Start Conversation'}</span>
-                        {!loading && <IconArrowRight className="h-5 w-5" />}
-                      </button>
+                                        <div className="mt-10 flex flex-col items-center gap-3">
+                                            <button
+                                                onClick={startConversation}
+                                                disabled={loading}
+                                                className="gd-btn gd-btn-primary px-8 py-4 text-lg disabled:opacity-50 disabled:cursor-not-allowed"
+                                                type="button"
+                                            >
+                                                <span>{loading ? 'Connecting…' : 'Start Conversation'}</span>
+                                                {!loading && <IconArrowRight className="h-5 w-5" />}
+                                            </button>
 
-                      {error && (
-                        <div className="gd-badge border-red-500/25 bg-red-500/10 text-red-200">
-                          <span className="h-2 w-2 rounded-full bg-red-400" />
-                          <span className="text-sm">{error}</span>
-                        </div>
-                      )}
-                    </div>
-                  </div>
+                                            {error && (
+                                                <div className="gd-badge border-red-500/25 bg-red-500/10 text-red-200">
+                                                    <span className="h-2 w-2 rounded-full bg-red-400" />
+                                                    <span className="text-sm">{error}</span>
+                                                </div>
+                                            )}
+                                        </div>
 
-                  <p className="mt-10 text-xs text-slate-400/90">
-                    Morgan uses AI to generate responses. Information may be inaccurate or incomplete. Please review and verify.
-                  </p>
-                </div>
-              )}
-                        </div>
-          </section>
-        )}
-            </main>
 
-            {/* CONTACT MODAL */}
-            {showContactForm && (
-                <div className="fixed inset-0 z-[999] flex items-center justify-center bg-black/70 backdrop-blur-sm px-6">
-                    <div className="gd-glass w-full max-w-md p-7 md:p-8">
-                        <div className="mb-5 flex items-center justify-between">
-                            <h3 className="text-xl font-semibold">Contact Us</h3>
-                            <button onClick={() => setShowContactForm(false)} className="gd-btn" type="button" aria-label="Close">
-                                <IconX className="h-5 w-5" />
-                            </button>
-                        </div>
-
-                        {contactSuccess ? (
-                            <div className="gd-badge border-emerald-500/25 bg-emerald-500/10">
-                                <span className="h-2 w-2 rounded-full bg-emerald-400" />
-                                <span className="text-sm">Message sent. We’ll reach out shortly.</span>
+                                        <p className="mt-10 text-xs text-slate-400/90">
+                                            Morgan uses AI to generate responses. Information may be inaccurate or incomplete. Please review and verify.
+                                        </p>
+                                    </div>
+                                )}
                             </div>
-                        ) : (
-                            <form onSubmit={handleContactSubmit} className="space-y-4">
-                                <div className="grid grid-cols-1 gap-4">
-                                    <input
-                                        className="w-full rounded-xl border border-slate-700/60 bg-slate-950/40 px-4 py-3 text-white placeholder:text-slate-500 focus:border-emerald-500/50"
-                                        placeholder="Name"
-                                        value={contactForm.name}
-                                        onChange={(e) => setContactForm({ ...contactForm, name: e.target.value })}
-                                        required
-                                    />
-                                    <input
-                                        className="w-full rounded-xl border border-slate-700/60 bg-slate-950/40 px-4 py-3 text-white placeholder:text-slate-500 focus:border-emerald-500/50"
-                                        placeholder="Email"
-                                        type="email"
-                                        value={contactForm.email}
-                                        onChange={(e) => setContactForm({ ...contactForm, email: e.target.value })}
-                                        required
-                                    />
-                                    <input
-                                        className="w-full rounded-xl border border-slate-700/60 bg-slate-950/40 px-4 py-3 text-white placeholder:text-slate-500 focus:border-emerald-500/50"
-                                        placeholder="Phone (optional)"
-                                        value={contactForm.phone}
-                                        onChange={(e) => setContactForm({ ...contactForm, phone: e.target.value })}
-                                    />
-                                    <input
-                                        className="w-full rounded-xl border border-slate-700/60 bg-slate-950/40 px-4 py-3 text-white placeholder:text-slate-500 focus:border-emerald-500/50"
-                                        placeholder="Company"
-                                        value={contactForm.companyName}
-                                        onChange={(e) => setContactForm({ ...contactForm, companyName: e.target.value, company: e.target.value })}
-                                    />
-                                    <textarea
-                                        className="min-h-[110px] w-full resize-none rounded-xl border border-slate-700/60 bg-slate-950/40 px-4 py-3 text-white placeholder:text-slate-500 focus:border-emerald-500/50"
-                                        placeholder="What would you like to discuss?"
-                                        value={contactForm.message}
-                                        onChange={(e) => setContactForm({ ...contactForm, message: e.target.value })}
-                                        required
-                                    />
-                                </div>
+                        </section>
+                    )}
+                </main>
 
-                                <button
-                                    type="submit"
-                                    disabled={contactSubmitting}
-                                    className="gd-btn gd-btn-primary w-full py-3 disabled:opacity-50 disabled:cursor-not-allowed"
-                                >
-                                    {contactSubmitting ? 'Sending…' : 'Send message'}
+                {/* CONTACT MODAL */}
+                {showContactForm && (
+                    <div className="fixed inset-0 z-[999] flex items-center justify-center bg-black/70 backdrop-blur-sm px-6">
+                        <div className="gd-glass w-full max-w-md p-7 md:p-8">
+                            <div className="mb-5 flex items-center justify-between">
+                                <h3 className="text-xl font-semibold">Contact Us</h3>
+                                <button onClick={() => setShowContactForm(false)} className="gd-btn" type="button" aria-label="Close">
+                                    <IconX className="h-5 w-5" />
                                 </button>
+                            </div>
 
-                                <p className="text-xs text-slate-400/90">
-                                    Tip: Press <span className="gd-badge px-2 py-1 text-xs">Esc</span> to close this dialog.
-                                </p>
-                            </form>
-                        )}
+                            {contactSuccess ? (
+                                <div className="gd-badge border-emerald-500/25 bg-emerald-500/10">
+                                    <span className="h-2 w-2 rounded-full bg-emerald-400" />
+                                    <span className="text-sm">Message sent. We’ll reach out shortly.</span>
+                                </div>
+                            ) : (
+                                <form onSubmit={handleContactSubmit} className="space-y-4">
+                                    <div className="grid grid-cols-1 gap-4">
+                                        <input
+                                            className="w-full rounded-xl border border-slate-700/60 bg-slate-950/40 px-4 py-3 text-white placeholder:text-slate-500 focus:border-emerald-500/50"
+                                            placeholder="Name"
+                                            value={contactForm.name}
+                                            onChange={(e) => setContactForm({ ...contactForm, name: e.target.value })}
+                                            required
+                                        />
+                                        <input
+                                            className="w-full rounded-xl border border-slate-700/60 bg-slate-950/40 px-4 py-3 text-white placeholder:text-slate-500 focus:border-emerald-500/50"
+                                            placeholder="Email"
+                                            type="email"
+                                            value={contactForm.email}
+                                            onChange={(e) => setContactForm({ ...contactForm, email: e.target.value })}
+                                            required
+                                        />
+                                        <input
+                                            className="w-full rounded-xl border border-slate-700/60 bg-slate-950/40 px-4 py-3 text-white placeholder:text-slate-500 focus:border-emerald-500/50"
+                                            placeholder="Phone (optional)"
+                                            value={contactForm.phone}
+                                            onChange={(e) => setContactForm({ ...contactForm, phone: e.target.value })}
+                                        />
+                                        <input
+                                            className="w-full rounded-xl border border-slate-700/60 bg-slate-950/40 px-4 py-3 text-white placeholder:text-slate-500 focus:border-emerald-500/50"
+                                            placeholder="Company"
+                                            value={contactForm.companyName}
+                                            onChange={(e) => setContactForm({ ...contactForm, companyName: e.target.value, company: e.target.value })}
+                                        />
+                                        <textarea
+                                            className="min-h-[110px] w-full resize-none rounded-xl border border-slate-700/60 bg-slate-950/40 px-4 py-3 text-white placeholder:text-slate-500 focus:border-emerald-500/50"
+                                            placeholder="What would you like to discuss?"
+                                            value={contactForm.message}
+                                            onChange={(e) => setContactForm({ ...contactForm, message: e.target.value })}
+                                            required
+                                        />
+                                    </div>
+
+                                    <button
+                                        type="submit"
+                                        disabled={contactSubmitting}
+                                        className="gd-btn gd-btn-primary w-full py-3 disabled:opacity-50 disabled:cursor-not-allowed"
+                                    >
+                                        {contactSubmitting ? 'Sending…' : 'Send message'}
+                                    </button>
+
+                                    <p className="text-xs text-slate-400/90">
+                                        Tip: Press <span className="gd-badge px-2 py-1 text-xs">Esc</span> to close this dialog.
+                                    </p>
+                                </form>
+                            )}
+                        </div>
                     </div>
-                </div>
-            )}
-        </div>
-  </CVIProvider >
-  );
+                )}
+            </div>
+        </CVIProvider >
+    );
 }
