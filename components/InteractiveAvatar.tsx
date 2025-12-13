@@ -68,6 +68,9 @@ export default function InteractiveAvatar() {
     const [audioOnly] = useState(false); // kept for API compatibility (toggled elsewhere if you re-add UI)
     const [showDemo, setShowDemo] = useState(false);
 
+    // Safety Modal
+    const [confirmExit, setConfirmExit] = useState(false);
+
     // Lead capture
     const [showContactForm, setShowContactForm] = useState(false);
     const [contactForm, setContactForm] = useState({
@@ -112,6 +115,7 @@ export default function InteractiveAvatar() {
 
     const endConversation = async () => {
         if (!conversation) return;
+        setConfirmExit(false); // Close modal if open
 
         try {
             await fetch('/api/tavus/end', {
@@ -205,12 +209,13 @@ export default function InteractiveAvatar() {
         return () => window.removeEventListener('beforeunload', handleBeforeUnload);
     }, [conversation]);
 
-    // Quality-of-life keyboard shortcuts: Esc closes modal; Shift+Esc ends demo; Ctrl+Enter starts convo (idle).
+    // Quality-of-life keyboard shortcuts
     useEffect(() => {
         const onKeyDown = (e: KeyboardEvent) => {
             if (e.key === 'Escape') {
-                if (e.shiftKey && showDemo) handleEndDemo();
-                if (showContactForm) setShowContactForm(false);
+                if (confirmExit) setConfirmExit(false);
+                else if (e.shiftKey && showDemo) handleEndDemo();
+                else if (showContactForm) setShowContactForm(false);
             }
             if ((e.ctrlKey || e.metaKey) && e.key === 'Enter' && !conversation && !loading) {
                 startConversation();
@@ -218,7 +223,7 @@ export default function InteractiveAvatar() {
         };
         window.addEventListener('keydown', onKeyDown);
         return () => window.removeEventListener('keydown', onKeyDown);
-    }, [conversation, loading, showDemo, showContactForm]);
+    }, [conversation, loading, showDemo, showContactForm, confirmExit]);
 
     const headerStyle = useMemo(() => {
         // In demo mode we leave room for the Morgan sidebar so the header never hides behind it.
@@ -241,7 +246,7 @@ export default function InteractiveAvatar() {
                     style={headerStyle}
                 >
                     <div className="mx-auto flex max-w-7xl items-center justify-between">
-                        {/* Logo (hide during demo, consistent with current behavior) */}
+                        {/* Logo: Hide in Demo Mode to remove distraction */}
                         {!showDemo ? (
                             <a
                                 href="https://godeskless.com"
@@ -282,7 +287,7 @@ export default function InteractiveAvatar() {
                                         <IconArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
                                     </button>
 
-                                    <button onClick={endConversation} className="gd-btn gd-btn-danger" type="button">
+                                    <button onClick={() => setConfirmExit(true)} className="gd-btn gd-btn-danger" type="button">
                                         <IconX className="h-5 w-5" />
                                         <span>Exit</span>
                                     </button>
@@ -305,9 +310,15 @@ export default function InteractiveAvatar() {
                                     bottom: 0,
                                 }}
                             >
-                                <div className="h-full w-full bg-white">
+                                <div className="relative h-full w-full bg-white">
+                                    {/* CLEANUP HACK: Mask overlay to hide GoDeskless Top Nav */}
+                                    <div className="pointer-events-none absolute left-0 top-0 z-20 h-[88px] w-full bg-white" />
+
+                                    {/* CLEANUP HACK: Mask overlay to hide GoDeskless Chat Bubble (bottom-right) */}
+                                    <div className="pointer-events-none absolute bottom-0 right-0 z-20 h-[110px] w-[360px] bg-white" />
+
                                     {/* A little “browser chrome” to feel enterprise, not “random iframe” */}
-                                    <div className="flex items-center justify-between px-4 py-3 border-b border-slate-200">
+                                    <div className="relative z-30 flex items-center justify-between px-4 py-3 border-b border-slate-200 bg-white shadow-sm">
                                         <div className="flex items-center gap-2 text-slate-700">
                                             <span className="inline-flex h-2.5 w-2.5 rounded-full bg-red-400" />
                                             <span className="inline-flex h-2.5 w-2.5 rounded-full bg-yellow-400" />
@@ -349,17 +360,40 @@ export default function InteractiveAvatar() {
                                     </button>
                                 </div>
 
-                                <div className="flex-1 overflow-hidden">
-                                    {conversation ? (
-                                        <Conversation conversationUrl={conversation.conversation_url} onLeave={handleConversationLeave} />
-                                    ) : null}
+                                <div className="flex-1 overflow-hidden relative">
+                                    {/* Conversation View */}
+                                    <div className="h-[300px] w-full bg-slate-950">
+                                        {conversation ? (
+                                            <Conversation conversationUrl={conversation.conversation_url} onLeave={handleConversationLeave} />
+                                        ) : null}
+                                    </div>
+
+                                    {/* Status Panel (Fills dead zone) */}
+                                    <div className="p-6">
+                                        <div className="border border-slate-700/50 bg-slate-900/40 rounded-2xl p-5">
+                                            <div className="flex items-center justify-between mb-3">
+                                                <span className="text-sm font-semibold text-slate-200">Session Status</span>
+                                                <span className="text-xs text-emerald-400 font-medium">● Connected</span>
+                                            </div>
+                                            <p className="text-xs text-slate-400 leading-relaxed">
+                                                If you’re not on camera, Morgan will guide the demo via voice command.
+                                                You can also use the controls below to navigate chapters.
+                                            </p>
+
+                                            <div className="mt-4 grid grid-cols-3 gap-2">
+                                                <button className="gd-btn px-2 py-2 text-[10px] opacity-50 cursor-not-allowed">Next</button>
+                                                <button className="gd-btn px-2 py-2 text-[10px] opacity-50 cursor-not-allowed">Repeat</button>
+                                                <button className="gd-btn px-2 py-2 text-[10px] opacity-50 cursor-not-allowed">Jump</button>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
 
                                 <div className="flex gap-3 border-t border-slate-700/50 bg-slate-800/60 p-4">
                                     <button onClick={handleEndDemo} className="gd-btn gd-btn-primary flex-1" type="button">
                                         <span>Back to Morgan</span>
                                     </button>
-                                    <button onClick={endConversation} className="gd-btn gd-btn-danger flex-1" type="button">
+                                    <button onClick={() => setConfirmExit(true)} className="gd-btn gd-btn-danger flex-1" type="button">
                                         <span>Exit</span>
                                     </button>
                                 </div>
@@ -415,7 +449,6 @@ export default function InteractiveAvatar() {
                                                 </div>
                                             )}
                                         </div>
-
 
                                         <p className="mt-10 text-xs text-slate-400/90">
                                             Morgan uses AI to generate responses. Information may be inaccurate or incomplete. Please review and verify.
@@ -498,7 +531,33 @@ export default function InteractiveAvatar() {
                         </div>
                     </div>
                 )}
+
+                {/* CONFIRM EXIT MODAL */}
+                {confirmExit && (
+                    <div className="fixed inset-0 z-[999] grid place-items-center bg-black/70 backdrop-blur-sm px-6">
+                        <div className="gd-glass w-full max-w-sm p-6 text-center">
+                            <h3 className="text-lg font-semibold text-white">End session?</h3>
+                            <p className="mt-2 text-sm text-slate-300">
+                                This will disconnect Morgan and close the demo.
+                            </p>
+                            <div className="mt-6 flex gap-3">
+                                <button
+                                    className="gd-btn flex-1 bg-white/5 hover:bg-white/10"
+                                    onClick={() => setConfirmExit(false)}
+                                >
+                                    Cancel
+                                </button>
+                                <button
+                                    className="gd-btn gd-btn-danger flex-1"
+                                    onClick={endConversation}
+                                >
+                                    End Session
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                )}
             </div>
-        </CVIProvider >
+        </CVIProvider>
     );
 }
