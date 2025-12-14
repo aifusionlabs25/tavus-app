@@ -71,10 +71,20 @@ export async function POST(request: Request) {
 
         console.log(`[Webhook] Received event: ${eventType} from conversation: ${conversation_id}`);
 
-        // Handle Transcript Ready OR Shutdown: Use both as triggers to be safe.
-        if (eventType === 'application.transcription_ready' || eventType === 'system.shutdown') {
+        // ============================================================================
+        // NOVA FIX #4: Shutdown just ACKs (no transcript available in this event)
+        // ============================================================================
+        if (eventType === 'system.shutdown') {
+            console.log('[Webhook] Shutdown ACK. No analysis (transcript not in this event).');
+            return NextResponse.json({ message: 'Shutdown acknowledged' });
+        }
 
-            console.log(`[Webhook] 📜 Event '${eventType}' received for ${conversation_id}. Attempting Hot Lead Analysis...`);
+        // ============================================================================
+        // SINGLE TRIGGER: Only analyze on transcription_ready (where transcript lives)
+        // ============================================================================
+        if (eventType === 'application.transcription_ready') {
+
+            console.log(`[Webhook] 📜 Transcript Ready for ${conversation_id}. Starting Hot Lead Analysis...`);
 
             let transcriptText = "";
             let tavusRecordingUrl = `https://platform.tavus.io/conversations/${conversation_id}`;
@@ -98,12 +108,11 @@ export async function POST(request: Request) {
             if (transcriptText.length < 200 && process.env.TAVUS_API_KEY) {
                 console.log('[Webhook] Payload transcript missing or short. Falling back to Tavus API...');
 
-                // Retry loop: 5 attempts with increasing backoff
-                const delays = [2000, 4000, 6000, 8000, 10000];
+                // Retry loop: 3 attempts (reduced since payload should usually have it)
+                const delays = [2000, 4000, 6000];
 
-                for (let attempt = 0; attempt < 5; attempt++) {
+                for (let attempt = 0; attempt < 3; attempt++) {
                     try {
-                        // CRITICAL FIX: Must use ?verbose=true to get transcript data
                         const transcriptResponse = await fetch(`${CONFIG.TAVUS.API_URL}/conversations/${conversation_id}?verbose=true`, {
                             method: 'GET',
                             headers: { 'x-api-key': process.env.TAVUS_API_KEY },
@@ -112,51 +121,36 @@ export async function POST(request: Request) {
                         if (transcriptResponse.ok) {
                             const convoData = await transcriptResponse.json();
 
-                            // DEBUG LOG: Inspect structure
                             console.log(`[Webhook] API Response Keys (Attempt ${attempt + 1}):`, Object.keys(convoData));
 
-                            // Check for transcript directly
                             if (convoData.transcript) {
                                 const apiTranscript = normalizeTranscript(convoData.transcript);
-                                console.log(`[Webhook] API Transcript Length (Normalized): ${apiTranscript.length} chars`);
-
                                 if (apiTranscript.length > transcriptText.length) {
                                     transcriptText = apiTranscript;
                                 }
-
                                 if (convoData.recording_url) tavusRecordingUrl = convoData.recording_url;
                             }
 
-                            // NOVA FIX: Check for transcript inside 'events' array
-                            // Tavus verbose mode may return events like [{event_type: 'message', content: '...'}]
+                            // Check events array as fallback
                             if (convoData.events && Array.isArray(convoData.events) && transcriptText.length < 200) {
-                                console.log(`[Webhook] Found 'events' array (${convoData.events.length} items). Extracting transcript...`);
                                 const eventsTranscript = convoData.events
                                     .filter((e: any) => e.content || e.text || e.transcript || e.message)
-                                    .map((e: any) => `${e.role || e.sender || e.event_type || 'unknown'}: ${e.content || e.text || e.transcript || e.message || ''}`)
+                                    .map((e: any) => `${e.role || e.sender || 'unknown'}: ${e.content || e.text || e.transcript || e.message || ''}`)
                                     .join('\n');
 
                                 if (eventsTranscript.length > transcriptText.length) {
                                     transcriptText = eventsTranscript;
-                                    console.log(`[Webhook] Extracted ${transcriptText.length} chars from events.`);
                                 }
                             }
 
-                            if (transcriptText.length >= 200) {
-                                console.log(`[Webhook] Transcript fetched successfully on attempt ${attempt + 1}`);
-                                break; // Success!
-                            }
-                        } else {
-                            console.error(`[Webhook] API Error ${transcriptResponse.status}:`, await transcriptResponse.text());
+                            if (transcriptText.length >= 200) break;
                         }
                     } catch (err) {
                         console.error(`[Webhook] API fetch failed attempt ${attempt + 1}:`, err);
                     }
 
-                    if (attempt < 4) {
-                        const waitTime = delays[attempt];
-                        console.log(`[Webhook] Transcript still short. Waiting ${waitTime}ms (Attempt ${attempt + 1}/5)...`);
-                        await new Promise(r => setTimeout(r, waitTime));
+                    if (attempt < 2) {
+                        await new Promise(r => setTimeout(r, delays[attempt]));
                     }
                 }
             }
@@ -165,13 +159,11 @@ export async function POST(request: Request) {
             // NOVA FIX #3: USE 200+ CHAR GATE (more realistic for actual conversations)
             // ============================================================================
             if (transcriptText && transcriptText.length >= 200) {
-                // 2. Gemini Analysis
                 console.log(`[Webhook] ✅ Analyzing ${transcriptText.length} chars with ${CONFIG.GEMINI.MODEL}...`);
                 const gemini = new GeminiService();
                 const leadData = await gemini.analyzeTranscript(transcriptText);
 
                 if (leadData) {
-                    // 3. Send Gmail Hot Lead Report
                     console.log('[Webhook] Generating Gmail Draft...');
                     const gmailService = new GmailDraftService();
                     const finalLeadData = {
@@ -182,7 +174,6 @@ export async function POST(request: Request) {
                     };
                     await gmailService.createDraft(finalLeadData);
 
-                    // 4. Save to Google Sheets
                     const sheets = getSheetsClient();
                     if (sheets && process.env.GOOGLE_SHEET_ID) {
                         try {
