@@ -33,7 +33,13 @@ export class GeminiService {
         this.genAI = new GoogleGenerativeAI(apiKey || '');
         // Using centralized config for model validation and easy upgrades
         console.log(`[GeminiService] Initializing with model: ${CONFIG.GEMINI.MODEL}`);
-        this.model = this.genAI.getGenerativeModel({ model: CONFIG.GEMINI.MODEL });
+        // NOVA HARDENING: JSON output mode for deterministic parsing
+        this.model = this.genAI.getGenerativeModel({
+            model: CONFIG.GEMINI.MODEL,
+            generationConfig: {
+                responseMimeType: "application/json"
+            }
+        });
     }
 
     async analyzeTranscript(transcript: string): Promise<LeadData | null> {
