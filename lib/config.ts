@@ -5,7 +5,8 @@
 export const CONFIG = {
     GEMINI: {
         // Use environment variable if set (for flexibility), otherwise default to free tier flash model
-        MODEL: process.env.GEMINI_MODEL || 'gemini-1.5-flash',
+        // Updated Dec 2024: gemini-1.5-flash deprecated in v1beta, use gemini-2.0-flash
+        MODEL: process.env.GEMINI_MODEL || 'gemini-2.0-flash',
     },
     TAVUS: {
         API_URL: 'https://tavusapi.com/v2',

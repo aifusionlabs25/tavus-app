@@ -51,7 +51,7 @@ function normalizeTranscript(rawTranscript: any): string {
     // If array (Tavus format), convert to readable string
     if (Array.isArray(rawTranscript)) {
         return rawTranscript
-            .map((t: any) => `${t.role || 'unknown'}: ${t.content || ''}`)
+            .map((t: any) => `${t.role || t.sender || 'unknown'}: ${t.content || t.text || t.transcript || ''}`)
             .join('\n');
     }
 
@@ -115,6 +115,7 @@ export async function POST(request: Request) {
                             // DEBUG LOG: Inspect structure
                             console.log(`[Webhook] API Response Keys (Attempt ${attempt + 1}):`, Object.keys(convoData));
 
+                            // Check for transcript directly
                             if (convoData.transcript) {
                                 const apiTranscript = normalizeTranscript(convoData.transcript);
                                 console.log(`[Webhook] API Transcript Length (Normalized): ${apiTranscript.length} chars`);
@@ -124,11 +125,26 @@ export async function POST(request: Request) {
                                 }
 
                                 if (convoData.recording_url) tavusRecordingUrl = convoData.recording_url;
+                            }
 
-                                if (transcriptText.length >= 200) {
-                                    console.log(`[Webhook] Transcript fetched successfully on attempt ${attempt + 1}`);
-                                    break; // Success!
+                            // NOVA FIX: Check for transcript inside 'events' array
+                            // Tavus verbose mode may return events like [{event_type: 'message', content: '...'}]
+                            if (convoData.events && Array.isArray(convoData.events) && transcriptText.length < 200) {
+                                console.log(`[Webhook] Found 'events' array (${convoData.events.length} items). Extracting transcript...`);
+                                const eventsTranscript = convoData.events
+                                    .filter((e: any) => e.content || e.text || e.transcript || e.message)
+                                    .map((e: any) => `${e.role || e.sender || e.event_type || 'unknown'}: ${e.content || e.text || e.transcript || e.message || ''}`)
+                                    .join('\n');
+
+                                if (eventsTranscript.length > transcriptText.length) {
+                                    transcriptText = eventsTranscript;
+                                    console.log(`[Webhook] Extracted ${transcriptText.length} chars from events.`);
                                 }
+                            }
+
+                            if (transcriptText.length >= 200) {
+                                console.log(`[Webhook] Transcript fetched successfully on attempt ${attempt + 1}`);
+                                break; // Success!
                             }
                         } else {
                             console.error(`[Webhook] API Error ${transcriptResponse.status}:`, await transcriptResponse.text());
