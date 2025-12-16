@@ -63,9 +63,10 @@ export class GmailDraftService {
      * Generate email body from lead data
      */
     private generateEmailBody(leadData: LeadData, leadScore: number, badges: string[]): string {
-        const badgeHTML = badges.map(badge =>
-            `<span class="badge">${badge}</span>`
-        ).join('\n                ');
+        // Safe join for badges
+        const badgeHTML = (Array.isArray(badges) ? badges : [])
+            .map(badge => `<span class="badge">${badge}</span>`)
+            .join('\n                ');
 
         // Read v3.0 HTML template
         const templatePath = path.join(process.cwd(), 'templates/Email_Template_v3_Clean_Executive.html');
@@ -77,6 +78,9 @@ export class GmailDraftService {
             console.error('Template not found, using fallback.');
             return `Error: Template not found at ${templatePath}`;
         }
+
+        const safePainPoints = Array.isArray(leadData.pain_points) ? leadData.pain_points : [];
+        const safeCommittee = Array.isArray(leadData.buying_committee) ? leadData.buying_committee : [];
 
         // Replace dynamic placeholders
         htmlTemplate = htmlTemplate
@@ -90,13 +94,13 @@ export class GmailDraftService {
             .replace(/{{location}}/g, leadData.geography || 'Not provided')
             .replace(/{{email}}/g, leadData.lead_email || 'Not provided')
             .replace(/{{phone}}/g, leadData.lead_phone || 'Not provided')
-            .replace(/{{pain_point_1}}/g, extractPainPoint(leadData.pain_points, 0))
-            .replace(/{{pain_point_2}}/g, extractPainPoint(leadData.pain_points, 1))
-            .replace(/{{pain_point_3}}/g, extractPainPoint(leadData.pain_points, 2))
+            .replace(/{{pain_point_1}}/g, extractPainPoint(safePainPoints, 0))
+            .replace(/{{pain_point_2}}/g, extractPainPoint(safePainPoints, 1))
+            .replace(/{{pain_point_3}}/g, extractPainPoint(safePainPoints, 2))
             .replace(/{{budget}}/g, leadData.budget_range || 'Not discussed')
             .replace(/{{timeline}}/g, leadData.timeline || 'Not discussed')
-            .replace(/{{decision_maker}}/g, extractDecisionMaker(leadData.buying_committee))
-            .replace(/{{buying_committee}}/g, leadData.buying_committee.join(', ') || 'Not mentioned')
+            .replace(/{{decision_maker}}/g, extractDecisionMaker(safeCommittee))
+            .replace(/{{buying_committee}}/g, safeCommittee.join(', ') || 'Not mentioned')
             .replace(/{{sales_strategy}}/g, formatSalesStrategy(leadData.salesPlan))
             .replace(/{{demo_focus_areas}}/g, generateDemoFocusAreas(leadData))
             .replace(/{{current_systems}}/g, leadData.currentSystems || 'Not mentioned');
