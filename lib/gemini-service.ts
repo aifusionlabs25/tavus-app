@@ -38,6 +38,8 @@ export class GeminiService {
             model: CONFIG.GEMINI.MODEL,
             generationConfig: {
                 responseMimeType: "application/json",
+                temperature: 0.1, // NOVA FIX: Low temperature to prevent hallucination loops
+                maxOutputTokens: 1000,
                 responseSchema: {
                     type: SchemaType.OBJECT,
                     properties: {
@@ -69,6 +71,7 @@ export class GeminiService {
         
         Extract the following data strictly as JSON. 
         If a field is not found, use null or "Not mentioned".
+        IMPORTANT: Keep all string values concise (under 20 words). Do not repeat text.
         
         Transcript:
         "${transcript}"
