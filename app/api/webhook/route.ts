@@ -59,6 +59,9 @@ function normalizeTranscript(rawTranscript: any): string {
                 const role = t.role || t.sender || 'unknown';
                 const content = t.content || t.text || t.message || '';
 
+                // IGNORE System Prompts (The main source of bloat)
+                if (role.toLowerCase() === 'system') return null;
+
                 // If content is empty, ignore this entry (it's likely a system event or metadata)
                 if (!content || typeof content !== 'string') return null;
 
