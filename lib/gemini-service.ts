@@ -38,7 +38,7 @@ export class GeminiService {
             model: CONFIG.GEMINI.MODEL,
             generationConfig: {
                 responseMimeType: "application/json",
-                temperature: 0.1, // NOVA FIX: Low temperature to prevent hallucination loops
+                temperature: 0.0, // NOVA FIX: Zero temperature for maximum determinism
                 maxOutputTokens: 1000,
                 responseSchema: {
                     type: SchemaType.OBJECT,
@@ -67,18 +67,21 @@ export class GeminiService {
         if (!transcript) return null;
 
         const prompt = `
-        You are a Senior Sales Operations Analyst. Analyze the following sales conversation transcript between 'Morgan' (AI SDR) and a prospect.
+        You are a Data Entry Bot. You do not explain. You do not chat. You only extract facts.
+        Analyze this transcript and extract the Lead Data.
         
-        Extract the following data strictly as JSON. 
-        If a field is not found, use null or "Not mentioned".
-        IMPORTANT: Keep all string values concise (under 20 words). Do not repeat text.
+        RULES:
+        1. STRINGS MUST BE UNDER 5 WORDS.
+        2. DO NOT include full sentences.
+        3. DO NOT repeat the transcript content.
+        4. If a field is not found, return null.
         
         Transcript:
         "${transcript}"
-
+        
         JSON Schema:
         {
-            "lead_name": "Name of the prospect",
+            "lead_name": "Name only (e.g. John Smith)",
             "role": "Job title or role",
             "company_name": "Company name",
             "vertical": "Industry (e.g. Plumbing, HVAC)",
