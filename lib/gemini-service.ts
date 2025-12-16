@@ -39,26 +39,7 @@ export class GeminiService {
             generationConfig: {
                 responseMimeType: "application/json",
                 temperature: 0.0, // NOVA FIX: Zero temperature for maximum determinism
-                maxOutputTokens: 1000,
-                responseSchema: {
-                    type: SchemaType.OBJECT,
-                    properties: {
-                        lead_name: { type: SchemaType.STRING, nullable: true },
-                        role: { type: SchemaType.STRING, nullable: true },
-                        company_name: { type: SchemaType.STRING, nullable: true },
-                        vertical: { type: SchemaType.STRING, nullable: true },
-                        teamSize: { type: SchemaType.STRING, nullable: true },
-                        geography: { type: SchemaType.STRING, nullable: true },
-                        pain_points: { type: SchemaType.ARRAY, items: { type: SchemaType.STRING }, nullable: true },
-                        currentSystems: { type: SchemaType.STRING, nullable: true },
-                        buying_committee: { type: SchemaType.ARRAY, items: { type: SchemaType.STRING }, nullable: true },
-                        budget_range: { type: SchemaType.STRING, nullable: true },
-                        timeline: { type: SchemaType.STRING, nullable: true },
-                        lead_email: { type: SchemaType.STRING, nullable: true },
-                        lead_phone: { type: SchemaType.STRING, nullable: true },
-                        salesPlan: { type: SchemaType.ARRAY, items: { type: SchemaType.STRING }, nullable: true }
-                    }
-                }
+                maxOutputTokens: 1000
             }
         });
     }
