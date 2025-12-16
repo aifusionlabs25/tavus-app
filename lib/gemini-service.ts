@@ -56,6 +56,7 @@ export class GeminiService {
         - Be concise but accurate.
         - If a value is not explicitly mentioned, return null.
         - Do not hallucinate or guess.
+        - Convert spoken email addresses to standard format (e.g. "john at gmail dot com" -> "john@gmail.com").
         
         EXAMPLE OUTPUT FORMAT:
         {
