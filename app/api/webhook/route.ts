@@ -50,8 +50,27 @@ function normalizeTranscript(rawTranscript: any): string {
 
     // If array (Tavus format), convert to readable string
     if (Array.isArray(rawTranscript)) {
+        // Track unique messages to prevent duplicates (Event Stream issue)
+        const seen = new Set<string>();
+
         return rawTranscript
-            .map((t: any) => `${t.role || t.sender || 'unknown'}: ${t.content || t.text || t.transcript || ''}`)
+            .map((t: any) => {
+                // PRIORITIZE distinct content over history
+                const role = t.role || t.sender || 'unknown';
+                const content = t.content || t.text || t.message || '';
+
+                // If content is empty, ignore this entry (it's likely a system event or metadata)
+                if (!content || typeof content !== 'string') return null;
+
+                const line = `${role}: ${content}`;
+
+                // Effective Deduplication
+                if (seen.has(line)) return null;
+                seen.add(line);
+
+                return line;
+            })
+            .filter(Boolean) // Remove nulls
             .join('\n');
     }
 
