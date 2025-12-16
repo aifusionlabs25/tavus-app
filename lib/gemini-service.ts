@@ -48,45 +48,35 @@ export class GeminiService {
         if (!transcript) return null;
 
         const prompt = `
-        You are a Data Entry Bot. You do not explain. You do not chat. You only extract facts.
-        Analyze this transcript and extract the Lead Data.
+        You are a Senior Sales Operations Analyst. Your job is to extract lead qualification data from a conversation transcript.
         
-        RULES:
-        1. STRINGS MUST BE UNDER 5 WORDS.
-        2. DO NOT include full sentences.
-        3. DO NOT repeat the transcript content.
-        4. If a field is not found, return null.
+        Analyze the transcript below and extract the key information into a JSON object.
         
-        EXAMPLE OUTPUT:
+        GUIDELINES:
+        - Be concise but accurate.
+        - If a value is not explicitly mentioned, return null.
+        - Do not hallucinate or guess.
+        
+        EXAMPLE OUTPUT FORMAT:
         {
-            "lead_name": "Tom",
+            "lead_name": "Tom Smith",
             "role": "Owner",
             "company_name": "Tom's Plumbing",
             "vertical": "Plumbing",
             "teamSize": "20 techs",
-            "budget_range": "Not discussed" 
+            "geography": "Phoenix, AZ",
+            "pain_points": ["Missed calls", "Scheduling chaos"],
+            "currentSystems": "Excel, Pen and Paper",
+            "buying_committee": ["Tom (Owner)", "Sarah (Office Manager)"],
+            "budget_range": "Not discussed",
+            "timeline": "ASAP",
+            "lead_email": "tom@example.com",
+            "lead_phone": "555-0100",
+            "salesPlan": ["Demo dispatch feature", "Highlight mobile app"]
         }
 
         Transcript:
         "${transcript}"
-        
-        JSON Schema:
-        {
-            "lead_name": "Name only (e.g. John Smith)",
-            "role": "Job title or role",
-            "company_name": "Company name",
-            "vertical": "Industry (e.g. Plumbing, HVAC)",
-            "teamSize": "Number of technicians/staff",
-            "geography": "Location",
-            "pain_points": ["List of specific pain points"],
-            "currentSystems": "Current software (ServiceTitan, Housecall Pro, Paper, Excel, etc)",
-            "buying_committee": ["Names/Roles of decision makers"],
-            "budget_range": "Mentioned budget or 'Not discussed'",
-            "timeline": "Implementation timeline (e.g. ASAP, Next Month)",
-            "lead_email": "Email if provided",
-            "lead_phone": "Phone if provided",
-            "salesPlan": "3 bullet points on next steps for sales team"
-        }
         `;
 
         try {
@@ -98,10 +88,11 @@ export class GeminiService {
             // Clean up markdown code blocks if present
             const jsonStr = text.replace(/```json\n|\n```/g, '').replace(/```/g, '').trim();
 
-            console.log('[GeminiService] 🔍 RAW JSON OUTPUT:', jsonStr.substring(0, 500) + '...'); // Log first 500 chars
+            console.log('[GeminiService] 🔍 RAW JSON OUTPUT:', jsonStr.substring(0, 500) + '...');
 
             const data = JSON.parse(jsonStr) as LeadData;
-            console.log('⚡ Gemini Analysis Complete. Company:', data.company_name, 'Lead:', data.lead_name);
+            console.log('⚡ Gemini Analysis Complete. Keys found:', Object.keys(data).join(', '));
+            console.log('⚡ Data Sample - Company:', data.company_name, 'Lead:', data.lead_name);
             return data;
         } catch (error) {
             console.error('❌ Gemini Analysis Failed:', error);
