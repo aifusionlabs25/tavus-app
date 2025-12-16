@@ -214,7 +214,8 @@ export async function POST(request: Request) {
                                 finalLeadData.teamSize || 'Not Provided',
                                 finalLeadData.geography || 'Not Provided',
                                 finalLeadData.currentSystems || 'Not Provided',
-                                finalLeadData.salesPlan || '',
+                                // Safe join for salesPlan (which might be array)
+                                Array.isArray(finalLeadData.salesPlan) ? finalLeadData.salesPlan.join('\n') : (finalLeadData.salesPlan || ''),
                                 finalLeadData.tavusRecordingUrl
                             ]];
 

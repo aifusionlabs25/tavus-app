@@ -350,13 +350,20 @@ function generateDemoFocusAreas(leadData: LeadData): string {
 
 function generateSubjectLine(leadData: LeadData, environment: string): string {
     // Sanitize function to remove newlines and extra spaces
-    const sanitize = (str: string) => str.replace(/\n/g, ' ').replace(/\s+/g, ' ').trim();
-    const truncate = (str: string, len: number) => str.length > len ? str.substring(0, len) + '...' : str;
+    const sanitize = (str: any) => {
+        if (!str) return '';
+        if (typeof str !== 'string') return String(str);
+        return str.replace(/\n/g, ' ').replace(/\s+/g, ' ').trim();
+    };
+    const truncate = (str: any, len: number) => {
+        const s = sanitize(str);
+        return s.length > len ? s.substring(0, len) + '...' : s;
+    };
 
     const contactName = sanitize(leadData.lead_name || 'Unknown Contact');
     const companyName = sanitize(leadData.company_name || 'Unknown Company');
-    const teamSize = truncate(sanitize(leadData.teamSize || 'Unknown Size'), 20);
-    const budget = truncate(sanitize(leadData.budget_range || 'Budget TBD'), 20);
+    const teamSize = truncate(leadData.teamSize || 'Unknown Size', 20);
+    const budget = truncate(leadData.budget_range || 'Budget TBD', 20);
 
     const mainPain = leadData.pain_points && leadData.pain_points.length > 0
         ? truncate(sanitize(leadData.pain_points[0]), 40)
@@ -369,8 +376,16 @@ function generateSubjectLine(leadData: LeadData, environment: string): string {
     return `🔥 Hot Lead: ${contactName} - ${companyName} (${teamSize}, ${budget}, ${mainPain})`;
 }
 
-function formatSalesStrategy(strategy: string): string {
+function formatSalesStrategy(strategy: string | string[]): string {
     if (!strategy) return '<li>Strategy not generated</li>';
+
+    // Handle Array directly (e.g. from Gemini JSON)
+    if (Array.isArray(strategy)) {
+        return strategy.map(line => `<li>${line}</li>`).join('\n');
+    }
+
+    // Handle String
+    if (typeof strategy !== 'string') return '<li>Invalid Strategy Format</li>';
 
     // Clean up JSON-like artifacts
     let cleanStrategy = strategy.trim();
