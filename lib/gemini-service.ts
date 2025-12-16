@@ -101,8 +101,10 @@ export class GeminiService {
             // Clean up markdown code blocks if present
             const jsonStr = text.replace(/```json\n|\n```/g, '').replace(/```/g, '').trim();
 
+            console.log('[GeminiService] 🔍 RAW JSON OUTPUT:', jsonStr.substring(0, 500) + '...'); // Log first 500 chars
+
             const data = JSON.parse(jsonStr) as LeadData;
-            console.log('⚡ Gemini Analysis Complete:', data.company_name);
+            console.log('⚡ Gemini Analysis Complete. Company:', data.company_name, 'Lead:', data.lead_name);
             return data;
         } catch (error) {
             console.error('❌ Gemini Analysis Failed:', error);

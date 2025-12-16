@@ -182,6 +182,7 @@ export async function POST(request: Request) {
             // ============================================================================
             if (transcriptText && transcriptText.length >= 200) {
                 console.log(`[Webhook] ✅ Analyzing ${transcriptText.length} chars with ${CONFIG.GEMINI.MODEL}...`);
+                console.log(`[Webhook] 📜 NORMALIZED TRANSCRIPT PREVIEW:`, transcriptText.substring(0, 500) + '...');
 
                 const gemini = new GeminiService();
                 let leadData = null;
