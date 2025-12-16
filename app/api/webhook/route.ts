@@ -163,8 +163,26 @@ export async function POST(request: Request) {
             // ============================================================================
             if (transcriptText && transcriptText.length >= 200) {
                 console.log(`[Webhook] ✅ Analyzing ${transcriptText.length} chars with ${CONFIG.GEMINI.MODEL}...`);
+
                 const gemini = new GeminiService();
-                const leadData = await gemini.analyzeTranscript(transcriptText);
+                let leadData = null;
+
+                // RETRY LOGIC FOR 429 (Rate Limits)
+                // Why 2 retries? Because free tier resets every minute, 25s wait usually sufficient
+                for (let retry = 0; retry < 2; retry++) {
+                    try {
+                        leadData = await gemini.analyzeTranscript(transcriptText);
+                        break; // Success!
+                    } catch (error: any) {
+                        if (error?.message?.includes('429') || error?.status === 429 || error?.errorDetails?.[0]?.reason === 'RATE_LIMIT_EXCEEDED') {
+                            console.warn(`[Webhook] ⚠️ Gemini 429 Rate Limit hit. Waiting 25s (Attempt ${retry + 1}/2)...`);
+                            await new Promise(r => setTimeout(r, 25000));
+                        } else {
+                            console.error(`[Webhook] ❌ Gemini Error (Attempt ${retry + 1}):`, error);
+                            throw error; // Other error, rethrow
+                        }
+                    }
+                }
 
                 if (leadData) {
                     console.log('[Webhook] Generating Gmail Draft...');

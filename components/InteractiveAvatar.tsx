@@ -352,6 +352,11 @@ export default function InteractiveAvatar() {
 
                             {conversation && !showDemo && (
                                 <>
+                                    <button onClick={openCalendly} className="gd-btn" type="button">
+                                        <IconCalendar className="h-4 w-4" />
+                                        <span>Schedule Demo</span>
+                                    </button>
+
                                     <button onClick={handleStartDemo} className="gd-btn gd-btn-primary" type="button">
                                         <span>Interactive Demo</span>
                                         <IconArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
@@ -425,9 +430,15 @@ export default function InteractiveAvatar() {
                                         <span className="text-sm font-semibold">Morgan live</span>
                                     </div>
 
-                                    <button onClick={handleEndDemo} className="text-xs text-slate-500 hover:text-white transition-colors" type="button" title="Back to Morgan">
-                                        Back
-                                    </button>
+                                    <div className="flex items-center gap-2">
+                                        <button onClick={openCalendly} className="text-xs text-emerald-400 hover:text-emerald-300 transition-colors mr-2 flex items-center gap-1" type="button">
+                                            <IconCalendar className="h-3 w-3" />
+                                            Schedule
+                                        </button>
+                                        <button onClick={handleEndDemo} className="text-xs text-slate-500 hover:text-white transition-colors" type="button" title="Back to Morgan">
+                                            Back
+                                        </button>
+                                    </div>
                                 </div>
 
                                 <div className="flex-1 flex flex-col overflow-hidden relative">
