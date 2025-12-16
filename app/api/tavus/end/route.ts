@@ -106,9 +106,7 @@ export async function POST(request: Request) {
                             </p>
                         </div>
 
-                        <p style="font-size: 12px; color: #6b7280; margin-top: 30px;">
-                            * Full transcripts and recording links are available in the Tavus dashboard.
-                        </p>
+
                     </div>
                     <div class="footer">
                         Sent via GoDeskless Platform • AI Fusion Labs
