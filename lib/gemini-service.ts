@@ -76,6 +76,16 @@ export class GeminiService {
         3. DO NOT repeat the transcript content.
         4. If a field is not found, return null.
         
+        EXAMPLE OUTPUT:
+        {
+            "lead_name": "Tom",
+            "role": "Owner",
+            "company_name": "Tom's Plumbing",
+            "vertical": "Plumbing",
+            "teamSize": "20 techs",
+            "budget_range": "Not discussed" 
+        }
+
         Transcript:
         "${transcript}"
         
