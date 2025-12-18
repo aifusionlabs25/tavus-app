@@ -35,12 +35,13 @@ const DEFAULT_KB_TAGS = [
 ];
 
 // Style Guidelines to steer LLM behavior
+// Style Guidelines to steer LLM behavior
 const STYLE_GUIDELINES = `
-STYLE RULES:
-1. Do NOT use the user's name in every response. Use it only once at the start and end of the conversation.
-2. Be concise. Avoid reading long lists. Summarize key points.
-3. Pronounce 'live' as 'l-eye-v' (rhymes with five) when referring to real-time features.
-4. Keep responses under 3 sentences unless explaining a complex topic.
+IMPORTANT SYSTEM INSTRUCTIONS:
+1.  **NAME USAGE**: You are strictly FORBIDDEN from using the user's name in the middle of the conversation. Use it ONLY in the very first greeting and the final goodbye. Never use it in intermediate responses.
+2.  **CONCISENESS**: Keep responses short (under 3 sentences). Do not repeat back what the user just said or summarize their input unless asked.
+3.  **PRONUNCIATION**: Pronounce the word 'live' as 'l-eye-v' (rhymes with five).
+4.  **FILLERS**: Stop starting sentences with "Got it," "Sure thing," or "Thanks,". Go straight to the answer.
 `;
 
 export async function POST(request: Request) {
