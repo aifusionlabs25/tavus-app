@@ -34,6 +34,15 @@ const DEFAULT_KB_TAGS = [
   'morgan-godeskless-demo'
 ];
 
+// Style Guidelines to steer LLM behavior
+const STYLE_GUIDELINES = `
+STYLE RULES:
+1. Do NOT use the user's name in every response. Use it only once at the start and end of the conversation.
+2. Be concise. Avoid reading long lists. Summarize key points.
+3. Pronounce 'live' as 'l-eye-v' (rhymes with five) when referring to real-time features.
+4. Keep responses under 3 sentences unless explaining a complex topic.
+`;
+
 export async function POST(request: Request) {
   // Destructure body, but we will IGNORE persona_id from client to ensure security
   const { persona_id: _ignored, audio_only, memory_id, document_tags, custom_greeting, context_url, conversation_name, conversational_context } = await request.json();
@@ -62,7 +71,7 @@ export async function POST(request: Request) {
       persona_id: serverPersonaId, // Reverting to 'persona_id' as verified working in previous version
       custom_greeting: cleanedGreeting,
       conversation_name: conversation_name || "Morgan Demo Session",
-      conversational_context: conversational_context || "You are Morgan, a helpful guide.",
+      conversational_context: (conversational_context || "You are Morgan, a helpful guide.") + STYLE_GUIDELINES,
       document_tags: finalTags,
       properties: {
         max_call_duration: 2700, // 45 Minutes (CEO Demo Limit)
