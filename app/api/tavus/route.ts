@@ -70,6 +70,13 @@ export async function POST(request: Request) {
         participant_absent_timeout: 300, // 5 Minutes (Reduced from 10)
         participant_left_timeout: 60, // 1 Minute (Aggressive Cleanup)
       },
+      layers: {
+        conversational_flow: {
+          turn_detection_model: "sparrow-1",
+          turn_taking_patience: "medium",
+          replica_interruptibility: "high"
+        }
+      },
       audio_only: audio_only,
       memory_id: memory_id,
       callback_url: callbackUrl,
