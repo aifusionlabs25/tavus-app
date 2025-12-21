@@ -50,11 +50,14 @@ export async function POST(request: Request) {
   try {
     const baseUrl = process.env.NEXT_PUBLIC_APP_URL?.replace(/\/$/, '') || 'http://localhost:3000';
 
-    // NOVA FIX: Dynamic Webhook URL for Vercel Preview
-    // VERCEL_URL is set by Vercel on every deployment (Preview & Prod)
-    // We prioritize it to ensure we hit the *current* deployment, not a hardcoded prod URL.
+    // NOVA FIX: Dynamic Webhook URL Logic
+    // 1. If PRODUCTION, Force the Public Domain (Most Reliable)
+    // 2. If PREVIEW (or validation), use VERCEL_URL (Deployment Hash)
     let finalBaseUrl = baseUrl;
-    if (process.env.VERCEL_URL) {
+
+    if (process.env.VERCEL_ENV === 'production') {
+      finalBaseUrl = 'https://tavus-app-navy.vercel.app';
+    } else if (process.env.VERCEL_URL) {
       finalBaseUrl = `https://${process.env.VERCEL_URL}`;
     }
 
