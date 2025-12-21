@@ -107,10 +107,10 @@ export class GeminiService {
 
             // NOVA FALLBACK: If 2.0 Flash is rate limited (429), try 1.5 Flash
             if (error.status === 429 || (error.message && error.message.includes('429'))) {
-                console.warn('⚠️ Gemini 2.0 Rate Limit Hit. Attempting FALLBACK to gemini-1.5-flash-latest...');
+                console.warn('⚠️ Gemini 2.0 Rate Limit Hit. Attempting FALLBACK to gemini-1.5-flash...');
                 try {
                     const fallbackModel = this.genAI.getGenerativeModel({
-                        model: 'gemini-1.5-flash-latest',
+                        model: 'gemini-1.5-flash',
                         generationConfig: { responseMimeType: "application/json", temperature: 0.2 }
                     });
 
