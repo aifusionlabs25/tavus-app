@@ -1,7 +1,7 @@
 
 import { NextResponse } from 'next/server';
 import { google } from 'googleapis';
-import { GmailDraftService } from '@/lib/gmail-draft-service';
+import { Resend } from 'resend'; // Switched from GmailDraft to Resend for "Spoofing"
 import { GeminiService } from '@/lib/gemini-service';
 import { CONFIG } from '@/lib/config';
 
@@ -208,15 +208,47 @@ export async function POST(request: Request) {
                 }
 
                 if (leadData) {
-                    console.log('[Webhook] Generating Gmail Draft...');
-                    const gmailService = new GmailDraftService();
+                    console.log('[Webhook] Sending "Spoofed" Follow-up Email via Resend...');
+
+                    if (process.env.RESEND_API_KEY) {
+                        const resend = new Resend(process.env.RESEND_API_KEY);
+
+                        // User requested spoofing: "Morgan drafts that follow up email... impress the CEO"
+                        // Fallback to aifusionlabs@gmail.com if lead email is missing or for demo safety
+                        const recipient = leadData.lead_email && leadData.lead_email.includes('@') ? leadData.lead_email : 'aifusionlabs@gmail.com';
+
+                        // Create a nicer HTML wrapper for the AI-generated text
+                        const emailBodyHtml = `
+                        <div style="font-family: sans-serif; padding: 20px; line-height: 1.6; color: #333;">
+                            <p style="white-space: pre-line;">${leadData.followUpEmail}</p>
+                            <br>
+                            <hr style="border: 0; border-top: 1px solid #eee;">
+                            <p style="color: #666; font-size: 0.9em;">
+                                <strong>Morgan</strong><br>
+                                Senior Field Service Transformation Specialist<br>
+                                <span style="color: #FF4F00;">GoDeskless</span><br>
+                                <a href="https://www.godeskless.com">www.godeskless.com</a>
+                            </p>
+                        </div>
+                        `;
+
+                        await resend.emails.send({
+                            from: 'Morgan at GoDeskless <noreply@aifusionlabs.app>',
+                            to: [recipient, 'aifusionlabs@gmail.com'], // Always BCC the user for the demo
+                            subject: `Action Plan: Next Steps for ${leadData.company_name || 'Your Team'}`,
+                            html: emailBodyHtml
+                        });
+                        console.log('✅ [Webhook] Sent "Morgan" email to:', recipient);
+                    } else {
+                        console.error('❌ [Webhook] RESEND_API_KEY missing. Cannot send email.');
+                    }
+
                     const finalLeadData = {
                         ...leadData,
-                        followUpEmail: "",
-                        conversationTranscript: transcriptText,
                         tavusRecordingUrl: tavusRecordingUrl
                     };
-                    await gmailService.createDraft(finalLeadData);
+                    // Removed GmailDraftService call
+
 
                     const sheets = getSheetsClient();
                     if (sheets && process.env.GOOGLE_SHEET_ID) {
