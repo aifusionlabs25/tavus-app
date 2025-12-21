@@ -1,4 +1,6 @@
 import { NextResponse } from 'next/server';
+import { MORGAN_SYSTEM_PROMPT } from '@/lib/morgan-prompt';
+
 
 // Helper to clean greeting for TTS
 function cleanGreetingForTTS(greeting: string): string {
@@ -34,16 +36,6 @@ const DEFAULT_KB_TAGS = [
   'morgan-godeskless-demo'
 ];
 
-// Style Guidelines to steer LLM behavior
-// Style Guidelines to steer LLM behavior
-const STYLE_GUIDELINES = `
-IMPORTANT SYSTEM INSTRUCTIONS:
-1.  **NAME USAGE**: You are strictly FORBIDDEN from using the user's name in the middle of the conversation. Use it ONLY in the very first greeting and the final goodbye. Never use it in intermediate responses.
-2.  **CONCISENESS**: Keep responses short (under 3 sentences). Do not repeat back what the user just said or summarize their input unless asked.
-3.  **PRONUNCIATION**: Pronounce the word 'live' as 'l-eye-v' (rhymes with five).
-4.  **FILLERS**: Stop starting sentences with "Got it," "Sure thing," or "Thanks,". Go straight to the answer.
-`;
-
 export async function POST(request: Request) {
   // Destructure body, but we will IGNORE persona_id from client to ensure security
   const { persona_id: _ignored, audio_only, memory_id, document_tags, custom_greeting, context_url, conversation_name, conversational_context } = await request.json();
@@ -72,7 +64,7 @@ export async function POST(request: Request) {
       persona_id: serverPersonaId, // Reverting to 'persona_id' as verified working in previous version
       custom_greeting: cleanedGreeting,
       conversation_name: conversation_name || "Morgan Demo Session",
-      conversational_context: (conversational_context || "You are Morgan, a helpful guide.") + STYLE_GUIDELINES,
+      conversational_context: MORGAN_SYSTEM_PROMPT,
       document_tags: finalTags,
       properties: {
         max_call_duration: 2700, // 45 Minutes (CEO Demo Limit)
