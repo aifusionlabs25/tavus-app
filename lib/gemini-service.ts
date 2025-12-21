@@ -18,6 +18,7 @@ export interface LeadData {
     lead_email: string;
     lead_phone: string;
     salesPlan: string;
+    followUpEmail: string;
 }
 
 export class GeminiService {
@@ -57,6 +58,11 @@ export class GeminiService {
         - If a value is not explicitly mentioned, return null.
         - Do not hallucinate or guess.
         - Convert spoken email addresses to standard format (e.g. "john at gmail dot com" -> "john@gmail.com").
+        - **followUpEmail**: Write a short, warm, professional follow-up email body (HTML text, paragraphs <p> and <br> only, NO <html> tags, NO Subject line). 
+          - Address the lead by name.
+          - Reference 1-2 specific pain points they mentioned to show you listened.
+          - Propose the next step (Demo or Call).
+          - Key Tone: Helpful, not pushy.
         
         EXAMPLE OUTPUT FORMAT:
         {
@@ -73,7 +79,8 @@ export class GeminiService {
             "timeline": "ASAP",
             "lead_email": "tom@example.com",
             "lead_phone": "555-0100",
-            "salesPlan": ["Demo dispatch feature", "Highlight mobile app"]
+            "salesPlan": ["Demo dispatch feature", "Highlight mobile app"],
+            "followUpEmail": "<p>Hi Tom,</p><p>Great connecting just now. You mentioned that scheduling chaos is costing you jobs—that's exactly what we fix.</p><p>Let's get that demo set up.</p>"
         }
 
         Transcript:
