@@ -16,9 +16,10 @@ interface LeadData {
     buying_committee: string[];
     budget_range: string;
     timeline: string;
+    lead_email: string; // Restored
     lead_phone: string;
     salesPlan: string;
-    followUpEmail: string; // Added to match GeminiService
+    followUpEmail: string;
     conversationTranscript?: string;
     tavusRecordingUrl?: string;
 }
