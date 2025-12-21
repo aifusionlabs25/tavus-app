@@ -49,7 +49,17 @@ export async function POST(request: Request) {
 
   try {
     const baseUrl = process.env.NEXT_PUBLIC_APP_URL?.replace(/\/$/, '') || 'http://localhost:3000';
-    const callbackUrl = baseUrl ? `${baseUrl}/api/webhook` : undefined;
+
+    // NOVA FIX: Dynamic Webhook URL for Vercel Preview
+    // If we are in a Vercel Preview (VERCEL_URL set, VERCEL_ENV='preview'), override baseUrl
+    // This ensures the webhook hits THIS preview instance, not Production.
+    let finalBaseUrl = baseUrl;
+    if (process.env.VERCEL_ENV === 'preview' && process.env.VERCEL_URL) {
+      finalBaseUrl = `https://${process.env.VERCEL_URL}`;
+      console.log(`[Setup] Detected Vercel Preview. Overriding Webhook URL to: ${finalBaseUrl}`);
+    }
+
+    const callbackUrl = finalBaseUrl ? `${finalBaseUrl}/api/webhook` : undefined;
 
     console.log('Creating conversation for Persona:', serverPersonaId);
 
