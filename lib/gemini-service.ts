@@ -102,8 +102,31 @@ export class GeminiService {
             console.log('⚡ Gemini Analysis Complete. Keys found:', Object.keys(data).join(', '));
             console.log('⚡ Data Sample - Company:', data.company_name, 'Lead:', data.lead_name);
             return data;
-        } catch (error) {
-            console.error('❌ Gemini Analysis Failed:', error);
+        } catch (error: any) {
+            console.error('❌ Gemini Analysis Failed:', error.message);
+
+            // NOVA FALLBACK: If 2.0 Flash is rate limited (429), try 1.5 Flash
+            if (error.status === 429 || (error.message && error.message.includes('429'))) {
+                console.warn('⚠️ Gemini 2.0 Rate Limit Hit. Attempting FALLBACK to gemini-1.5-flash-latest...');
+                try {
+                    const fallbackModel = this.genAI.getGenerativeModel({
+                        model: 'gemini-1.5-flash-latest',
+                        generationConfig: { responseMimeType: "application/json", temperature: 0.2 }
+                    });
+
+                    const result = await fallbackModel.generateContent(prompt);
+                    const response = await result.response;
+                    const text = response.text();
+
+                    const jsonStr = text.replace(/```json\n|\n```/g, '').replace(/```/g, '').trim();
+                    console.log('[GeminiService] 🔄 FALLBACK SUCCESS. RAW JSON:', jsonStr.substring(0, 50) + '...');
+                    return JSON.parse(jsonStr) as LeadData;
+
+                } catch (fallbackError: any) {
+                    console.error('❌ Fallback Model Also Failed:', fallbackError.message);
+                }
+            }
+
             return null;
         }
     }
