@@ -13,7 +13,7 @@ function getResendClient(): Resend | null {
 }
 
 export async function POST(request: Request) {
-    const { conversation_id, notes } = await request.json();
+    const { conversation_id, notes, duration } = await request.json();
 
     if (!process.env.TAVUS_API_KEY) {
         return NextResponse.json({ error: 'API key not configured' }, { status: 500 });
@@ -91,6 +91,10 @@ export async function POST(request: Request) {
                             <div class="metric">
                                 <div class="metric-label">Time</div>
                                 <div class="metric-value">${sessionDate.split(',')[1]} (Phoenix)</div>
+                            </div>
+                            <div class="metric">
+                                <div class="metric-label">Duration</div>
+                                <div class="metric-value">${duration || 'N/A'}</div>
                             </div>
                         </div>
 

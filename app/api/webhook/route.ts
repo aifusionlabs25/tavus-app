@@ -130,10 +130,14 @@ export async function POST(request: Request) {
             // ============================================================================
             // NOVA FIX #2: ONLY HIT TAVUS API IF PAYLOAD MISSING/SHORT (Fallback Only)
             // ============================================================================
-            if (transcriptText.length < 200 && process.env.TAVUS_API_KEY) {
-                console.log('[Webhook] Payload transcript missing or short. Falling back to Tavus API...');
+            // ============================================================================
+            // NOVA FIX #2: ALWAYS SYNC WITH TAVUS API (Metadata + Recording URL)
+            // Even if we have transcript, we need the recording_url and other metadata.
+            // ============================================================================
+            if (process.env.TAVUS_API_KEY) {
+                console.log('[Webhook] Syncing conversation metadata definitions...');
 
-                // Retry loop: 3 attempts (reduced since payload should usually have it)
+                // Retry loop: 3 attempts
                 const delays = [2000, 4000, 6000];
 
                 for (let attempt = 0; attempt < 3; attempt++) {
@@ -146,29 +150,22 @@ export async function POST(request: Request) {
                         if (transcriptResponse.ok) {
                             const convoData = await transcriptResponse.json();
 
-                            console.log(`[Webhook] API Response Keys (Attempt ${attempt + 1}):`, Object.keys(convoData));
+                            // 1. Sync Recording URL (Critical for Internal Email)
+                            if (convoData.recording_url) {
+                                tavusRecordingUrl = convoData.recording_url;
+                                console.log('[Webhook] ✅ Captured Public Recording URL:', tavusRecordingUrl);
+                            }
 
+                            // 2. Sync / Enrich Transcript if better version found
                             if (convoData.transcript) {
                                 const apiTranscript = normalizeTranscript(convoData.transcript);
                                 if (apiTranscript.length > transcriptText.length) {
                                     transcriptText = apiTranscript;
-                                }
-                                if (convoData.recording_url) tavusRecordingUrl = convoData.recording_url;
-                            }
-
-                            // Check events array as fallback
-                            if (convoData.events && Array.isArray(convoData.events) && transcriptText.length < 200) {
-                                const eventsTranscript = convoData.events
-                                    .filter((e: any) => e.content || e.text || e.transcript || e.message)
-                                    .map((e: any) => `${e.role || e.sender || 'unknown'}: ${e.content || e.text || e.transcript || e.message || ''}`)
-                                    .join('\n');
-
-                                if (eventsTranscript.length > transcriptText.length) {
-                                    transcriptText = eventsTranscript;
+                                    console.log(`[Webhook] Enriched transcript from API (${transcriptText.length} chars)`);
                                 }
                             }
 
-                            if (transcriptText.length >= 200) break;
+                            break; // Success
                         }
                     } catch (err) {
                         console.error(`[Webhook] API fetch failed attempt ${attempt + 1}:`, err);
@@ -234,22 +231,58 @@ export async function POST(request: Request) {
                         // NOVA FEATURE: INTERNAL LEAD ALERT (The "3rd Email")
                         // Separate email to the internal team with rich data for scoring/review
                         // ============================================================================
+                        // ============================================================================
+                        // NOVA FEATURE: INTERNAL LEAD ALERT (The "3rd Email")
+                        // Separate email to the internal team with rich data for scoring/review
+                        // ============================================================================
                         console.log('[Webhook] Sending Internal Lead Alert...');
+
                         const internalBodyHtml = `
-                        <div style="font-family: sans-serif; padding: 20px; line-height: 1.4; color: #333; background-color: #f9f9f9; border: 1px solid #ddd; border-radius: 8px;">
-                            <h2 style="color: #FF4F00; margin-top: 0;">🚨 New Hot Lead Detected</h2>
-                            <p><strong>Lead:</strong> ${leadData.lead_name} (${leadData.role})</p>
-                            <p><strong>Company:</strong> ${leadData.company_name} (${leadData.vertical})</p>
-                            <hr>
-                            <p><strong>💰 Budget:</strong> ${leadData.budget_range || 'Unknown'}</p>
-                            <p><strong>👥 Team Size:</strong> ${leadData.teamSize || 'Unknown'}</p>
-                            <p><strong>📍 Location:</strong> ${leadData.geography || 'Unknown'}</p>
-                            <p><strong>⚠️ Pain Points:</strong> ${(leadData.pain_points || []).join(', ')}</p>
-                            <hr>
-                            <h3 style="margin-bottom: 5px;">🤖 AI Suggested Plan:</h3>
-                            <pre style="white-space: pre-wrap; background: #eee; padding: 10px; border-radius: 4px;">${Array.isArray(leadData.salesPlan) ? leadData.salesPlan.join('\n') : leadData.salesPlan}</pre>
-                            <br>
-                            <a href="${tavusRecordingUrl}" style="background-color: #333; color: #fff; padding: 10px 15px; text-decoration: none; border-radius: 4px;">View Conversation Record</a>
+                        <div style="font-family: sans-serif; padding: 20px; line-height: 1.5; color: #333; background-color: #f9f9f9; border: 1px solid #ddd; border-radius: 8px;">
+                            <div style="border-bottom: 2px solid #FF4F00; padding-bottom: 10px; margin-bottom: 15px;">
+                                <h2 style="color: #FF4F00; margin: 0;">🚨 Hot Lead Detected</h2>
+                                <p style="margin: 5px 0 0 0; color: #666; font-size: 14px;">Conversation ID: ${conversation_id}</p>
+                            </div>
+
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                                <div>
+                                    <h3 style="margin-bottom: 10px; color: #111;">👤 Prospect</h3>
+                                    <p style="margin: 5px 0;"><strong>Name:</strong> ${leadData.lead_name}</p>
+                                    <p style="margin: 5px 0;"><strong>Role:</strong> ${leadData.role}</p>
+                                    <p style="margin: 5px 0;"><strong>Company:</strong> ${leadData.company_name}</p>
+                                    <p style="margin: 5px 0;"><strong>Email:</strong> ${leadData.lead_email}</p>
+                                    <p style="margin: 5px 0;"><strong>Location:</strong> ${leadData.geography}</p>
+                                </div>
+                                <div>
+                                    <h3 style="margin-bottom: 10px; color: #111;">🏢 Organization</h3>
+                                    <p style="margin: 5px 0;"><strong>Vertical:</strong> ${leadData.vertical}</p>
+                                    <p style="margin: 5px 0;"><strong>Team Size:</strong> ${leadData.teamSize}</p>
+                                    <p style="margin: 5px 0;"><strong>Budget:</strong> ${leadData.budget_range}</p>
+                                    <p style="margin: 5px 0;"><strong>Systems:</strong> ${leadData.currentSystems}</p>
+                                </div>
+                            </div>
+
+                            <hr style="border: 0; border-top: 1px solid #ccc; margin: 20px 0;">
+
+                            <h3 style="color: #111;">⚠️ Pain Points</h3>
+                            <ul style="background: #fff; padding: 15px 20px; border-radius: 4px; border: 1px solid #e5e5e5;">
+                                ${(leadData.pain_points || []).map((p: string) => `<li>${p}</li>`).join('')}
+                            </ul>
+
+                            <h3 style="color: #111;">🤖 AI Analysis & Next Steps</h3>
+                            <div style="background: #eef2ff; padding: 15px; border-radius: 4px; margin-bottom: 10px; border-left: 4px solid #6366f1;">
+                                <strong>Morgan's Action:</strong><br>
+                                ${leadData.morgan_action || 'Standard follow-up sent.'}
+                            </div>
+                            <div style="background: #fdf2f8; padding: 15px; border-radius: 4px; margin-bottom: 20px; border-left: 4px solid #ec4899;">
+                                <strong>Recommended Team Action:</strong><br>
+                                ${leadData.team_action || 'Call to verify lead details.'}
+                            </div>
+
+                            <div style="text-align: center; margin-top: 30px;">
+                                <a href="${tavusRecordingUrl}" style="background-color: #333; color: #fff; padding: 12px 25px; text-decoration: none; border-radius: 6px; font-weight: bold;">View Conversation Record</a>
+                                <p style="margin-top: 10px; font-size: 12px; color: #999;">Link expires in 7 days</p>
+                            </div>
                         </div>
                         `;
 

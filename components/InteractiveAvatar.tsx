@@ -150,9 +150,15 @@ export default function InteractiveAvatar() {
         window.open('https://calendly.com/aifusionlabs', '_blank', 'width=600,height=700');
     };
 
+    // Session Timing
+    const [startTime, setStartTime] = useState<number | null>(null);
+
+    // ... (existing code)
+
     const startConversation = async () => {
         setLoading(true);
         setError('');
+        setStartTime(Date.now()); // Track start time
 
         try {
             const response = await fetch('/api/tavus', {
@@ -170,6 +176,7 @@ export default function InteractiveAvatar() {
             setConversation(data);
         } catch (err: any) {
             setError(err?.message || 'Something went sideways starting the conversation.');
+            setStartTime(null); // Reset if failed
         } finally {
             setLoading(false);
         }
@@ -179,13 +186,23 @@ export default function InteractiveAvatar() {
         if (!conversation) return;
         setConfirmExit(false); // Close modal if open
 
+        // Calculate Duration
+        let durationString = "Unknown";
+        if (startTime) {
+            const ms = Date.now() - startTime;
+            const minutes = Math.floor(ms / 60000);
+            const seconds = Math.floor((ms % 60000) / 1000);
+            durationString = `${minutes}m ${seconds}s`;
+        }
+
         try {
             await fetch('/api/tavus/end', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     conversation_id: conversation.conversation_id,
-                    notes: logEntries // Pass notes to backend for email report
+                    notes: logEntries, // Pass notes to backend for email report
+                    duration: durationString // Pass duration
                 }),
             });
         } catch (err) {
@@ -195,6 +212,7 @@ export default function InteractiveAvatar() {
             setShowDemo(false);
             setLogEntries([]); // Clear logs on exit
             setLogMode(false);
+            setStartTime(null);
         }
     };
 
