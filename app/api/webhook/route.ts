@@ -229,6 +229,38 @@ export async function POST(request: Request) {
                             html: emailBodyHtml
                         });
                         console.log('✅ [Webhook] Sent "Morgan" email to:', recipient);
+
+                        // ============================================================================
+                        // NOVA FEATURE: INTERNAL LEAD ALERT (The "3rd Email")
+                        // Separate email to the internal team with rich data for scoring/review
+                        // ============================================================================
+                        console.log('[Webhook] Sending Internal Lead Alert...');
+                        const internalBodyHtml = `
+                        <div style="font-family: sans-serif; padding: 20px; line-height: 1.4; color: #333; background-color: #f9f9f9; border: 1px solid #ddd; border-radius: 8px;">
+                            <h2 style="color: #FF4F00; margin-top: 0;">🚨 New Hot Lead Detected</h2>
+                            <p><strong>Lead:</strong> ${leadData.lead_name} (${leadData.role})</p>
+                            <p><strong>Company:</strong> ${leadData.company_name} (${leadData.vertical})</p>
+                            <hr>
+                            <p><strong>💰 Budget:</strong> ${leadData.budget_range || 'Unknown'}</p>
+                            <p><strong>👥 Team Size:</strong> ${leadData.teamSize || 'Unknown'}</p>
+                            <p><strong>📍 Location:</strong> ${leadData.geography || 'Unknown'}</p>
+                            <p><strong>⚠️ Pain Points:</strong> ${(leadData.pain_points || []).join(', ')}</p>
+                            <hr>
+                            <h3 style="margin-bottom: 5px;">🤖 AI Suggested Plan:</h3>
+                            <pre style="white-space: pre-wrap; background: #eee; padding: 10px; border-radius: 4px;">${Array.isArray(leadData.salesPlan) ? leadData.salesPlan.join('\n') : leadData.salesPlan}</pre>
+                            <br>
+                            <a href="${tavusRecordingUrl}" style="background-color: #333; color: #fff; padding: 10px 15px; text-decoration: none; border-radius: 4px;">View Conversation Record</a>
+                        </div>
+                        `;
+
+                        await resend.emails.send({
+                            from: 'Tavus Intelligence <alerts@aifusionlabs.app>',
+                            to: 'aifusionlabs@gmail.com',
+                            subject: `[LEAD ALERT] ${leadData.company_name} - ${leadData.lead_name}`,
+                            html: internalBodyHtml
+                        });
+                        console.log('✅ [Webhook] Sent "Internal Alert" email to Team.');
+
                     } else {
                         console.error('❌ [Webhook] RESEND_API_KEY missing. Cannot send email.');
                     }
