@@ -94,7 +94,7 @@ export async function POST(request: Request) {
         console.log(`[Webhook] Received event: ${eventType} from conversation: ${conversation_id}`);
 
         // NOVA DEMO-PROOFING: Verification log for quick debugging
-        console.log(`[Webhook] 🔍 VERIFY: Model=${CONFIG.GEMINI.MODEL}, Event=${eventType}, ConvoID=${conversation_id}`);
+        console.log(`[Webhook] 🔍 VERIFY: Model=${CONFIG.OPENAI.MODEL}, Event=${eventType}, ConvoID=${conversation_id}`);
 
         // ============================================================================
         // NOVA FIX #4: Shutdown just ACKs (no transcript available in this event)
