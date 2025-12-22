@@ -8,6 +8,9 @@ export const CONFIG = {
         // Updated Dec 2024: gemini-1.5-flash deprecated in v1beta, use gemini-2.0-flash
         MODEL: process.env.GEMINI_MODEL || 'gemini-2.0-flash',
     },
+    OPENAI: {
+        MODEL: 'gpt-4o-mini', // Lowest cost, high speed, perfect for JSON extraction
+    },
     TAVUS: {
         API_URL: 'https://tavusapi.com/v2',
         // Feature flag: Disable by default to prevent 405 Method Not Allowed errors during demo
