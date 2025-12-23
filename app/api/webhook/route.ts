@@ -112,7 +112,7 @@ export async function POST(request: Request) {
             console.log(`[Webhook] 📜 Transcript Ready for ${conversation_id}. Starting Hot Lead Analysis...`);
 
             let transcriptText = "";
-            let tavusRecordingUrl = `https://platform.tavus.io/conversations/${conversation_id}`;
+            let tavusRecordingUrl: string | null = null;
 
             // ============================================================================
             // NOVA FIX #1: PREFER WEBHOOK PAYLOAD TRANSCRIPT (Faster, fewer moving parts)
@@ -280,8 +280,12 @@ export async function POST(request: Request) {
                             </div>
 
                             <div style="text-align: center; margin-top: 30px;">
-                                <a href="${tavusRecordingUrl}" style="background-color: #333; color: #fff; padding: 12px 25px; text-decoration: none; border-radius: 6px; font-weight: bold;">View Conversation Record</a>
-                                <p style="margin-top: 10px; font-size: 12px; color: #999;">Link expires in 7 days</p>
+                                ${tavusRecordingUrl
+                                ? `<a href="${tavusRecordingUrl}" style="background-color: #333; color: #fff; padding: 12px 25px; text-decoration: none; border-radius: 6px; font-weight: bold;">View Conversation Record</a>
+                                       <p style="margin-top: 10px; font-size: 12px; color: #999;">Link expires in 7 days</p>`
+                                : `<div style="background-color: #eee; color: #666; padding: 12px 25px; border-radius: 6px; display: inline-block;">Video Processing...</div>
+                                       <p style="margin-top: 10px; font-size: 12px; color: #999;">Recording will be available in Tavus Dashboard shortly.</p>`
+                            }
                             </div>
                         </div>
                         `;
