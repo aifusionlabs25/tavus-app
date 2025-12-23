@@ -4,6 +4,7 @@ import { google } from 'googleapis';
 import { Resend } from 'resend'; // Switched from GmailDraft to Resend for "Spoofing"
 import { OpenAIService } from '@/lib/openai-service';
 import { CONFIG } from '@/lib/config';
+import { SalesforceService } from '@/lib/salesforce-service';
 
 // Allow webhook to run for up to 60 seconds (Vercel Limit) to wait for transcripts
 export const maxDuration = 60;
@@ -386,6 +387,21 @@ export async function POST(request: Request) {
                     console.log('✅ [Webhook] Saved row to Google Sheets');
                 } catch (sheetError: any) {
                     console.error('❌ [Webhook] Google Sheets Error:', sheetError.message);
+                }
+            }
+
+            // ============================================================================
+            // SALESFORCE DUAL-WRITE (Optional - Controlled by SALESFORCE_ENABLED env var)
+            // ============================================================================
+            if (process.env.SALESFORCE_ENABLED === 'true' && leadData && leadData.lead_name) {
+                try {
+                    console.log('[Webhook] 🔗 Syncing Lead to Salesforce...');
+                    const sfService = new SalesforceService();
+                    const sfLeadId = await sfService.createLead(leadData);
+                    console.log('✅ [Webhook] Salesforce Lead created:', sfLeadId);
+                } catch (sfError: any) {
+                    console.error('❌ [Webhook] Salesforce Error:', sfError.message);
+                    // Non-blocking: Don't fail the webhook if Salesforce fails
                 }
             }
 
