@@ -10,7 +10,7 @@ export default function AccessGate({ children }: AccessGateProps) {
     const [isAuthenticated, setIsAuthenticated] = useState(false)
     const [name, setName] = useState('')
     const [email, setEmail] = useState('')
-    // name/email already declared above
+    const [token, setToken] = useState('')
     const [error, setError] = useState('')
     const [loading, setLoading] = useState(false)
 
@@ -34,7 +34,7 @@ export default function AccessGate({ children }: AccessGateProps) {
             const response = await fetch('/api/auth', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ name, email })
+                body: JSON.stringify({ name, email, token })
             })
 
             const data = await response.json()
@@ -43,7 +43,7 @@ export default function AccessGate({ children }: AccessGateProps) {
                 // strict auth: no localStorage persistence
                 setIsAuthenticated(true)
             } else {
-                setError(data.message || 'Invalid email format')
+                setError(data.message || 'Invalid credentials')
             }
         } catch {
             setError('Authentication failed. Please try again.')
@@ -87,6 +87,7 @@ export default function AccessGate({ children }: AccessGateProps) {
         setIsAuthenticated(false)
         setName('')
         setEmail('')
+        setToken('')
     }
 
     // SSR Safe Portal
@@ -140,7 +141,7 @@ export default function AccessGate({ children }: AccessGateProps) {
                             Morgan AI <span className="text-emerald-400">Demo Access</span>
                         </h1>
                         <p className="text-slate-400 mt-2 text-sm">
-                            Enter your email to continue
+                            Enter your verified credentials
                         </p>
                     </div>
 
@@ -175,6 +176,20 @@ export default function AccessGate({ children }: AccessGateProps) {
                                 />
                             </div>
 
+                            <div>
+                                <label className="block text-sm font-medium text-slate-300 mb-2">
+                                    Access Code
+                                </label>
+                                <input
+                                    type="password"
+                                    value={token}
+                                    onChange={(e) => setToken(e.target.value)}
+                                    placeholder="Enter access code"
+                                    required
+                                    className="w-full px-4 py-3 bg-slate-900/50 border border-slate-600 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all"
+                                />
+                            </div>
+
                             {error && (
                                 <div className="text-red-400 text-sm bg-red-500/10 border border-red-500/20 rounded-lg px-4 py-2">
                                     {error}
@@ -183,10 +198,10 @@ export default function AccessGate({ children }: AccessGateProps) {
 
                             <button
                                 type="submit"
-                                disabled={loading || !name || !email}
+                                disabled={loading || !name || !email || !token}
                                 className="w-full py-3 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-medium rounded-lg shadow-lg shadow-emerald-500/25 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
                             >
-                                {loading ? 'Verifying...' : 'Access Demo'}
+                                {loading ? 'Verifying...' : 'Secure Access'}
                             </button>
                         </div>
                     </form>
