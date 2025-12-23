@@ -38,7 +38,7 @@ const DEFAULT_KB_TAGS = [
 
 export async function POST(request: Request) {
   // Destructure body, but we will IGNORE persona_id from client to ensure security
-  const { persona_id: _ignored, audio_only, memory_id, document_tags, custom_greeting, context_url, conversation_name, conversational_context } = await request.json();
+  const { persona_id: _ignored, audio_only, memory_id, document_tags, custom_greeting, context_url, conversation_name, conversational_context, properties } = await request.json();
 
   // 1. Get Persona ID secure from server
   const serverPersonaId = process.env.TAVUS_PERSONA_ID;
@@ -87,6 +87,8 @@ export async function POST(request: Request) {
         enable_recording: true,
         participant_absent_timeout: 300, // 5 Minutes (Reduced from 10)
         participant_left_timeout: 60, // 1 Minute (Aggressive Cleanup)
+        // Merge in client-provided properties (Identity, etc)
+        ...(properties || {})
       },
       audio_only: audio_only,
       memory_id: memory_id,

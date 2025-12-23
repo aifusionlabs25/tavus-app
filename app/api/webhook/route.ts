@@ -113,6 +113,7 @@ export async function POST(request: Request) {
 
             let transcriptText = "";
             let tavusRecordingUrl: string | null = null;
+            let leadData: any = null; // Hoisted for visibility in fallback logger
 
             // ============================================================================
             // NOVA FIX #1: PREFER WEBHOOK PAYLOAD TRANSCRIPT (Faster, fewer moving parts)
@@ -178,20 +179,30 @@ export async function POST(request: Request) {
             }
 
             // ============================================================================
-            // NOVA FIX #3: USE 200+ CHAR GATE (more realistic for actual conversations)
+            // NOVA FIX #3: LOWERED GATE TO 50 CHARS (Better for testing)
             // ============================================================================
-            if (transcriptText && transcriptText.length >= 200) {
+            if (transcriptText && transcriptText.length >= 50) {
                 console.log(`[Webhook] ✅ Analyzing ${transcriptText.length} chars with ${CONFIG.OPENAI.MODEL}...`);
                 console.log(`[Webhook] 📜 NORMALIZED TRANSCRIPT PREVIEW:`, transcriptText.substring(0, 500) + '...');
 
                 const aiService = new OpenAIService();
-                let leadData = null;
+                // leadData already declared in outer scope
 
                 try {
                     leadData = await aiService.analyzeTranscript(transcriptText);
                 } catch (error: any) {
                     console.error('[Webhook] ❌ AI Analysis Failed:', error);
                     // Safe Mode fallback is handled inside OpenAIService
+                }
+
+                // ============================================================================
+                // NOVA FIX #6: TRUST VERIFIED IDENTITY (Override AI Hallucinations)
+                // ============================================================================
+                if (body.properties && body.properties.user_email) {
+                    if (!leadData) leadData = {}; // Initialize if AI failed completely
+                    leadData.lead_email = body.properties.user_email;
+                    if (body.properties.user_name) leadData.lead_name = body.properties.user_name;
+                    console.log('[Webhook] 📧 Enforcing Verified User Identity:', leadData.lead_email);
                 }
 
                 if (leadData) {
@@ -302,60 +313,87 @@ export async function POST(request: Request) {
                         console.error('❌ [Webhook] RESEND_API_KEY missing. Cannot send email.');
                     }
 
-                    const finalLeadData = {
-                        ...leadData,
-                        tavusRecordingUrl: tavusRecordingUrl
-                    };
-                    // Removed GmailDraftService call
 
 
-                    const sheets = getSheetsClient();
-                    if (sheets && process.env.GOOGLE_SHEET_ID) {
-                        try {
-                            console.log('[Webhook] SAVING TO GOOGLE SHEETS...');
-                            const values = [[
-                                new Date().toISOString(),
-                                finalLeadData.lead_name || 'Not Provided',
-                                finalLeadData.role || 'Not Provided',
-                                finalLeadData.company_name || 'Not Provided',
-                                finalLeadData.lead_email || 'Not Provided',
-                                finalLeadData.lead_phone || 'Not Provided',
-                                finalLeadData.budget_range || 'Not Provided',
-                                finalLeadData.timeline || 'Not Provided',
-                                Array.isArray(finalLeadData.pain_points) ? finalLeadData.pain_points.join(', ') : (finalLeadData.pain_points || ''),
-                                Array.isArray(finalLeadData.buying_committee) ? finalLeadData.buying_committee.join(', ') : (finalLeadData.buying_committee || ''),
-                                finalLeadData.vertical || 'Field Service',
-                                finalLeadData.teamSize || 'Not Provided',
-                                finalLeadData.geography || 'Not Provided',
-                                finalLeadData.currentSystems || 'Not Provided',
-                                // Safe join for salesPlan (which might be array)
-                                Array.isArray(finalLeadData.salesPlan) ? finalLeadData.salesPlan.join('\n') : (finalLeadData.salesPlan || ''),
-                                finalLeadData.tavusRecordingUrl
-                            ]];
-
-                            await sheets.spreadsheets.values.append({
-                                spreadsheetId: process.env.GOOGLE_SHEET_ID,
-                                range: 'Sheet1!A:Q',
-                                valueInputOption: 'USER_ENTERED',
-                                requestBody: { values },
-                            });
-                            console.log('✅ [Webhook] Saved row to Google Sheets');
-                        } catch (sheetError: any) {
-                            console.error('❌ [Webhook] Google Sheets Error:', sheetError.message);
-                        }
-                    }
 
                     console.log('[Webhook] 🚀 Hot Lead Pipeline Complete!');
-                } else {
-                    console.warn('[Webhook] Gemini returned null lead data.');
                 }
             } else {
-                console.warn(`[Webhook] Transcript too short (${transcriptText.length} chars, need 200+). Skipping analysis.`);
+                console.warn(`[Webhook] Transcript too short (${transcriptText.length} chars). Skipping AI, but logging to Sheets.`);
             }
+
+
+            // ============================================================================
+            // NOVA FIX #5: ALWAYS LOG TO SHEETS (Combined Fallback Logic)
+            // ============================================================================
+            const sheets = getSheetsClient();
+            if (sheets && process.env.GOOGLE_SHEET_ID) {
+                try {
+                    console.log('[Webhook] SAVING TO GOOGLE SHEETS...');
+
+                    // Fallback to "Unknown" if no leadData exists
+                    const finalLeadData: any = leadData || {
+                        lead_name: 'Unknown (Short/Failed)',
+                        role: 'N/A',
+                        company_name: 'N/A',
+                        lead_email: 'N/A',
+                        lead_phone: 'N/A',
+                        budget_range: 'N/A',
+                        timeline: 'N/A',
+                        pain_points: [],
+                        buying_committee: [],
+                        vertical: 'N/A',
+                        teamSize: 'N/A',
+                        geography: 'N/A',
+                        currentSystems: 'N/A',
+                        salesPlan: `Transcript Length: ${transcriptText.length} chars.`,
+                        tavusRecordingUrl: tavusRecordingUrl || ''
+                    };
+
+                    // explicit override if needed
+                    if (!leadData && tavusRecordingUrl) {
+                        finalLeadData.tavusRecordingUrl = tavusRecordingUrl;
+                    } else if (leadData && tavusRecordingUrl) {
+                        finalLeadData.tavusRecordingUrl = tavusRecordingUrl;
+                    }
+
+                    const values = [[
+                        new Date().toISOString(),
+                        finalLeadData.lead_name || 'Not Provided',
+                        finalLeadData.role || 'Not Provided',
+                        finalLeadData.company_name || 'Not Provided',
+                        finalLeadData.lead_email || 'Not Provided',
+                        finalLeadData.lead_phone || 'Not Provided',
+                        finalLeadData.budget_range || 'Not Provided',
+                        finalLeadData.timeline || 'Not Provided',
+                        Array.isArray(finalLeadData.pain_points) ? finalLeadData.pain_points.join(', ') : (finalLeadData.pain_points || ''),
+                        Array.isArray(finalLeadData.buying_committee) ? finalLeadData.buying_committee.join(', ') : (finalLeadData.buying_committee || ''),
+                        finalLeadData.vertical || 'Field Service',
+                        finalLeadData.teamSize || 'Not Provided',
+                        finalLeadData.geography || 'Not Provided',
+                        finalLeadData.currentSystems || 'Not Provided',
+                        // Safe join for salesPlan (which might be array)
+                        Array.isArray(finalLeadData.salesPlan) ? finalLeadData.salesPlan.join('\n') : (finalLeadData.salesPlan || ''),
+                        finalLeadData.tavusRecordingUrl
+                    ]];
+
+                    await sheets.spreadsheets.values.append({
+                        spreadsheetId: process.env.GOOGLE_SHEET_ID,
+                        range: 'Sheet1!A:Q',
+                        valueInputOption: 'USER_ENTERED',
+                        requestBody: { values },
+                    });
+                    console.log('✅ [Webhook] Saved row to Google Sheets');
+                } catch (sheetError: any) {
+                    console.error('❌ [Webhook] Google Sheets Error:', sheetError.message);
+                }
+            }
+
+            console.log('[Webhook] 🚀 Hot Lead Pipeline Complete!');
+
+            return NextResponse.json({ message: 'Event processed' });
+
         }
-
-        return NextResponse.json({ message: 'Event processed' });
-
     } catch (error: any) {
         console.error('Error processing webhook:', error);
         return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });

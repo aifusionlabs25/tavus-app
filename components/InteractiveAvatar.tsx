@@ -17,8 +17,15 @@ type SafeLogEntry = {
     timestamp: Date;
 };
 
+interface InteractiveAvatarProps {
+    userEmail?: string;
+    userName?: string;
+}
+
 const SIDEBAR_WIDTH = 400; // px
 const HEADER_HEIGHT = 68;  // px (used for the demo iframe top offset)
+
+// ... Icon components ...
 
 function IconArrowRight(props: React.SVGProps<SVGSVGElement>) {
     return (
@@ -85,7 +92,7 @@ function ShellBackground() {
     );
 }
 
-export default function InteractiveAvatar() {
+export default function InteractiveAvatar({ userEmail, userName }: InteractiveAvatarProps) {
     const [conversation, setConversation] = useState<TavusConversation | null>(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
@@ -161,10 +168,20 @@ export default function InteractiveAvatar() {
         setStartTime(Date.now()); // Track start time
 
         try {
+            console.log('[InteractiveAvatar] Starting conversation for:', { userEmail, userName });
             const response = await fetch('/api/tavus', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ audio_only: audioOnly }),
+                body: JSON.stringify({
+                    audio_only: audioOnly,
+                    // Pass Identity to Backend
+                    properties: {
+                        user_email: userEmail,
+                        user_name: userName,
+                        // Enable Memory Pointers if email is present
+                        ...(userEmail ? { memory_stores: ["email_hash"] } : {})
+                    }
+                }),
             });
 
             if (!response.ok) {

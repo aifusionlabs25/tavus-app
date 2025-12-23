@@ -3,33 +3,24 @@ import { NextResponse } from 'next/server'
 export async function POST(request: Request) {
     try {
         const body = await request.json()
-        const { name, token } = body
+        const { name, email } = body
 
-        // Get the secret token from environment variable
-        const validToken = process.env.DEMO_ACCESS_TOKEN
+        // Basic Email Regex Validation
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
-        if (!validToken) {
-            console.error('CRITICAL: DEMO_ACCESS_TOKEN not configured in environment')
+        if (!email || !emailRegex.test(email)) {
+            console.log(`❌ Access denied for: ${name} (invalid email: ${email})`)
             return NextResponse.json({
                 success: false,
-                message: 'System Integrity Error: Auth not configured.'
-            }, { status: 500 })
+                message: 'Please enter a valid work email.'
+            }, { status: 400 })
         }
 
-        // Validate token
-        if (token === validToken) {
-            console.log(`✅ Access granted to: ${name}`)
-            return NextResponse.json({
-                success: true,
-                message: 'Access granted'
-            })
-        } else {
-            console.log(`❌ Access denied for: ${name} (invalid token)`)
-            return NextResponse.json({
-                success: false,
-                message: 'Invalid access token'
-            }, { status: 401 })
-        }
+        console.log(`✅ Access granted to: ${name} (${email})`)
+        return NextResponse.json({
+            success: true,
+            message: 'Access granted'
+        })
 
     } catch (error) {
         console.error('Auth error:', error)

@@ -1,5 +1,5 @@
 'use client'
-import { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { createPortal } from 'react-dom'
 
 interface AccessGateProps {
@@ -9,7 +9,8 @@ interface AccessGateProps {
 export default function AccessGate({ children }: AccessGateProps) {
     const [isAuthenticated, setIsAuthenticated] = useState(false)
     const [name, setName] = useState('')
-    const [token, setToken] = useState('')
+    const [email, setEmail] = useState('')
+    // name/email already declared above
     const [error, setError] = useState('')
     const [loading, setLoading] = useState(false)
 
@@ -33,7 +34,7 @@ export default function AccessGate({ children }: AccessGateProps) {
             const response = await fetch('/api/auth', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ name, token })
+                body: JSON.stringify({ name, email })
             })
 
             const data = await response.json()
@@ -42,7 +43,7 @@ export default function AccessGate({ children }: AccessGateProps) {
                 // strict auth: no localStorage persistence
                 setIsAuthenticated(true)
             } else {
-                setError(data.message || 'Invalid access token')
+                setError(data.message || 'Invalid email format')
             }
         } catch {
             setError('Authentication failed. Please try again.')
@@ -85,7 +86,7 @@ export default function AccessGate({ children }: AccessGateProps) {
     const handleLogout = () => {
         setIsAuthenticated(false)
         setName('')
-        setToken('')
+        setEmail('')
     }
 
     // SSR Safe Portal
@@ -96,6 +97,19 @@ export default function AccessGate({ children }: AccessGateProps) {
 
     // Authenticated - show children with logout option
     if (isAuthenticated) {
+        // Inject user props into children (InteractiveAvatar)
+        const childrenWithProps = React.Children.map(children, child => {
+            if (React.isValidElement(child)) {
+                return React.cloneElement(child, {
+                    //@ts-ignore - Dynamic prop injection
+                    userEmail: email,
+                    //@ts-ignore
+                    userName: name
+                });
+            }
+            return child;
+        });
+
         return (
             <div className="relative">
                 {/* Logout button - small, in corner */}
@@ -103,9 +117,9 @@ export default function AccessGate({ children }: AccessGateProps) {
                     onClick={handleLogout}
                     className="fixed bottom-4 left-4 z-[500] text-[10px] text-slate-600 hover:text-white bg-transparent hover:bg-slate-900/80 px-2 py-1 rounded-md border border-transparent hover:border-slate-700/50 transition-all opacity-30 hover:opacity-100"
                 >
-                    Admin
+                    Exit Demo
                 </button>
-                {children}
+                {childrenWithProps}
             </div>
         )
     }
@@ -126,7 +140,7 @@ export default function AccessGate({ children }: AccessGateProps) {
                             Morgan AI <span className="text-emerald-400">Demo Access</span>
                         </h1>
                         <p className="text-slate-400 mt-2 text-sm">
-                            Enter your credentials to continue
+                            Enter your email to continue
                         </p>
                     </div>
 
@@ -149,13 +163,13 @@ export default function AccessGate({ children }: AccessGateProps) {
 
                             <div>
                                 <label className="block text-sm font-medium text-slate-300 mb-2">
-                                    Access Token
+                                    Work Email
                                 </label>
                                 <input
-                                    type="password"
-                                    value={token}
-                                    onChange={(e) => setToken(e.target.value)}
-                                    placeholder="Enter secret token"
+                                    type="email"
+                                    value={email}
+                                    onChange={(e) => setEmail(e.target.value)}
+                                    placeholder="name@company.com"
                                     required
                                     className="w-full px-4 py-3 bg-slate-900/50 border border-slate-600 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all"
                                 />
@@ -169,7 +183,7 @@ export default function AccessGate({ children }: AccessGateProps) {
 
                             <button
                                 type="submit"
-                                disabled={loading || !name || !token}
+                                disabled={loading || !name || !email}
                                 className="w-full py-3 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-medium rounded-lg shadow-lg shadow-emerald-500/25 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
                             >
                                 {loading ? 'Verifying...' : 'Access Demo'}
