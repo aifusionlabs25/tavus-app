@@ -287,7 +287,7 @@ export async function POST(request: Request) {
                         `;
 
                         await resend.emails.send({
-                            from: 'Tavus Intelligence <alerts@aifusionlabs.app>',
+                            from: 'GoDeskless Intelligence <alerts@aifusionlabs.app>',
                             to: 'aifusionlabs@gmail.com',
                             subject: `[LEAD ALERT] ${leadData.company_name} - ${leadData.lead_name}`,
                             html: internalBodyHtml
