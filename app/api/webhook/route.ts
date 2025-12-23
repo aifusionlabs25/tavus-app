@@ -295,7 +295,7 @@ export async function POST(request: Request) {
                                 ? `<a href="${tavusRecordingUrl}" style="background-color: #333; color: #fff; padding: 12px 25px; text-decoration: none; border-radius: 6px; font-weight: bold;">View Conversation Record</a>
                                        <p style="margin-top: 10px; font-size: 12px; color: #999;">Link expires in 7 days</p>`
                                 : `<div style="background-color: #eee; color: #666; padding: 12px 25px; border-radius: 6px; display: inline-block;">Video Processing...</div>
-                                       <p style="margin-top: 10px; font-size: 12px; color: #999;">Recording will be available in Tavus Dashboard shortly.</p>`
+                                       <p style="margin-top: 10px; font-size: 12px; color: #999;">Recording will be available in your Dashboard shortly.</p>`
                             }
                             </div>
                         </div>
