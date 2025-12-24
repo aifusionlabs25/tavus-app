@@ -77,28 +77,46 @@ export class SalesforceService {
     }
 
     /**
+     * Helper to clean "Unknown" values - returns null if unknown
+     */
+    private cleanValue(value?: string): string | null {
+        if (!value) return null;
+        const lower = value.toLowerCase().trim();
+        if (lower === 'unknown' || lower === 'n/a' || lower === 'not provided' || lower === '') {
+            return null;
+        }
+        return value;
+    }
+
+    /**
      * Create a Lead in Salesforce from Morgan conversation data
      * Returns the new Lead ID
      */
     async createLead(leadData: LeadData): Promise<string> {
         const { accessToken, instanceUrl } = await this.authenticate();
 
-        // Parse lead name into first/last
-        const nameParts = (leadData.lead_name || 'Unknown Lead').split(' ');
-        const firstName = nameParts[0] || 'Unknown';
-        const lastName = nameParts.slice(1).join(' ') || 'Lead';
+        // Parse lead name into first/last - handle "Unknown" specially
+        const rawName = this.cleanValue(leadData.lead_name);
+        let firstName = 'Prospect';
+        let lastName = 'Lead';
 
-        // Build Lead record
+        if (rawName) {
+            const nameParts = rawName.split(' ');
+            firstName = nameParts[0] || 'Prospect';
+            lastName = nameParts.slice(1).join(' ') || 'Lead';
+        }
+
+        // Build Lead record - clean all "Unknown" values
         const leadRecord = {
             FirstName: firstName,
             LastName: lastName,
-            Email: leadData.lead_email || null,
-            Phone: leadData.lead_phone || null,
-            Company: leadData.company_name || 'Unknown Company',
-            Title: leadData.role || null,
-            Industry: leadData.vertical || 'Field Service',
+            Email: this.cleanValue(leadData.lead_email),
+            Phone: this.cleanValue(leadData.lead_phone),
+            Company: this.cleanValue(leadData.company_name) || 'Company Not Provided',
+            Title: this.cleanValue(leadData.role),
+            Industry: this.cleanValue(leadData.vertical) || 'Field Service',
             NumberOfEmployees: this.parseTeamSize(leadData.teamSize),
-            City: leadData.geography || null,
+            City: this.cleanValue(leadData.geography),
             LeadSource: 'Morgan AI Agent',
             Description: this.buildDescription(leadData),
         };
@@ -124,35 +142,73 @@ export class SalesforceService {
 
     /**
      * Parse team size string to number (Salesforce expects integer)
+     * Handles formats like: "50", "50 plumbers", "about 50 technicians", "50-60", etc.
      */
     private parseTeamSize(teamSize?: string): number | null {
         if (!teamSize) return null;
-        const match = teamSize.match(/\d+/);
-        return match ? parseInt(match[0], 10) : null;
+
+        // Clean "unknown" values
+        const lower = teamSize.toLowerCase().trim();
+        if (lower === 'unknown' || lower === 'n/a' || lower === '') return null;
+
+        // Extract first number from the string
+        const match = teamSize.match(/(\d+)/);
+        if (match) {
+            const num = parseInt(match[1], 10);
+            console.log(`[SalesforceService] Parsed team size: "${teamSize}" → ${num}`);
+            return num;
+        }
+
+        console.log(`[SalesforceService] Could not parse team size: "${teamSize}"`);
+        return null;
     }
 
     /**
-     * Build description field from lead data
+     * Build description field from lead data - skips "Unknown" values
      */
     private buildDescription(leadData: LeadData): string {
         const parts: string[] = [];
 
-        if (leadData.budget_range) parts.push(`Budget: ${leadData.budget_range}`);
-        if (leadData.timeline) parts.push(`Timeline: ${leadData.timeline}`);
-        if (leadData.currentSystems) parts.push(`Current Systems: ${leadData.currentSystems}`);
+        // Helper to check if value is meaningful
+        const isValid = (val?: string) => {
+            if (!val) return false;
+            const lower = val.toLowerCase().trim();
+            return lower !== 'unknown' && lower !== 'n/a' && lower !== '';
+        };
+
+        // Add team size if available
+        if (isValid(leadData.teamSize)) {
+            parts.push(`Team Size: ${leadData.teamSize}`);
+        }
+
+        if (isValid(leadData.budget_range)) {
+            parts.push(`Budget: ${leadData.budget_range}`);
+        }
+
+        if (isValid(leadData.timeline)) {
+            parts.push(`Timeline: ${leadData.timeline}`);
+        }
+
+        if (isValid(leadData.currentSystems)) {
+            parts.push(`Current Systems: ${leadData.currentSystems}`);
+        }
 
         if (leadData.pain_points) {
             const pains = Array.isArray(leadData.pain_points)
-                ? leadData.pain_points.join(', ')
+                ? leadData.pain_points.filter(p => isValid(p)).join(', ')
                 : leadData.pain_points;
-            parts.push(`Pain Points: ${pains}`);
+            if (isValid(pains)) {
+                parts.push(`Pain Points: ${pains}`);
+            }
         }
 
         if (leadData.salesPlan) {
             const plan = Array.isArray(leadData.salesPlan)
-                ? leadData.salesPlan.join('\n')
+                ? leadData.salesPlan.filter(p => isValid(p)).join('\n- ')
                 : leadData.salesPlan;
-            parts.push(`\nSales Plan:\n${plan}`);
+            if (isValid(plan)) {
+                parts.push(`\nSales Plan:\n- ${plan}`);
+            }
         }
 
         return parts.join('\n') || 'Lead captured from Morgan AI conversation.';
