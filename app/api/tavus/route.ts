@@ -85,7 +85,7 @@ export async function POST(request: Request) {
       properties: {
         max_call_duration: 2700, // 45 Minutes (CEO Demo Limit)
         enable_recording: true,
-        participant_absent_timeout: 300, // 5 Minutes (Reduced from 10)
+        participant_absent_timeout: 60, // 1 Minute (User can call back)
         participant_left_timeout: 60, // 1 Minute (Aggressive Cleanup)
         // Merge in client-provided properties (Identity, etc)
         ...(properties || {})
