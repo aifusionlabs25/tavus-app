@@ -410,6 +410,13 @@ export async function POST(request: Request) {
             return NextResponse.json({ message: 'Event processed' });
 
         }
+
+        // ============================================================================
+        // FALLBACK: Handle any other event types gracefully
+        // ============================================================================
+        console.log(`[Webhook] Ignoring unhandled event type: ${eventType}`);
+        return NextResponse.json({ message: `Event ${eventType} acknowledged but not processed` });
+
     } catch (error: any) {
         console.error('Error processing webhook:', error);
         return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
