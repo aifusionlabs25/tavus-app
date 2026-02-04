@@ -234,7 +234,7 @@ export async function POST(request: Request) {
                         await resend.emails.send({
                             from: 'Morgan at GoDeskless <noreply@aifusionlabs.app>',
                             to: [recipient, 'aifusionlabs@gmail.com'], // Always BCC the user for the demo
-                            subject: `Action Plan: Next Steps for ${leadData.company_name || 'Your Team'}`,
+                            subject: `Action Plan: Next Steps for GoDeskless`,
                             html: emailBodyHtml
                         });
                         console.log('✅ [Webhook] Sent "Morgan" email to:', recipient);
